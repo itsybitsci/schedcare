@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "238401330440",
+    "firebase_url": "https://schedcare-default-rtdb.firebaseio.com",
+    "project_id": "schedcare",
+    "storage_bucket": "schedcare.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238401330440:android:2d6b1238d133ea48c520bd",
+        "android_client_info": {
+          "package_name": "com.itsybitsci.schedcare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "238401330440-f7a0eumh6mkblaid8vi6muj46la81rcb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL3j7cZGr0Fb0m94noWVeRzT4nv7neROE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "238401330440-f7a0eumh6mkblaid8vi6muj46la81rcb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "238401330440-11p7a40du1mldo5bqsssgs9u8pd0e9k1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.itsybitsci.schedcare"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
