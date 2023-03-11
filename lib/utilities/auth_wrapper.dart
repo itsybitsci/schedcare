@@ -15,7 +15,7 @@ class AuthWrapper extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authNotifier = ref.watch(authProvider);
+    final authNotifier = ref.watch(firebaseProvider);
 
     return StreamBuilder(
       stream: authNotifier.userStream,

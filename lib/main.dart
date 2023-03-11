@@ -4,7 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:schedcare/screens/authentication/verify_email_screen.dart';
+import 'package:schedcare/screens/home/doctor_home_screen.dart';
+import 'package:schedcare/screens/home/patient_home_screen.dart';
 import 'package:schedcare/utilities/firebase_options.dart';
 import 'package:schedcare/screens/authentication/doctor_register_screen.dart';
 import 'package:schedcare/screens/authentication/login_screen.dart';
@@ -14,6 +18,9 @@ import 'package:schedcare/utilities/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -59,9 +66,12 @@ class SchedcareApp extends StatelessWidget {
       routes: {
         '/': (context) => const AuthWrapper(),
         '/login': (context) => LoginScreen(),
-        '/register_patient': (context) => const PatientRegisterScreen(),
-        '/register_doctor': (context) => const DoctorRegisterScreen(),
         '/reset_password': (context) => ResetPasswordScreen(),
+        '/verify_email': (context) => const VerifyEmailScreen(),
+        '/register_patient': (context) => PatientRegisterScreen(),
+        '/patient_home': (context) => const PatientHomeScreen(),
+        '/register_doctor': (context) => DoctorRegisterScreen(),
+        '/doctor_home': (context) => const DoctorHomeScreen(),
       },
       debugShowCheckedModeBanner: false,
     );

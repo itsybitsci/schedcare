@@ -10,7 +10,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
   final formKeyResetPassword = GlobalKey<FormState>();
 
   Future sendPasswordResetEMail(
-      AuthProvider authNotifier,
+      FirebaseProvider authNotifier,
       RegistrationProvider registrationNotifier,
       ValueNotifier canResendEmail,
       ValueNotifier emailSent) async {
@@ -40,7 +40,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authNotifier = ref.watch(authProvider);
+    final authNotifier = ref.watch(firebaseProvider);
     final registrationNotifier = ref.watch(registrationProvider);
     final emailSent = useValueNotifier(false);
 

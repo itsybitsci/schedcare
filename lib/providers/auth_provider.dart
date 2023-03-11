@@ -2,15 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:schedcare/services/firestore_services.dart';
-import 'package:schedcare/services/auth_services.dart';
-import 'package:schedcare/models/app_user_model.dart';
+import 'package:schedcare/services/firestore_service.dart';
+import 'package:schedcare/services/auth_service.dart';
+import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
-class AuthProvider extends ChangeNotifier {
+class FirebaseProvider extends ChangeNotifier {
   bool _isLoading = false;
-  bool _isLoggedIn = false;
   UserCredential? _userCredential;
   Patient? _patient;
   Doctor? _doctor;
@@ -19,9 +18,9 @@ class AuthProvider extends ChangeNotifier {
   FirestoreService fireStoreService = FirestoreService();
 
   bool get isLoading => _isLoading;
-  bool get isLoggedIn => _isLoggedIn;
+  User? get isLoggedIn => authService.currentUser;
   UserCredential? get userCredential => _userCredential;
-  User? get user => authService.user;
+  User? get user => authService.currentUser;
   Patient? get patient => _patient;
   Doctor? get doctor => _doctor;
   String? get role => _role;
@@ -56,7 +55,6 @@ class AuthProvider extends ChangeNotifier {
 
       await fireStoreService.logUser(user);
 
-      _isLoggedIn = true;
       setLoading(false);
       notifyListeners();
       return _userCredential;
@@ -119,8 +117,8 @@ class AuthProvider extends ChangeNotifier {
     setLoading(true);
     try {
       _patient = null;
+      _doctor = null;
       _userCredential = null;
-      _isLoggedIn = false;
       await authService.signOut();
       setLoading(false);
       notifyListeners();
@@ -131,5 +129,5 @@ class AuthProvider extends ChangeNotifier {
   }
 }
 
-final authProvider =
-    ChangeNotifierProvider<AuthProvider>((ref) => AuthProvider());
+final firebaseProvider =
+    ChangeNotifierProvider<FirebaseProvider>((ref) => FirebaseProvider());

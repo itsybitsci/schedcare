@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/auth_provider.dart';
 
-class PatientHomeScreen extends ConsumerWidget {
+class PatientHomeScreen extends HookConsumerWidget {
   const PatientHomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authNotifier = ref.watch(authProvider);
+    final authNotifier = ref.watch(firebaseProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      body: authNotifier.isLoggedIn
+      body: authNotifier.isLoggedIn != null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

@@ -4,55 +4,13 @@ import 'package:schedcare/providers/auth_provider.dart';
 import 'package:schedcare/providers/registration_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 
-class DoctorRegisterScreen extends ConsumerStatefulWidget {
-  const DoctorRegisterScreen({Key? key}) : super(key: key);
+class DoctorRegisterScreen extends HookConsumerWidget {
+  DoctorRegisterScreen({super.key});
+  final GlobalKey<FormState> formKeyRegisterDoctor = GlobalKey<FormState>();
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() {
-    return _DoctorRegisterScreenState();
-  }
-}
-
-class _DoctorRegisterScreenState extends ConsumerState<DoctorRegisterScreen> {
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController middleNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController suffixController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController repeatPasswordController =
-      TextEditingController();
-  late final List<String> sexes;
-  late String sexesDropdownValue;
-  late bool passwordVisible;
-  late bool repeatPasswordVisible;
-  late final GlobalKey<FormState> formKeyRegisterDoctor;
-
-  @override
-  void initState() {
-    super.initState();
-    sexes = <String>[RegistrationConstants.male, RegistrationConstants.female];
-    sexesDropdownValue = sexes.first;
-    passwordVisible = false;
-    repeatPasswordVisible = false;
-    formKeyRegisterDoctor = GlobalKey<FormState>();
-  }
-
-  @override
-  void dispose() {
-    firstNameController.dispose();
-    middleNameController.dispose();
-    lastNameController.dispose();
-    suffixController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    repeatPasswordController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final authNotifier = ref.watch(authProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final firebaseNotifier = ref.watch(firebaseProvider);
     final registrationNotifier = ref.watch(registrationProvider);
 
     return Scaffold(
@@ -89,9 +47,10 @@ class _DoctorRegisterScreenState extends ConsumerState<DoctorRegisterScreen> {
                       'suffix': registrationNotifier.suffix,
                       'sex': registrationNotifier.sex,
                       'specialization': registrationNotifier.specialization,
+                      'isApproved': false,
                     };
 
-                    await authNotifier.createUserWithEmailAndPassword(
+                    await firebaseNotifier.createUserWithEmailAndPassword(
                         registrationNotifier.email,
                         registrationNotifier.password,
                         userData);
@@ -99,7 +58,7 @@ class _DoctorRegisterScreenState extends ConsumerState<DoctorRegisterScreen> {
                     if (context.mounted) Navigator.pop(context);
                   }
                 },
-                child: authNotifier.isLoading
+                child: firebaseNotifier.isLoading
                     ? const CircularProgressIndicator(
                         color: Colors.white,
                       )

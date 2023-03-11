@@ -9,7 +9,7 @@ class LoginScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AuthProvider authNotifier = ref.watch(authProvider);
+    final FirebaseProvider firebaseNotifier = ref.watch(firebaseProvider);
     final TextEditingController emailController = useTextEditingController();
     final TextEditingController passwordController = useTextEditingController();
 
@@ -64,12 +64,12 @@ class LoginScreen extends HookConsumerWidget {
               onPressed: () async {
                 if (formKeyLogin.currentState!.validate()) {
                   formKeyLogin.currentState?.save();
-                  await authNotifier.logInWithEmailAndPassword(
+                  await firebaseNotifier.logInWithEmailAndPassword(
                       emailController.text, passwordController.text);
                 }
               },
               icon: const Icon(Icons.lock_open),
-              label: authNotifier.isLoading
+              label: firebaseNotifier.isLoading
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )

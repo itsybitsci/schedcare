@@ -48,6 +48,7 @@ dependencies:
   firebase_app_check: ^0.1.1+12
   firebase_storage: ^11.0.14
   flutter_hooks: ^0.18.6
+  go_router: ^6.2.0
 
 flutter_icons:
   android: true

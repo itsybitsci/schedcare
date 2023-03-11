@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/services/auth_services.dart';
+import 'package:schedcare/services/auth_service.dart';
 import 'package:schedcare/utilities/auth_wrapper.dart';
 
 class VerifyEmailScreen extends ConsumerStatefulWidget {
@@ -24,7 +24,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
     super.initState();
 
     isEmailVerified = false;
-    canResendVerificationEmail = authService.user.emailVerified;
+    canResendVerificationEmail = authService.currentUser!.emailVerified;
     if (!isEmailVerified) {
       sendVerificationEmail();
 
@@ -42,7 +42,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   }
 
   Future sendVerificationEmail() async {
-    final user = authService.user;
+    final user = authService.currentUser!;
 
     await authService.sendEmailVerification(user);
 
@@ -58,10 +58,10 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   }
 
   Future checkEmailVerified() async {
-    await authService.user.reload();
+    await authService.currentUser!.reload();
 
     setState(() {
-      isEmailVerified = authService.user.emailVerified;
+      isEmailVerified = authService.currentUser!.emailVerified;
     });
 
     if (isEmailVerified) timer?.cancel();

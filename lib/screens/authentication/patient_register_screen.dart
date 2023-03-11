@@ -4,27 +4,13 @@ import 'package:schedcare/providers/auth_provider.dart';
 import 'package:schedcare/providers/registration_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 
-class PatientRegisterScreen extends ConsumerStatefulWidget {
-  const PatientRegisterScreen({super.key});
+class PatientRegisterScreen extends HookConsumerWidget {
+  PatientRegisterScreen({super.key});
+  final GlobalKey<FormState> formKeyRegisterPatient = GlobalKey<FormState>();
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() {
-    return _PatientRegisterScreenState();
-  }
-}
-
-class _PatientRegisterScreenState extends ConsumerState<PatientRegisterScreen> {
-  late final GlobalKey<FormState> formKeyRegisterPatient;
-
-  @override
-  void initState() {
-    super.initState();
-    formKeyRegisterPatient = GlobalKey<FormState>();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final authNotifier = ref.watch(authProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final firebaseNotifier = ref.watch(firebaseProvider);
     final registrationNotifier = ref.watch(registrationProvider);
 
     return Scaffold(
@@ -74,10 +60,11 @@ class _PatientRegisterScreenState extends ConsumerState<PatientRegisterScreen> {
                       'classification': registrationNotifier.classification,
                       'uhsIdNumber': registrationNotifier.uhsId,
                       'vaccinationStatus':
-                          registrationNotifier.vaccinationStatus
+                          registrationNotifier.vaccinationStatus,
+                      'isApproved': true,
                     };
 
-                    await authNotifier.createUserWithEmailAndPassword(
+                    await firebaseNotifier.createUserWithEmailAndPassword(
                         registrationNotifier.email,
                         registrationNotifier.password,
                         userData);
@@ -85,7 +72,7 @@ class _PatientRegisterScreenState extends ConsumerState<PatientRegisterScreen> {
                     if (context.mounted) Navigator.pop(context);
                   }
                 },
-                child: authNotifier.isLoading
+                child: firebaseNotifier.isLoading
                     ? const CircularProgressIndicator(
                         color: Colors.white,
                       )
