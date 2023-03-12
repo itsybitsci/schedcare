@@ -45,7 +45,7 @@ class FirebaseProvider extends ChangeNotifier {
       DocumentSnapshot? snapshot =
           await fireStoreService.getFirestoreData(user!);
 
-      _role = Helper.getRoleFromSnapshot(snapshot!);
+      _role = getRoleFromSnapshot(snapshot!);
 
       if (_role!.toLowerCase() == RegistrationConstants.patient.toLowerCase()) {
         _patient = Patient.fromDocumentSnapshot(snapshot);
@@ -60,6 +60,7 @@ class FirebaseProvider extends ChangeNotifier {
       return _userCredential;
     } catch (e) {
       setLoading(false);
+      showToast(Exception(e).toString());
       throw Exception(e).toString();
     }
   }
@@ -94,7 +95,7 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getFirestoreData(User user, String collectionName) async {
+  Future<void> getFirestoreData(User user) async {
     setLoading(true);
     try {
       DocumentSnapshot? snapshot =
@@ -129,5 +130,18 @@ class FirebaseProvider extends ChangeNotifier {
   }
 }
 
-final firebaseProvider =
-    ChangeNotifierProvider<FirebaseProvider>((ref) => FirebaseProvider());
+final firebaseProvider = ChangeNotifierProvider<FirebaseProvider>(
+  (ref) => FirebaseProvider(),
+);
+
+final authStateChangeProvider = StreamProvider.autoDispose(
+  (ref) => FirebaseAuth.instance.authStateChanges(),
+);
+
+final userSnapShotProvider = FutureProvider.family
+    .autoDispose<DocumentSnapshot<Map<String, dynamic>>, String>(
+  (ref, uid) => FirebaseFirestore.instance
+      .collection(FirestoreConstants.usersCollection)
+      .doc(uid)
+      .get(),
+);

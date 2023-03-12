@@ -6,15 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/screens/authentication/verify_email_screen.dart';
-import 'package:schedcare/screens/home/doctor_home_screen.dart';
-import 'package:schedcare/screens/home/patient_home_screen.dart';
+import 'package:schedcare/providers/router_provider.dart';
 import 'package:schedcare/utilities/firebase_options.dart';
-import 'package:schedcare/screens/authentication/doctor_register_screen.dart';
-import 'package:schedcare/screens/authentication/login_screen.dart';
-import 'package:schedcare/screens/authentication/patient_register_screen.dart';
-import 'package:schedcare/screens/authentication/reset_password_screen.dart';
-import 'package:schedcare/utilities/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +40,7 @@ void main() async {
   );
 }
 
-class SchedcareApp extends StatelessWidget {
+class SchedcareApp extends HookConsumerWidget {
   const SchedcareApp({super.key});
 
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -56,23 +49,16 @@ class SchedcareApp extends StatelessWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final routeNotifier = ref.watch(routerProvider);
+    return MaterialApp.router(
       title: 'SchedCare',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const AuthWrapper(),
-        '/login': (context) => LoginScreen(),
-        '/reset_password': (context) => ResetPasswordScreen(),
-        '/verify_email': (context) => const VerifyEmailScreen(),
-        '/register_patient': (context) => PatientRegisterScreen(),
-        '/patient_home': (context) => const PatientHomeScreen(),
-        '/register_doctor': (context) => DoctorRegisterScreen(),
-        '/doctor_home': (context) => const DoctorHomeScreen(),
-      },
+      routeInformationParser: routeNotifier.routeInformationParser,
+      routeInformationProvider: routeNotifier.routeInformationProvider,
+      routerDelegate: routeNotifier.routerDelegate,
       debugShowCheckedModeBanner: false,
     );
   }

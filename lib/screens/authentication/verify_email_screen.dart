@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/services/auth_service.dart';
 import 'package:schedcare/utilities/auth_wrapper.dart';
+import 'package:schedcare/utilities/helpers.dart';
 
 class VerifyEmailScreen extends ConsumerStatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);
@@ -44,6 +45,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   Future sendVerificationEmail() async {
     final user = authService.currentUser!;
 
+    if (!mounted) return;
     await authService.sendEmailVerification(user);
 
     setState(() => canResendVerificationEmail = false);
@@ -52,6 +54,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
       const Duration(seconds: 10),
     ).then(
       (value) {
+        if (!mounted) return;
         setState(() => canResendVerificationEmail = true);
       },
     );
@@ -70,6 +73,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   @override
   Widget build(BuildContext context) {
     if (isEmailVerified) {
+      showToast('Successfully verified email.');
       return const AuthWrapper();
     } else {
       return Scaffold(

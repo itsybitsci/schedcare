@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/providers/auth_provider.dart';
+import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/providers/registration_provider.dart';
 
 class ResetPasswordScreen extends HookConsumerWidget {
@@ -47,6 +48,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reset Password'),
+        automaticallyImplyLeading: false,
       ),
       body: Form(
         key: formKeyResetPassword,
@@ -74,6 +76,15 @@ class ResetPasswordScreen extends HookConsumerWidget {
               ),
               if (useValueListenable(emailSent))
                 const Text('An email has been sent to your email address.'),
+              const SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  context.pop();
+                },
+                child: const Text('Go back to Login screen'),
+              ),
             ],
           ),
         ),

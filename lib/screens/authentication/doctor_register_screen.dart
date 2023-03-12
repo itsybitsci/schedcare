@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/providers/auth_provider.dart';
+import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/providers/registration_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 
@@ -16,6 +17,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register Doctor'),
+        automaticallyImplyLeading: false,
       ),
       body: Form(
         key: formKeyRegisterDoctor,
@@ -66,7 +68,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: const Text('Go back to Login screen'),
               ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/providers/auth_provider.dart';
+import 'package:schedcare/providers/firebase_provider.dart';
+import 'package:schedcare/utilities/constants.dart';
 
 class LoginScreen extends HookConsumerWidget {
   LoginScreen({super.key});
@@ -77,19 +79,19 @@ class LoginScreen extends HookConsumerWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/register_patient');
+                context.push(RoutePaths.patientRegistration);
               },
               child: const Text('Register as Patient'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/register_doctor');
+                context.push(RoutePaths.doctorRegistration);
               },
               child: const Text('Register as Doctor'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/reset_password');
+                context.push(RoutePaths.resetPassword);
               },
               child: const Text('Reset password'),
             )
