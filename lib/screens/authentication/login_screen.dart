@@ -11,7 +11,7 @@ class LoginScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final FirebaseProvider firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseNotifier = ref.watch(firebaseProvider);
     final TextEditingController emailController = useTextEditingController();
     final TextEditingController passwordController = useTextEditingController();
 

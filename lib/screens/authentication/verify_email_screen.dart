@@ -78,7 +78,8 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
     } else {
       return Scaffold(
           appBar: AppBar(
-            title: const Text('Verify email!'),
+            title: const Text('Verify Email'),
+            automaticallyImplyLeading: false,
           ),
           body: Padding(
             padding: const EdgeInsets.all(16),

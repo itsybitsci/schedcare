@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
+import 'package:schedcare/screens/authentication/doctor_approval_screen.dart';
 import 'package:schedcare/screens/authentication/verify_email_screen.dart';
 import 'package:schedcare/screens/home/doctor_home_screen.dart';
 import 'package:schedcare/screens/authentication/login_screen.dart';
@@ -15,12 +16,12 @@ class AuthWrapper extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
-    final userStreamNotifier = ref.watch(authStateChangeProvider);
 
-    //Listen for auth changes
-    return userStreamNotifier.when(
-      data: (User? user) {
-        if (user != null) {
+    return StreamBuilder(
+      stream: firebaseNotifier.userStream,
+      builder: (context, AsyncSnapshot<User?> snapshot) {
+        if (snapshot.hasData) {
+          User user = snapshot.data!;
           final userSnapshotNotifier =
               ref.watch(userSnapShotProvider(user.uid));
 
@@ -30,17 +31,18 @@ class AuthWrapper extends HookConsumerWidget {
           // Get user snapshot from firestore
           return userSnapshotNotifier.when(
             data: (data) {
-              Map<String, dynamic> userData =
-                  data.data() as Map<String, dynamic>;
-              String role = userData['role'];
+              String role = data.get('role');
 
               //Redirect based on role
               if (role.toLowerCase() ==
-                      RegistrationConstants.patient.toLowerCase() &&
-                  !firebaseNotifier.isLoading) {
+                  RegistrationConstants.patient.toLowerCase()) {
                 return const PatientHomeScreen();
               } else if (role.toLowerCase() ==
                   RegistrationConstants.doctor.toLowerCase()) {
+                // Check if doctor is approved
+                if (!data.get('isApproved')) {
+                  return const DoctorApprovalScreen();
+                }
                 return const DoctorHomeScreen();
               }
               return materialLoading();
@@ -52,9 +54,6 @@ class AuthWrapper extends HookConsumerWidget {
         }
         return LoginScreen();
       },
-      error: (Object error, StackTrace stackTrace) =>
-          materialLoading(toastMessage: 'An error occurred.'),
-      loading: () => materialLoading(),
     );
   }
 }
