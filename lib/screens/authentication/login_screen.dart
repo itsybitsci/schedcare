@@ -7,6 +7,7 @@ import 'package:schedcare/utilities/constants.dart';
 
 class LoginScreen extends HookConsumerWidget {
   LoginScreen({super.key});
+
   final GlobalKey<FormState> formKeyLogin = GlobalKey<FormState>();
 
   @override

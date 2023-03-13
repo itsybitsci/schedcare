@@ -7,6 +7,7 @@ import 'package:schedcare/utilities/constants.dart';
 
 class PatientRegisterScreen extends HookConsumerWidget {
   PatientRegisterScreen({super.key});
+
   final GlobalKey<FormState> formKeyRegisterPatient = GlobalKey<FormState>();
 
   @override

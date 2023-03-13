@@ -31,20 +31,35 @@ class RegistrationProvider extends ChangeNotifier {
   bool _repeatPasswordVisible = false;
 
   String get firstName => _firstNameController.text.trim();
+
   String get middleName => _middleNameController.text.trim();
+
   String get lastName => _lastNameController.text.trim();
+
   String get suffix => _suffixController.text.trim();
+
   int get age => int.parse(_ageController.text.trim());
+
   String get birthdate => _birthdateController.text.trim();
+
   String get email => _emailController.text.trim();
+
   String get phoneNumber => _phoneNumberController.text.trim();
+
   String get address => _addressController.text.trim();
+
   String get uhsId => _uhsIdController.text.trim();
+
   String get sex => _sexesDropdownValue;
+
   String get classification => _classificationsDropdownValue;
+
   String get civilStatus => _civilStatusDropdownValue;
+
   String get vaccinationStatus => _vaccinationStatusDropdownValue;
+
   String get specialization => _specializationController.text.trim();
+
   String get password => _passwordController.text.trim();
 
   Widget buildFirstName() {

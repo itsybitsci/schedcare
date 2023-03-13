@@ -18,11 +18,17 @@ class FirebaseProvider extends ChangeNotifier {
   FirestoreService fireStoreService = FirestoreService();
 
   bool get getLoading => _isLoading;
+
   User? get getLogin => authService.currentUser;
+
   UserCredential? get getUserCredential => _userCredential;
+
   User? get getCurrentUser => authService.currentUser;
+
   Patient? get getPatient => _patient;
+
   Doctor? get getDoctor => _doctor;
+
   String? get getRole => _role;
 
   set setPatient(Patient patient) {

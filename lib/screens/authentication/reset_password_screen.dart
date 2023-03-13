@@ -9,6 +9,7 @@ import 'package:schedcare/providers/registration_provider.dart';
 
 class ResetPasswordScreen extends HookConsumerWidget {
   ResetPasswordScreen({super.key});
+
   final formKeyResetPassword = GlobalKey<FormState>();
 
   Future sendPasswordResetEMail(
