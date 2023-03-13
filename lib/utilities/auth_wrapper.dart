@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/screens/authentication/doctor_approval_screen.dart';
 import 'package:schedcare/screens/authentication/verify_email_screen.dart';
@@ -31,17 +32,27 @@ class AuthWrapper extends HookConsumerWidget {
           // Get user snapshot from firestore
           return userSnapshotNotifier.when(
             data: (data) {
-              String role = data.get('role');
+              String role = data.get(ModelFields.role);
 
               //Redirect based on role
               if (role.toLowerCase() ==
                   RegistrationConstants.patient.toLowerCase()) {
+                // Persist login
+                if (firebaseNotifier.getPatient == null) {
+                  Patient patient = Patient.fromSnapshot(data);
+                  firebaseNotifier.setPatient = patient;
+                }
                 return const PatientHomeScreen();
               } else if (role.toLowerCase() ==
                   RegistrationConstants.doctor.toLowerCase()) {
                 // Check if doctor is approved
-                if (!data.get('isApproved')) {
+                if (!data.get(ModelFields.isApproved)) {
                   return const DoctorApprovalScreen();
+                }
+                // Persist login
+                if (firebaseNotifier.getDoctor == null) {
+                  Doctor doctor = Doctor.fromSnapshot(data);
+                  firebaseNotifier.setDoctor = doctor;
                 }
                 return const DoctorHomeScreen();
               }

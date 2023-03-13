@@ -41,15 +41,16 @@ class DoctorRegisterScreen extends HookConsumerWidget {
                   if (formKeyRegisterDoctor.currentState!.validate()) {
                     formKeyRegisterDoctor.currentState?.save();
                     Map<String, dynamic> userData = {
-                      'email': registrationNotifier.email,
-                      'role': RegistrationConstants.doctor,
-                      'firstName': registrationNotifier.firstName,
-                      'middleName': registrationNotifier.middleName,
-                      'lastName': registrationNotifier.lastName,
-                      'suffix': registrationNotifier.suffix,
-                      'sex': registrationNotifier.sex,
-                      'specialization': registrationNotifier.specialization,
-                      'isApproved': false,
+                      ModelFields.email: registrationNotifier.email,
+                      ModelFields.role: RegistrationConstants.doctor,
+                      ModelFields.firstName: registrationNotifier.firstName,
+                      ModelFields.middleName: registrationNotifier.middleName,
+                      ModelFields.lastName: registrationNotifier.lastName,
+                      ModelFields.suffix: registrationNotifier.suffix,
+                      ModelFields.sex: registrationNotifier.sex,
+                      ModelFields.specialization:
+                          registrationNotifier.specialization,
+                      ModelFields.isApproved: false,
                     };
 
                     await firebaseNotifier.createUserWithEmailAndPassword(
@@ -60,7 +61,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
                     if (context.mounted) Navigator.pop(context);
                   }
                 },
-                child: firebaseNotifier.isLoading
+                child: firebaseNotifier.getLoading
                     ? const CircularProgressIndicator(
                         color: Colors.white,
                       )

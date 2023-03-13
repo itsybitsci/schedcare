@@ -14,12 +14,12 @@ class PatientHomeScreen extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      body: !firebaseNotifier.isLoading
+      body: !firebaseNotifier.getLoading
           ? Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                    'You\'re in the Home Screen as a Patient ${firebaseNotifier.patient!.email}'),
+                    'You\'re in the Home Screen as a Patient ${firebaseNotifier.getPatient!.email}'),
                 Center(
                   child: ElevatedButton(
                     child: const Text('Logout'),

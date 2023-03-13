@@ -75,3 +75,25 @@ class RoutePaths {
   static const String doctorRegistration = '/doctor_registration';
   static const String authWrapper = '/authWrapper';
 }
+
+class ModelFields {
+  static const String email = 'email';
+  static const String role = 'role';
+  static const String firstName = 'firstName';
+  static const String middleName = 'middleName';
+  static const String lastName = 'lastName';
+  static const String suffix = 'suffix';
+  static const String age = 'age';
+  static const String birthDate = 'birthDate';
+  static const String sex = 'sex';
+  static const String phoneNumber = 'phoneNumber';
+  static const String address = 'address';
+  static const String civilStatus = 'civilStatus';
+  static const String classification = 'classification';
+  static const String uhsIdNumber = 'uhsIdNumber';
+  static const String vaccinationStatus = 'vaccinationStatus';
+  static const String isApproved = 'isApproved';
+  static const String specialization = 'specialization';
+  static const String lastLogin = 'lastLogin';
+  static const String createdAt = 'createdAt';
+}

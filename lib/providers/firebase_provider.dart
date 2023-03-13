@@ -17,13 +17,21 @@ class FirebaseProvider extends ChangeNotifier {
   AuthService authService = AuthService();
   FirestoreService fireStoreService = FirestoreService();
 
-  bool get isLoading => _isLoading;
-  User? get isLoggedIn => authService.currentUser;
-  UserCredential? get userCredential => _userCredential;
-  User? get user => authService.currentUser;
-  Patient? get patient => _patient;
-  Doctor? get doctor => _doctor;
-  String? get role => _role;
+  bool get getLoading => _isLoading;
+  User? get getLogin => authService.currentUser;
+  UserCredential? get getUserCredential => _userCredential;
+  User? get getCurrentUser => authService.currentUser;
+  Patient? get getPatient => _patient;
+  Doctor? get getDoctor => _doctor;
+  String? get getRole => _role;
+
+  set setPatient(Patient patient) {
+    _patient = patient;
+  }
+
+  set setDoctor(Doctor doctor) {
+    _doctor = doctor;
+  }
 
   setLoading(bool loader) {
     _isLoading = loader;
@@ -45,12 +53,15 @@ class FirebaseProvider extends ChangeNotifier {
       DocumentSnapshot? snapshot =
           await fireStoreService.getFirestoreData(user!);
 
-      _role = getRoleFromSnapshot(snapshot!);
+      _role = snapshot!.get(ModelFields.role).toString().toLowerCase() ==
+              RegistrationConstants.patient.toLowerCase()
+          ? RegistrationConstants.patient
+          : RegistrationConstants.doctor;
 
       if (_role!.toLowerCase() == RegistrationConstants.patient.toLowerCase()) {
-        _patient = Patient.fromDocumentSnapshot(snapshot);
+        _patient = Patient.fromSnapshot(snapshot);
       } else {
-        _doctor = Doctor.fromDocumentSnapshot(snapshot);
+        _doctor = Doctor.fromSnapshot(snapshot);
       }
 
       await fireStoreService.logUser(user);
@@ -75,10 +86,12 @@ class FirebaseProvider extends ChangeNotifier {
 
       User user = _userCredential!.user!;
 
-      userData.addAll({
-        'lastLogin': user.metadata.lastSignInTime,
-        'createdAt': user.metadata.creationTime,
-      });
+      userData.addAll(
+        {
+          ModelFields.lastLogin: user.metadata.lastSignInTime,
+          ModelFields.createdAt: user.metadata.creationTime,
+        },
+      );
 
       isSuccess =
           await fireStoreService.addUserToFirestoreDatabase(userData, user);
@@ -102,9 +115,9 @@ class FirebaseProvider extends ChangeNotifier {
           await fireStoreService.getFirestoreData(user);
 
       if (_role!.toLowerCase() == RegistrationConstants.patient.toLowerCase()) {
-        _patient = Patient.fromDocumentSnapshot(snapshot!);
+        _patient = Patient.fromSnapshot(snapshot!);
       } else {
-        _doctor = Doctor.fromDocumentSnapshot(snapshot!);
+        _doctor = Doctor.fromSnapshot(snapshot!);
       }
       setLoading(false);
       notifyListeners();

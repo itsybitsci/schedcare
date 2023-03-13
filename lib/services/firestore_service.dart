@@ -25,7 +25,7 @@ class FirestoreService {
           .collection(FirestoreConstants.usersCollection)
           .doc(user.uid)
           .update({
-        'lastLogin': user.metadata.lastSignInTime,
+        ModelFields.lastLogin: user.metadata.lastSignInTime,
       });
     } catch (e) {
       throw Exception(e).toString();

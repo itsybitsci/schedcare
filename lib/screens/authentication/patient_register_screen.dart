@@ -47,23 +47,24 @@ class PatientRegisterScreen extends HookConsumerWidget {
                   if (formKeyRegisterPatient.currentState!.validate()) {
                     formKeyRegisterPatient.currentState?.save();
                     Map<String, dynamic> userData = {
-                      'email': registrationNotifier.email,
-                      'role': RegistrationConstants.patient,
-                      'firstName': registrationNotifier.firstName,
-                      'middleName': registrationNotifier.middleName,
-                      'lastName': registrationNotifier.lastName,
-                      'suffix': registrationNotifier.suffix,
-                      'age': registrationNotifier.age,
-                      'birthDate': registrationNotifier.birthdate,
-                      'sex': registrationNotifier.sex,
-                      'phoneNumber': registrationNotifier.phoneNumber,
-                      'address': registrationNotifier.address,
-                      'civilStatus': registrationNotifier.civilStatus,
-                      'classification': registrationNotifier.classification,
-                      'uhsIdNumber': registrationNotifier.uhsId,
-                      'vaccinationStatus':
+                      ModelFields.email: registrationNotifier.email,
+                      ModelFields.role: RegistrationConstants.patient,
+                      ModelFields.firstName: registrationNotifier.firstName,
+                      ModelFields.middleName: registrationNotifier.middleName,
+                      ModelFields.lastName: registrationNotifier.lastName,
+                      ModelFields.suffix: registrationNotifier.suffix,
+                      ModelFields.age: registrationNotifier.age,
+                      ModelFields.birthDate: registrationNotifier.birthdate,
+                      ModelFields.sex: registrationNotifier.sex,
+                      ModelFields.phoneNumber: registrationNotifier.phoneNumber,
+                      ModelFields.address: registrationNotifier.address,
+                      ModelFields.civilStatus: registrationNotifier.civilStatus,
+                      ModelFields.classification:
+                          registrationNotifier.classification,
+                      ModelFields.uhsIdNumber: registrationNotifier.uhsId,
+                      ModelFields.vaccinationStatus:
                           registrationNotifier.vaccinationStatus,
-                      'isApproved': true,
+                      ModelFields.isApproved: true,
                     };
 
                     await firebaseNotifier.createUserWithEmailAndPassword(
@@ -74,7 +75,7 @@ class PatientRegisterScreen extends HookConsumerWidget {
                     if (context.mounted) Navigator.pop(context);
                   }
                 },
-                child: firebaseNotifier.isLoading
+                child: firebaseNotifier.getLoading
                     ? const CircularProgressIndicator(
                         color: Colors.white,
                       )

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:schedcare/utilities/constants.dart';
 
 class Patient {
   final String uid;
@@ -42,28 +43,28 @@ class Patient {
       required this.lastLogin,
       required this.createdAt});
 
-  factory Patient.fromDocumentSnapshot(DocumentSnapshot snapshot) {
+  factory Patient.fromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
     return Patient(
       uid: snapshot.id,
-      email: userData['email'],
-      role: userData['role'],
-      firstName: userData['firstName'],
-      middleName: userData['middleName'] ?? '',
-      lastName: userData['lastName'],
-      suffix: userData['suffix'] ?? '',
-      age: userData['age'],
-      birthDate: userData['birthDate'],
-      sex: userData['sex'],
-      phoneNumber: userData['phoneNumber'],
-      address: userData['address'],
-      civilStatus: userData['civilStatus'],
-      classification: userData['classification'] ?? '',
-      uhsIdNumber: userData['uhsIdNumber'] ?? '',
-      vaccinationStatus: userData['vaccinationStatus'],
-      isApproved: userData['isApproved'],
-      lastLogin: userData['lastLogin'].toDate(),
-      createdAt: userData['createdAt'].toDate(),
+      email: userData[ModelFields.email],
+      role: userData[ModelFields.role],
+      firstName: userData[ModelFields.firstName],
+      middleName: userData[ModelFields.middleName] ?? '',
+      lastName: userData[ModelFields.lastName],
+      suffix: userData[ModelFields.suffix] ?? '',
+      age: userData[ModelFields.age],
+      birthDate: userData[ModelFields.birthDate],
+      sex: userData[ModelFields.sex],
+      phoneNumber: userData[ModelFields.phoneNumber],
+      address: userData[ModelFields.address],
+      civilStatus: userData[ModelFields.civilStatus],
+      classification: userData[ModelFields.classification] ?? '',
+      uhsIdNumber: userData[ModelFields.uhsIdNumber] ?? '',
+      vaccinationStatus: userData[ModelFields.vaccinationStatus],
+      isApproved: userData[ModelFields.isApproved],
+      lastLogin: userData[ModelFields.lastLogin].toDate(),
+      createdAt: userData[ModelFields.createdAt].toDate(),
     );
   }
 }
@@ -96,21 +97,21 @@ class Doctor {
       required this.lastLogin,
       required this.createdAt});
 
-  factory Doctor.fromDocumentSnapshot(DocumentSnapshot snapshot) {
+  factory Doctor.fromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
     return Doctor(
       uid: snapshot.id,
-      email: userData['email'],
-      role: userData['role'],
-      firstName: userData['firstName'],
-      middleName: userData['middleName'] ?? '',
-      lastName: userData['lastName'],
-      suffix: userData['suffix'] ?? '',
-      sex: userData['sex'],
-      specialization: userData['specialization'],
-      isApproved: userData['isApproved'],
-      lastLogin: userData['lastLogin'].toDate(),
-      createdAt: userData['createdAt'].toDate(),
+      email: userData[ModelFields.email],
+      role: userData[ModelFields.role],
+      firstName: userData[ModelFields.firstName],
+      middleName: userData[ModelFields.middleName] ?? '',
+      lastName: userData[ModelFields.lastName],
+      suffix: userData[ModelFields.suffix] ?? '',
+      sex: userData[ModelFields.sex],
+      specialization: userData[ModelFields.specialization],
+      isApproved: userData[ModelFields.isApproved],
+      lastLogin: userData[ModelFields.lastLogin].toDate(),
+      createdAt: userData[ModelFields.createdAt].toDate(),
     );
   }
 }

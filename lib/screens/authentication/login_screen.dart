@@ -71,7 +71,7 @@ class LoginScreen extends HookConsumerWidget {
                 }
               },
               icon: const Icon(Icons.lock_open),
-              label: firebaseNotifier.isLoading
+              label: firebaseNotifier.getLoading
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
