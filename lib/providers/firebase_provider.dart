@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:schedcare/services/firestore_service.dart';
-import 'package:schedcare/services/auth_service.dart';
 import 'package:schedcare/models/user_models.dart';
+import 'package:schedcare/services/auth_service.dart';
+import 'package:schedcare/services/firestore_service.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
