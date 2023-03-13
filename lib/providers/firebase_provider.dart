@@ -14,22 +14,26 @@ class FirebaseProvider extends ChangeNotifier {
   Patient? _patient;
   Doctor? _doctor;
   String? _role;
-  AuthService authService = AuthService();
-  FirestoreService fireStoreService = FirestoreService();
+  final AuthService _authService = AuthService();
+  final FirestoreService _fireStoreService = FirestoreService();
 
   bool get getLoading => _isLoading;
 
-  User? get getLogin => authService.currentUser;
+  User? get getLogin => _authService.currentUser;
 
   UserCredential? get getUserCredential => _userCredential;
 
-  User? get getCurrentUser => authService.currentUser;
+  User? get getCurrentUser => _authService.currentUser;
 
   Patient? get getPatient => _patient;
 
   Doctor? get getDoctor => _doctor;
 
   String? get getRole => _role;
+
+  AuthService get getAuthService => _authService;
+
+  FirestoreService get getFirestoreService => _fireStoreService;
 
   set setPatient(Patient patient) {
     _patient = patient;
@@ -45,7 +49,7 @@ class FirebaseProvider extends ChangeNotifier {
   }
 
   Stream<User?> get userStream {
-    return authService.userStream();
+    return _authService.userStream();
   }
 
   Future<UserCredential?> logInWithEmailAndPassword(
@@ -53,11 +57,11 @@ class FirebaseProvider extends ChangeNotifier {
     setLoading(true);
     try {
       _userCredential =
-          await authService.logInWithEmailAndPassword(email, password);
+          await _authService.logInWithEmailAndPassword(email, password);
       User? user = _userCredential!.user;
 
       DocumentSnapshot? snapshot =
-          await fireStoreService.getFirestoreData(user!);
+          await _fireStoreService.getFirestoreData(user!);
 
       _role = snapshot!.get(ModelFields.role).toString().toLowerCase() ==
               RegistrationConstants.patient.toLowerCase()
@@ -70,7 +74,7 @@ class FirebaseProvider extends ChangeNotifier {
         _doctor = Doctor.fromSnapshot(snapshot);
       }
 
-      await fireStoreService.logUser(user);
+      await _fireStoreService.logUser(user);
 
       setLoading(false);
       notifyListeners();
@@ -88,7 +92,7 @@ class FirebaseProvider extends ChangeNotifier {
     bool isSuccess = false;
     try {
       _userCredential =
-          await authService.createUserWithEmailAndPassword(email, password);
+          await _authService.createUserWithEmailAndPassword(email, password);
 
       User user = _userCredential!.user!;
 
@@ -100,7 +104,7 @@ class FirebaseProvider extends ChangeNotifier {
       );
 
       isSuccess =
-          await fireStoreService.addUserToFirestoreDatabase(userData, user);
+          await _fireStoreService.addUserToFirestoreDatabase(userData, user);
 
       setLoading(false);
       notifyListeners();
@@ -118,7 +122,7 @@ class FirebaseProvider extends ChangeNotifier {
     setLoading(true);
     try {
       DocumentSnapshot? snapshot =
-          await fireStoreService.getFirestoreData(user);
+          await _fireStoreService.getFirestoreData(user);
 
       if (_role!.toLowerCase() == RegistrationConstants.patient.toLowerCase()) {
         _patient = Patient.fromSnapshot(snapshot!);
@@ -139,7 +143,7 @@ class FirebaseProvider extends ChangeNotifier {
       _patient = null;
       _doctor = null;
       _userCredential = null;
-      await authService.signOut();
+      await _authService.signOut();
       setLoading(false);
       notifyListeners();
     } catch (e) {
