@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:schedcare/screens/authentication/approval_screen.dart';
 import 'package:schedcare/screens/authentication/doctor_register_screen.dart';
 import 'package:schedcare/screens/authentication/login_screen.dart';
 import 'package:schedcare/screens/authentication/patient_register_screen.dart';
@@ -15,14 +16,19 @@ final routerProvider = Provider<GoRouter>(
   (ref) {
     final router = RouterNotifier();
     return GoRouter(
-        initialLocation: RoutePaths.authWrapper, routes: router.routes);
+      initialLocation: RoutePaths.authWrapper,
+      routes: router.routes,
+    );
   },
 );
 
 class RouterNotifier extends ChangeNotifier {
-  RouterNotifier();
-
-  List<GoRoute> get routes => [
+  List<RouteBase> get routes => [
+        GoRoute(
+          name: RouteNames.authWrapper,
+          path: RoutePaths.authWrapper,
+          builder: (context, state) => const AuthWrapper(),
+        ),
         GoRoute(
           name: RouteNames.login,
           path: RoutePaths.login,
@@ -59,9 +65,9 @@ class RouterNotifier extends ChangeNotifier {
           builder: (context, state) => DoctorRegisterScreen(),
         ),
         GoRoute(
-          name: RouteNames.authWrapper,
-          path: RoutePaths.authWrapper,
-          builder: (context, state) => const AuthWrapper(),
+          name: RouteNames.approval,
+          path: RoutePaths.approval,
+          builder: (context, state) => const ApprovalScreen(),
         ),
       ];
 }

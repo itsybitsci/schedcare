@@ -54,6 +54,7 @@ class RegistrationConstants {
 
 //Routes Names
 class RouteNames {
+  static const String authWrapper = 'authWrapper';
   static const String login = 'login';
   static const String verifyEmail = 'verify_email';
   static const String resetPassword = 'reset_password';
@@ -61,11 +62,12 @@ class RouteNames {
   static const String patientRegistration = 'patient_registration';
   static const String doctorHome = 'doctor_home';
   static const String doctorRegistration = 'doctor_registration';
-  static const String authWrapper = 'authWrapper';
+  static const String approval = 'approval';
 }
 
 //Route Paths
 class RoutePaths {
+  static const String authWrapper = '/';
   static const String login = '/login';
   static const String verifyEmail = '/verify_email';
   static const String resetPassword = '/reset_password';
@@ -73,7 +75,7 @@ class RoutePaths {
   static const String patientRegistration = '/patient_registration';
   static const String doctorHome = '/doctor_home';
   static const String doctorRegistration = '/doctor_registration';
-  static const String authWrapper = '/authWrapper';
+  static const String approval = '/approval';
 }
 
 class ModelFields {

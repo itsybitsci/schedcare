@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 
-class DoctorApprovalScreen extends HookConsumerWidget {
-  const DoctorApprovalScreen({super.key});
+class ApprovalScreen extends HookConsumerWidget {
+  const ApprovalScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
