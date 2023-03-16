@@ -60,8 +60,7 @@ class FirebaseProvider extends ChangeNotifier {
           await _authService.logInWithEmailAndPassword(email, password);
       User? user = _userCredential!.user;
 
-      DocumentSnapshot? snapshot =
-          await _fireStoreService.getFirestoreData(user!);
+      DocumentSnapshot? snapshot = await _fireStoreService.getUserData(user!);
 
       _role = snapshot!.get(ModelFields.role).toString().toLowerCase() ==
               RegistrationConstants.patient.toLowerCase()
@@ -112,25 +111,6 @@ class FirebaseProvider extends ChangeNotifier {
         return _userCredential;
       }
       throw Exception('Error in signing up user!');
-    } catch (e) {
-      setLoading(false);
-      throw Exception(e).toString();
-    }
-  }
-
-  Future<void> getFirestoreData(User user) async {
-    setLoading(true);
-    try {
-      DocumentSnapshot? snapshot =
-          await _fireStoreService.getFirestoreData(user);
-
-      if (_role!.toLowerCase() == RegistrationConstants.patient.toLowerCase()) {
-        _patient = Patient.fromSnapshot(snapshot!);
-      } else {
-        _doctor = Doctor.fromSnapshot(snapshot!);
-      }
-      setLoading(false);
-      notifyListeners();
     } catch (e) {
       setLoading(false);
       throw Exception(e).toString();

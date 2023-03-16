@@ -44,18 +44,47 @@ class FirestoreService {
     return isSuccess;
   }
 
-  Future<DocumentSnapshot?> getFirestoreData(User user) async {
-    DocumentSnapshot snapshot = await _firebaseDb
-        .collection(FirestoreConstants.usersCollection)
-        .doc(user.uid)
-        .get();
-    return snapshot;
+  Future<DocumentSnapshot?> getUserData(User user) async {
+    try {
+      DocumentSnapshot snapshot = await _firebaseDb
+          .collection(FirestoreConstants.usersCollection)
+          .doc(user.uid)
+          .get();
+      return snapshot;
+    } catch (e) {
+      throw Exception(e).toString();
+    }
+  }
+
+  Future<QuerySnapshot?> getUsersData() async {
+    try {
+      QuerySnapshot snapshot = await _firebaseDb
+          .collection(FirestoreConstants.usersCollection)
+          .get();
+      return snapshot;
+    } catch (e) {
+      throw Exception(e).toString();
+    }
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getUsersSnapshots() {
+    try {
+      return _firebaseDb
+          .collection(FirestoreConstants.usersCollection)
+          .snapshots();
+    } catch (e) {
+      throw Exception(e).toString();
+    }
   }
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> getUserSnapshots(User user) {
-    return _firebaseDb
-        .collection(FirestoreConstants.usersCollection)
-        .doc(user.uid)
-        .snapshots();
+    try {
+      return _firebaseDb
+          .collection(FirestoreConstants.usersCollection)
+          .doc(user.uid)
+          .snapshots();
+    } catch (e) {
+      throw Exception(e).toString();
+    }
   }
 }
