@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
@@ -20,83 +21,123 @@ class LoginScreen extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Login'),
       ),
+      resizeToAvoidBottomInset: false,
       body: Form(
         key: formKeyLogin,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              controller: emailController,
-              decoration: const InputDecoration(
-                  suffixIcon: Icon(Icons.email),
-                  labelText: 'Email Address',
-                  hintText: 'Enter email address'),
-              validator: (value) {
-                return value!.isEmpty ? 'Required' : null;
-              },
-            ),
-            HookBuilder(
-              builder: (_) {
-                final passwordVisible = useState(false);
-
-                return TextFormField(
-                  controller: passwordController,
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 80.h,
+              ),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 300.w),
+                child: TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  controller: emailController,
                   decoration: InputDecoration(
-                    labelText: 'Password',
-                    hintText: 'Enter password',
-                    suffixIcon: IconButton(
-                      icon: Icon(passwordVisible.value
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () =>
-                          passwordVisible.value = !passwordVisible.value,
+                    suffixIcon: const Icon(Icons.email),
+                    labelText: 'Email Address',
+                    hintText: 'Enter email address',
+                    border: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.blue, width: 3),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  obscureText: !passwordVisible.value,
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Required';
-                    }
-                    return null;
+                    return value!.isEmpty ? 'Required' : null;
                   },
-                );
-              },
-            ),
-            ElevatedButton.icon(
-              onPressed: () async {
-                if (formKeyLogin.currentState!.validate()) {
-                  formKeyLogin.currentState?.save();
-                  await firebaseNotifier.logInWithEmailAndPassword(
-                      emailController.text, passwordController.text);
-                }
-              },
-              icon: const Icon(Icons.lock_open),
-              label: firebaseNotifier.getLoading
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : const Text('Login'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.push(RoutePaths.patientRegistration);
-              },
-              child: const Text('Register as Patient'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.push(RoutePaths.doctorRegistration);
-              },
-              child: const Text('Register as Doctor'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.push(RoutePaths.resetPassword);
-              },
-              child: const Text('Reset password'),
-            )
-          ],
+                ),
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 300.w),
+                child: HookBuilder(
+                  builder: (_) {
+                    final passwordVisible = useState(false);
+
+                    return TextFormField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        hintText: 'Enter password',
+                        suffixIcon: IconButton(
+                          icon: Icon(passwordVisible.value
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: () =>
+                              passwordVisible.value = !passwordVisible.value,
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Colors.blue, width: 3),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      obscureText: !passwordVisible.value,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Required';
+                        }
+                        return null;
+                      },
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  if (formKeyLogin.currentState!.validate()) {
+                    formKeyLogin.currentState?.save();
+                    await firebaseNotifier.logInWithEmailAndPassword(
+                        emailController.text, passwordController.text);
+                  }
+                },
+                icon: const Icon(Icons.lock_open),
+                label: firebaseNotifier.getLoading
+                    ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : const Text('Login'),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      context.push(RoutePaths.patientRegistration);
+                    },
+                    child: const Text('Register as Patient'),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    child: const Text('or'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.push(RoutePaths.doctorRegistration);
+                    },
+                    child: const Text('Register as Doctor'),
+                  ),
+                ],
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  context.push(RoutePaths.resetPassword);
+                },
+                child: const Text('Reset password'),
+              )
+            ],
+          ),
         ),
       ),
     );
