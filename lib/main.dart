@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/router_provider.dart';
 import 'package:schedcare/utilities/firebase_options.dart';
@@ -51,15 +52,19 @@ class SchedcareApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final routeNotifier = ref.watch(routerProvider);
-    return MaterialApp.router(
-      title: 'SchedCare',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      routeInformationParser: routeNotifier.routeInformationParser,
-      routeInformationProvider: routeNotifier.routeInformationProvider,
-      routerDelegate: routeNotifier.routerDelegate,
-      debugShowCheckedModeBanner: false,
+    return ScreenUtilInit(
+      builder: (BuildContext context, Widget? child) {
+        return MaterialApp.router(
+          title: 'SchedCare',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          routeInformationParser: routeNotifier.routeInformationParser,
+          routeInformationProvider: routeNotifier.routeInformationProvider,
+          routerDelegate: routeNotifier.routerDelegate,
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }

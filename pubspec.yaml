@@ -50,6 +50,7 @@ dependencies:
   flutter_hooks: ^0.18.6
   go_router: ^6.2.0
   fluttertoast: ^8.2.1
+  flutter_screenutil: ^5.7.0
 
 flutter_icons:
   android: true
