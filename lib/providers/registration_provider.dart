@@ -14,7 +14,7 @@ class RegistrationProvider extends ChangeNotifier {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _uhsIdController = TextEditingController();
+  final TextEditingController _uhsIdNumberController = TextEditingController();
   final TextEditingController _specializationController =
       TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -48,7 +48,7 @@ class RegistrationProvider extends ChangeNotifier {
 
   String get address => _addressController.text.trim();
 
-  String get uhsId => _uhsIdController.text.trim();
+  String get uhsIdNumber => _uhsIdNumberController.text.trim();
 
   String get sex => _sexesDropdownValue;
 
@@ -62,7 +62,7 @@ class RegistrationProvider extends ChangeNotifier {
 
   String get password => _passwordController.text.trim();
 
-  Widget buildFirstName() {
+  Widget buildFirstName({required = false}) {
     return TextFormField(
       keyboardType: TextInputType.name,
       controller: _firstNameController,
@@ -72,7 +72,7 @@ class RegistrationProvider extends ChangeNotifier {
         suffixIcon: Icon(Icons.person),
       ),
       validator: (value) {
-        return value!.isEmpty ? 'Required' : null;
+        return required && value!.isEmpty ? 'Required' : null;
       },
     );
   }
@@ -210,7 +210,10 @@ class RegistrationProvider extends ChangeNotifier {
           labelText: 'Phone Number',
           hintText: '(+63)'),
       validator: (value) {
-        return value!.isEmpty ? 'Required' : null;
+        if (value!.isEmpty) return 'Required';
+        return !value.contains(RegExp('^(09|\\+639)\\d{9}\$'))
+            ? 'Invalid format'
+            : null;
       },
     );
   }
@@ -229,10 +232,10 @@ class RegistrationProvider extends ChangeNotifier {
     );
   }
 
-  Widget buildUhsId() {
+  Widget buildUhsIdNumber() {
     return TextFormField(
       keyboardType: TextInputType.number,
-      controller: _uhsIdController,
+      controller: _uhsIdNumberController,
       decoration: const InputDecoration(
           suffixIcon: FaIcon(FontAwesomeIcons.idCard),
           labelText: 'UHS ID Number (Optional)',

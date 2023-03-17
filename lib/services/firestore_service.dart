@@ -44,13 +44,12 @@ class FirestoreService {
     return isSuccess;
   }
 
-  Future<DocumentSnapshot?> getUserData(User user) async {
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserData(String uid) async {
     try {
-      DocumentSnapshot snapshot = await _firebaseDb
+      return await _firebaseDb
           .collection(FirestoreConstants.usersCollection)
-          .doc(user.uid)
+          .doc(uid)
           .get();
-      return snapshot;
     } catch (e) {
       throw Exception(e).toString();
     }
@@ -58,10 +57,9 @@ class FirestoreService {
 
   Future<QuerySnapshot?> getUsersData() async {
     try {
-      QuerySnapshot snapshot = await _firebaseDb
+      return await _firebaseDb
           .collection(FirestoreConstants.usersCollection)
           .get();
-      return snapshot;
     } catch (e) {
       throw Exception(e).toString();
     }

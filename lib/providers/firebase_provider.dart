@@ -41,6 +41,7 @@ class FirebaseProvider extends ChangeNotifier {
 
   set setDoctor(Doctor doctor) {
     _doctor = doctor;
+    notifyListeners();
   }
 
   setLoading(bool loader) {
@@ -60,9 +61,10 @@ class FirebaseProvider extends ChangeNotifier {
           await _authService.logInWithEmailAndPassword(email, password);
       User? user = _userCredential!.user;
 
-      DocumentSnapshot? snapshot = await _fireStoreService.getUserData(user!);
+      DocumentSnapshot? snapshot =
+          await _fireStoreService.getUserData(user!.uid);
 
-      _role = snapshot!.get(ModelFields.role).toString().toLowerCase() ==
+      _role = snapshot.get(ModelFields.role).toString().toLowerCase() ==
               RegistrationConstants.patient.toLowerCase()
           ? RegistrationConstants.patient
           : RegistrationConstants.doctor;
@@ -138,13 +140,24 @@ final firebaseProvider = ChangeNotifierProvider<FirebaseProvider>(
 );
 
 final authStateChangeProvider = StreamProvider.autoDispose(
-  (ref) => FirebaseAuth.instance.authStateChanges(),
+  (ref) {
+    final firebaseNotifier = ref.watch(firebaseProvider);
+    return firebaseNotifier.getAuthService.userStream();
+  },
 );
 
 final userSnapShotProvider = FutureProvider.family
     .autoDispose<DocumentSnapshot<Map<String, dynamic>>, String>(
-  (ref, uid) => FirebaseFirestore.instance
-      .collection(FirestoreConstants.usersCollection)
-      .doc(uid)
-      .get(),
+  (ref, uid) async {
+    final firebaseNotifier = ref.watch(firebaseProvider);
+    return await firebaseNotifier.getFirestoreService.getUserData(uid);
+  },
+);
+
+final userSnapShotsProvider =
+    StreamProvider.autoDispose<QuerySnapshot<Map<String, dynamic>>>(
+  (ref) {
+    final firebaseNotifier = ref.watch(firebaseProvider);
+    return firebaseNotifier.getFirestoreService.getUsersSnapshots();
+  },
 );
