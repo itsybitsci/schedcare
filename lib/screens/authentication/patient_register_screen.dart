@@ -73,7 +73,7 @@ class PatientRegisterScreen extends HookConsumerWidget {
                         registrationNotifier.password,
                         userData);
 
-                    if (context.mounted) Navigator.pop(context);
+                    if (context.mounted) context.pop();
                   }
                 },
                 child: firebaseNotifier.getLoading

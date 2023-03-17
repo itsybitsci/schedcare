@@ -78,52 +78,53 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
       return const AuthWrapper();
     } else {
       return Scaffold(
-          appBar: AppBar(
-            title: const Text('Verify Email'),
-            automaticallyImplyLeading: false,
+        appBar: AppBar(
+          title: const Text('Verify Email'),
+          automaticallyImplyLeading: false,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'A verification email has been sent to your email address.',
+                style: TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed:
+                    canResendVerificationEmail ? sendVerificationEmail : null,
+                icon: const Icon(
+                  Icons.email,
+                  size: 32,
+                ),
+                label: const Text(
+                  'Resend Email',
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              TextButton(
+                onPressed: () async {
+                  timer?.cancel();
+                  await authService.signOut();
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+            ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'A verification email has been sent to your email address.',
-                  style: TextStyle(fontSize: 20),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton.icon(
-                  onPressed:
-                      canResendVerificationEmail ? sendVerificationEmail : null,
-                  icon: const Icon(
-                    Icons.email,
-                    size: 32,
-                  ),
-                  label: const Text(
-                    'Resend Email',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                TextButton(
-                  onPressed: () async {
-                    timer?.cancel();
-                    await authService.signOut();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50),
-                  ),
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
-              ],
-            ),
-          ));
+        ),
+      );
     }
   }
 }
