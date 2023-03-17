@@ -141,23 +141,16 @@ final firebaseProvider = ChangeNotifierProvider<FirebaseProvider>(
 
 final authStateChangeProvider = StreamProvider.autoDispose(
   (ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
-    return firebaseNotifier.getAuthService.userStream();
+    return FirebaseAuth.instance.authStateChanges();
   },
 );
 
 final userSnapShotProvider = FutureProvider.family
     .autoDispose<DocumentSnapshot<Map<String, dynamic>>, String>(
   (ref, uid) async {
-    final firebaseNotifier = ref.watch(firebaseProvider);
-    return await firebaseNotifier.getFirestoreService.getUserData(uid);
-  },
-);
-
-final userSnapShotsProvider =
-    StreamProvider.autoDispose<QuerySnapshot<Map<String, dynamic>>>(
-  (ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
-    return firebaseNotifier.getFirestoreService.getUsersSnapshots();
+    return await FirebaseFirestore.instance
+        .collection(FirestoreConstants.usersCollection)
+        .doc(uid)
+        .get();
   },
 );
