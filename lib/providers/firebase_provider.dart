@@ -133,6 +133,20 @@ class FirebaseProvider extends ChangeNotifier {
       throw Exception(e).toString();
     }
   }
+
+  Future<bool> updateUser(Map<String, dynamic> userData, String uid) async {
+    setLoading(true);
+    try {
+      await _fireStoreService.updateUser(userData, uid);
+      setLoading(false);
+      showToast('Successfully updated profile.');
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
 }
 
 final firebaseProvider = ChangeNotifierProvider<FirebaseProvider>(

@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/pages/list_doctors_page.dart';
+import 'package:schedcare/pages/patient/list_doctors_page.dart';
 import 'package:schedcare/pages/notifications_page.dart';
-import 'package:schedcare/pages/patient_home_page.dart';
-import 'package:schedcare/pages/patient_profile_page.dart';
+import 'package:schedcare/pages/patient/patient_home_page.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
-
-List<Widget> patientPages = const [
-  PatientHomePage(),
-  ListDoctorsPage(),
-  NotificationsPage(),
-  PatientProfilePage(),
-];
+import 'package:schedcare/utilities/constants.dart';
 
 class PatientHomeScreen extends HookConsumerWidget {
   const PatientHomeScreen({Key? key}) : super(key: key);
@@ -22,10 +16,26 @@ class PatientHomeScreen extends HookConsumerWidget {
     final firebaseNotifier = ref.watch(firebaseProvider);
     final index = useState(0);
 
+    Widget getBody(int index) {
+      if (index == 0) {
+        return const PatientHomePage();
+      } else if (index == 1) {
+        return const ListDoctorsPage();
+      }
+      return const NotificationsPage();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('SchedCare'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            tooltip: 'Profile',
+            onPressed: () {
+              context.push(RoutePaths.profile);
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: 'Logout',
@@ -36,7 +46,7 @@ class PatientHomeScreen extends HookConsumerWidget {
         ],
       ),
       body: !firebaseNotifier.getLoading
-          ? patientPages[index.value]
+          ? getBody(index.value)
           : const Center(
               child: CircularProgressIndicator(),
             ),
@@ -68,10 +78,6 @@ class PatientHomeScreen extends HookConsumerWidget {
                 icon: Icon(Icons.notification_add_outlined),
                 selectedIcon: Icon(Icons.notification_add),
                 label: 'Notifications'),
-            NavigationDestination(
-                icon: Icon(Icons.person_2_outlined),
-                selectedIcon: Icon(Icons.person_2),
-                label: 'Profile'),
           ],
         ),
       ),

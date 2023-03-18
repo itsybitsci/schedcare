@@ -85,4 +85,16 @@ class FirestoreService {
       throw Exception(e).toString();
     }
   }
+
+  Future<bool> updateUser(Map<String, dynamic> userData, String uid) async {
+    try {
+      await _firebaseDb
+          .collection(FirestoreConstants.usersCollection)
+          .doc(uid)
+          .update(userData);
+      return true;
+    } catch (e) {
+      throw Exception(e).toString();
+    }
+  }
 }
