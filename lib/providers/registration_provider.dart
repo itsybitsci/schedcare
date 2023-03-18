@@ -62,7 +62,59 @@ class RegistrationProvider extends ChangeNotifier {
 
   String get password => _passwordController.text.trim();
 
-  Widget buildFirstName({required = false}) {
+  set setFirstName(String firstName) {
+    _firstNameController.text = firstName;
+  }
+
+  set setMiddleName(String middleName) {
+    _middleNameController.text = middleName;
+  }
+
+  set setLastName(String lastName) {
+    _lastNameController.text = lastName;
+  }
+
+  set setSuffix(String suffix) {
+    _suffixController.text = suffix;
+  }
+
+  set setAge(String age) {
+    _ageController.text = age;
+  }
+
+  set setSexesDropdownValue(String sexesDropdownValue) {
+    _sexesDropdownValue = sexesDropdownValue;
+  }
+
+  set setPhoneNumber(String phoneNumber) {
+    _phoneNumberController.text = phoneNumber;
+  }
+
+  set setBirthDate(String birthDate) {
+    _birthdateController.text = birthDate;
+  }
+
+  set setAddress(String address) {
+    _addressController.text = address;
+  }
+
+  set setUhsIdNumber(String uhsIdNumber) {
+    _uhsIdNumberController.text = uhsIdNumber;
+  }
+
+  set setClassification(String classification) {
+    _classificationsDropdownValue = classification;
+  }
+
+  set setCivilStatus(String civilStatus) {
+    _civilStatusDropdownValue = civilStatus;
+  }
+
+  set setVaccinationStatus(String vaccinationStatus) {
+    _vaccinationStatusDropdownValue = vaccinationStatus;
+  }
+
+  Widget buildFirstName() {
     return TextFormField(
       keyboardType: TextInputType.name,
       controller: _firstNameController,
@@ -72,7 +124,7 @@ class RegistrationProvider extends ChangeNotifier {
         suffixIcon: Icon(Icons.person),
       ),
       validator: (value) {
-        return required && value!.isEmpty ? 'Required' : null;
+        return value!.isEmpty ? 'Required' : null;
       },
     );
   }
@@ -131,8 +183,9 @@ class RegistrationProvider extends ChangeNotifier {
     );
   }
 
-  Widget buildSexesDropdown() {
+  Widget buildSexesDropdown({bool editProfile = false}) {
     return DropdownButtonFormField<String>(
+      value: editProfile ? _sexesDropdownValue : null,
       hint: const Text('Select sex'),
       alignment: AlignmentDirectional.center,
       decoration: const InputDecoration(
@@ -257,8 +310,9 @@ class RegistrationProvider extends ChangeNotifier {
     );
   }
 
-  Widget buildVaccinationStatus() {
+  Widget buildVaccinationStatus({bool editProfile = false}) {
     return DropdownButtonFormField<String>(
+      value: editProfile ? _vaccinationStatusDropdownValue : null,
       hint: const Text('Select vaccination status'),
       alignment: AlignmentDirectional.center,
       isExpanded: true,
@@ -284,8 +338,9 @@ class RegistrationProvider extends ChangeNotifier {
     );
   }
 
-  Widget buildClassification() {
+  Widget buildClassification({bool editProfile = false}) {
     return DropdownButtonFormField<String>(
+      value: editProfile ? _classificationsDropdownValue : null,
       hint: const Text('Select classification'),
       alignment: AlignmentDirectional.center,
       decoration: const InputDecoration(
@@ -308,8 +363,9 @@ class RegistrationProvider extends ChangeNotifier {
     );
   }
 
-  Widget buildCivilStatus() {
+  Widget buildCivilStatus({bool editProfile = false}) {
     return DropdownButtonFormField<String>(
+      value: editProfile ? _civilStatusDropdownValue : null,
       hint: const Text('Select civil status'),
       alignment: AlignmentDirectional.center,
       decoration: const InputDecoration(
@@ -334,7 +390,7 @@ class RegistrationProvider extends ChangeNotifier {
     );
   }
 
-  Widget buildPassword() {
+  Widget buildPassword([StateSetter? setState]) {
     return TextFormField(
       controller: _passwordController,
       decoration: InputDecoration(
@@ -344,8 +400,12 @@ class RegistrationProvider extends ChangeNotifier {
           icon:
               Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
           onPressed: () {
-            _passwordVisible = !_passwordVisible;
-            notifyListeners();
+            if (setState == null) {
+              _passwordVisible = !_passwordVisible;
+              notifyListeners();
+            } else {
+              setState(() => _passwordVisible = !_passwordVisible);
+            }
           },
         ),
       ),
@@ -369,7 +429,7 @@ class RegistrationProvider extends ChangeNotifier {
     );
   }
 
-  Widget buildRepeatPassword() {
+  Widget buildRepeatPassword([StateSetter? setState]) {
     return TextFormField(
       controller: _repeatPasswordController,
       decoration: InputDecoration(
@@ -379,8 +439,12 @@ class RegistrationProvider extends ChangeNotifier {
           icon: Icon(
               _repeatPasswordVisible ? Icons.visibility : Icons.visibility_off),
           onPressed: () {
-            _repeatPasswordVisible = !_repeatPasswordVisible;
-            notifyListeners();
+            if (setState == null) {
+              _repeatPasswordVisible = !_repeatPasswordVisible;
+              notifyListeners();
+            } else {
+              setState(() => _repeatPasswordVisible = !_repeatPasswordVisible);
+            }
           },
         ),
       ),

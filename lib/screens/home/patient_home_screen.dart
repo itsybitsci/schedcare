@@ -7,6 +7,7 @@ import 'package:schedcare/pages/notifications_page.dart';
 import 'package:schedcare/pages/patient/patient_home_page.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
+import 'package:schedcare/utilities/widgets.dart';
 
 class PatientHomeScreen extends HookConsumerWidget {
   const PatientHomeScreen({Key? key}) : super(key: key);
@@ -33,7 +34,7 @@ class PatientHomeScreen extends HookConsumerWidget {
             icon: const Icon(Icons.person),
             tooltip: 'Profile',
             onPressed: () {
-              context.push(RoutePaths.profile);
+              context.push(RoutePaths.patientProfile);
             },
           ),
           IconButton(
@@ -45,11 +46,7 @@ class PatientHomeScreen extends HookConsumerWidget {
           ),
         ],
       ),
-      body: !firebaseNotifier.getLoading
-          ? getBody(index.value)
-          : const Center(
-              child: CircularProgressIndicator(),
-            ),
+      body: !firebaseNotifier.getLoading ? getBody(index.value) : loading(),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           indicatorColor: Colors.blue.shade100,

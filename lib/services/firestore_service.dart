@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:schedcare/utilities/constants.dart';
+import 'package:schedcare/utilities/helpers.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firebaseDb = FirebaseFirestore.instance;
@@ -9,39 +10,21 @@ class FirestoreService {
     Map<String, dynamic> userData,
     String userUid,
   ) async {
-    try {
-      await _firebaseDb
-          .collection(FirestoreConstants.usersCollection)
-          .doc(userUid)
-          .set(userData);
-    } catch (e) {
-      throw Exception(e).toString();
-    }
+    await _firebaseDb
+        .collection(FirestoreConstants.usersCollection)
+        .doc(userUid)
+        .set(userData);
   }
 
   Future<void> logUser(User user) async {
-    try {
-      await _firebaseDb
-          .collection(FirestoreConstants.usersCollection)
-          .doc(user.uid)
-          .update({
+    await _firebaseDb
+        .collection(FirestoreConstants.usersCollection)
+        .doc(user.uid)
+        .update(
+      {
         ModelFields.lastLogin: user.metadata.lastSignInTime,
-      });
-    } catch (e) {
-      throw Exception(e).toString();
-    }
-  }
-
-  Future<bool> addUserToFirestoreDatabase(
-      Map<String, dynamic> userData, User user) async {
-    bool isSuccess = false;
-
-    await registerUser(userData, user.uid).then((_) {
-      isSuccess = true;
-    }).catchError((_) {
-      isSuccess = false;
-    });
-    return isSuccess;
+      },
+    );
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getUserData(String uid) async {
@@ -50,8 +33,9 @@ class FirestoreService {
           .collection(FirestoreConstants.usersCollection)
           .doc(uid)
           .get();
-    } catch (e) {
-      throw Exception(e).toString();
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      throw Exception(e.code);
     }
   }
 
@@ -60,8 +44,9 @@ class FirestoreService {
       return await _firebaseDb
           .collection(FirestoreConstants.usersCollection)
           .get();
-    } catch (e) {
-      throw Exception(e).toString();
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      throw Exception(e.code);
     }
   }
 
@@ -70,8 +55,9 @@ class FirestoreService {
       return _firebaseDb
           .collection(FirestoreConstants.usersCollection)
           .snapshots();
-    } catch (e) {
-      throw Exception(e).toString();
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      throw Exception(e.code);
     }
   }
 
@@ -81,20 +67,16 @@ class FirestoreService {
           .collection(FirestoreConstants.usersCollection)
           .doc(user.uid)
           .snapshots();
-    } catch (e) {
-      throw Exception(e).toString();
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      throw Exception(e.code);
     }
   }
 
-  Future<bool> updateUser(Map<String, dynamic> userData, String uid) async {
-    try {
-      await _firebaseDb
-          .collection(FirestoreConstants.usersCollection)
-          .doc(uid)
-          .update(userData);
-      return true;
-    } catch (e) {
-      throw Exception(e).toString();
-    }
+  Future<void> updateUser(Map<String, dynamic> userData, String uid) async {
+    return await _firebaseDb
+        .collection(FirestoreConstants.usersCollection)
+        .doc(uid)
+        .update(userData);
   }
 }

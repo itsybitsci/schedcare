@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:schedcare/utilities/helpers.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -7,33 +8,18 @@ class AuthService {
 
   Future<UserCredential?> logInWithEmailAndPassword(
       String email, String password) async {
-    try {
-      final credential = await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return credential;
-    } catch (e) {
-      throw Exception(e).toString();
-    }
+    return await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
   }
 
   Future<UserCredential?> createUserWithEmailAndPassword(
       String email, String password) async {
-    try {
-      final credential = await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
-
-      return credential;
-    } catch (e) {
-      throw Exception(e).toString();
-    }
+    return await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
   }
 
   Future<void> signOut() async {
-    try {
-      return await _firebaseAuth.signOut();
-    } catch (e) {
-      throw Exception(e).toString();
-    }
+    await _firebaseAuth.signOut();
   }
 
   Stream<User?> userStream() {
@@ -43,16 +29,17 @@ class AuthService {
   Future<void> sendEmailVerification(User user) async {
     try {
       await user.sendEmailVerification();
-    } catch (e) {
-      throw Exception(e).toString();
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      throw Exception(e.code);
     }
   }
 
   Future<void> sendPasswordResetEmail(String email) async {
-    try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
-    } catch (e) {
-      throw Exception(e).toString();
-    }
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    await _firebaseAuth.currentUser!.updatePassword(newPassword);
   }
 }

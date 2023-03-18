@@ -53,8 +53,7 @@ class FirebaseProvider extends ChangeNotifier {
     return _authService.userStream();
   }
 
-  Future<UserCredential?> logInWithEmailAndPassword(
-      String email, String password) async {
+  Future<bool> logInWithEmailAndPassword(String email, String password) async {
     setLoading(true);
     try {
       _userCredential =
@@ -79,18 +78,17 @@ class FirebaseProvider extends ChangeNotifier {
 
       setLoading(false);
       notifyListeners();
-      return _userCredential;
-    } catch (e) {
+      return true;
+    } on FirebaseException catch (e) {
       setLoading(false);
       showToast(Exception(e).toString());
       throw Exception(e).toString();
     }
   }
 
-  Future<UserCredential?> createUserWithEmailAndPassword(
+  Future<bool> createUserWithEmailAndPassword(
       String email, String password, Map<String, dynamic> userData) async {
     setLoading(true);
-    bool isSuccess = false;
     try {
       _userCredential =
           await _authService.createUserWithEmailAndPassword(email, password);
@@ -104,33 +102,29 @@ class FirebaseProvider extends ChangeNotifier {
         },
       );
 
-      isSuccess =
-          await _fireStoreService.addUserToFirestoreDatabase(userData, user);
+      await _fireStoreService.registerUser(userData, user.uid);
 
       setLoading(false);
       notifyListeners();
-      if (isSuccess) {
-        return _userCredential;
-      }
-      throw Exception('Error in signing up user!');
-    } catch (e) {
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
       setLoading(false);
-      throw Exception(e).toString();
+      throw Exception(e.code);
     }
   }
 
   Future<void> signOut() async {
     setLoading(true);
     try {
-      _patient = null;
-      _doctor = null;
-      _userCredential = null;
       await _authService.signOut();
+      showToast('Successfully logged out');
       setLoading(false);
       notifyListeners();
-    } catch (e) {
+    } on FirebaseException catch (e) {
+      showToast(e.code);
       setLoading(false);
-      throw Exception(e).toString();
+      throw Exception(e.code);
     }
   }
 
@@ -138,8 +132,39 @@ class FirebaseProvider extends ChangeNotifier {
     setLoading(true);
     try {
       await _fireStoreService.updateUser(userData, uid);
+      showToast('Successfully updated profile');
       setLoading(false);
-      showToast('Successfully updated profile.');
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
+
+  Future<bool> sendPasswordResetEmail(String email) async {
+    setLoading(true);
+    try {
+      await _authService.sendPasswordResetEmail(email);
+      showToast('Kindly check your email');
+      setLoading(false);
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
+
+  Future<bool> updatePassword(String newPassword) async {
+    setLoading(true);
+    try {
+      await _authService.updatePassword(newPassword);
+      showToast('Successfully updated password');
+      setLoading(false);
+      notifyListeners();
       return true;
     } on FirebaseException catch (e) {
       showToast(e.code);

@@ -1,119 +1,134 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/providers/edit_profile_provider.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
+import 'package:schedcare/providers/registration_provider.dart';
+import 'package:schedcare/services/firestore_service.dart';
 import 'package:schedcare/utilities/constants.dart';
+import 'package:schedcare/utilities/prompts.dart';
+import 'package:schedcare/utilities/widgets.dart';
 
-class PatientProfilePage extends HookConsumerWidget {
-  PatientProfilePage({Key? key}) : super(key: key);
-  final GlobalKey<FormState> formKeyEditPatientProfile = GlobalKey<FormState>();
+class PatientProfileScreen extends HookConsumerWidget {
+  PatientProfileScreen({super.key});
+  final GlobalKey<FormState> formKeyUpdatePassword = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    FirestoreService firestoreService = FirestoreService();
     final firebaseNotifier = ref.watch(firebaseProvider);
-    final editProfileNotifier = ref.watch(editProfileProvider);
-
-    useEffect(
-      () {
-        Future.microtask(
-          () async {
-            DocumentSnapshot<Map<String, dynamic>> data =
-                await FirebaseFirestore.instance
-                    .collection(FirestoreConstants.usersCollection)
-                    .doc(firebaseNotifier.getCurrentUser!.uid)
-                    .get();
-            editProfileNotifier.setFirstName = data.get(ModelFields.firstName);
-            editProfileNotifier.setFirstName = data.get(ModelFields.firstName);
-            editProfileNotifier.setMiddleName =
-                data.get(ModelFields.middleName);
-            editProfileNotifier.setLastName = data.get(ModelFields.lastName);
-            editProfileNotifier.setSuffix = data.get(ModelFields.suffix);
-            editProfileNotifier.setAge = data.get(ModelFields.age).toString();
-            editProfileNotifier.setSexesDropdownValue =
-                data.get(ModelFields.sex);
-            editProfileNotifier.setPhoneNumber =
-                data.get(ModelFields.phoneNumber);
-            editProfileNotifier.setBirthDate = data.get(ModelFields.birthDate);
-            editProfileNotifier.setAddress = data.get(ModelFields.address);
-            editProfileNotifier.setUhsIdNumber =
-                data.get(ModelFields.uhsIdNumber);
-            editProfileNotifier.setClassification =
-                data.get(ModelFields.classification);
-            editProfileNotifier.setCivilStatus =
-                data.get(ModelFields.civilStatus);
-            editProfileNotifier.setVaccinationStatus =
-                data.get(ModelFields.vaccinationStatus);
-          },
-        );
-        return null;
-      },
-    );
+    final registrationNotifier = ref.watch(registrationProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
-      ),
-      body: Form(
-        key: formKeyEditPatientProfile,
-        child: SingleChildScrollView(
-          reverse: true,
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              editProfileNotifier.buildFirstName(),
-              editProfileNotifier.buildMiddleName(),
-              editProfileNotifier.buildLastName(),
-              editProfileNotifier.buildSuffix(),
-              editProfileNotifier.buildAge(),
-              editProfileNotifier.buildSexesDropdown(),
-              editProfileNotifier.buildPhoneNumber(),
-              editProfileNotifier.buildBirthdate(context),
-              editProfileNotifier.buildAddress(),
-              editProfileNotifier.buildUhsIdNumber(),
-              editProfileNotifier.buildClassification(),
-              editProfileNotifier.buildCivilStatus(),
-              editProfileNotifier.buildVaccinationStatus(),
-              ElevatedButton(
-                onPressed: () async {
-                  if (formKeyEditPatientProfile.currentState!.validate()) {
-                    formKeyEditPatientProfile.currentState?.save();
-                    Map<String, dynamic> userData = {
-                      ModelFields.firstName: editProfileNotifier.firstName,
-                      ModelFields.middleName: editProfileNotifier.middleName,
-                      ModelFields.lastName: editProfileNotifier.lastName,
-                      ModelFields.suffix: editProfileNotifier.suffix,
-                      ModelFields.age: editProfileNotifier.age,
-                      ModelFields.birthDate: editProfileNotifier.birthdate,
-                      ModelFields.sex: editProfileNotifier.sex,
-                      ModelFields.phoneNumber: editProfileNotifier.phoneNumber,
-                      ModelFields.address: editProfileNotifier.address,
-                      ModelFields.civilStatus: editProfileNotifier.civilStatus,
-                      ModelFields.classification:
-                          editProfileNotifier.classification,
-                      ModelFields.uhsIdNumber: editProfileNotifier.uhsIdNumber,
-                      ModelFields.vaccinationStatus:
-                          editProfileNotifier.vaccinationStatus,
-                    };
-
-                    await firebaseNotifier
-                        .updateUser(
-                            userData, firebaseNotifier.getCurrentUser!.uid)
-                        .then((success) => success ? context.pop() : null);
-                  }
-                },
-                child: firebaseNotifier.getLoading
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                    : const Text('Save Details'),
-              ),
-            ],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Profile',
+            onPressed: () {
+              context.push(RoutePaths.editPatientProfile);
+            },
           ),
-        ),
+        ],
+      ),
+      body: StreamBuilder(
+        stream:
+            firestoreService.getUserSnapshots(firebaseNotifier.getCurrentUser!),
+        builder: (BuildContext context,
+            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.hasData) {
+            DocumentSnapshot<Map<String, dynamic>> data = snapshot.data!;
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  data.get(ModelFields.middleName) != ''
+                      ? Text(
+                          '${data.get(ModelFields.firstName)} ${data.get(ModelFields.middleName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}')
+                      : Text(
+                          '${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'),
+                  Text('Age: ${data.get(ModelFields.age)}'),
+                  Text('Sex: ${data.get(ModelFields.sex)}'),
+                  Text('Contact Number: ${data.get(ModelFields.phoneNumber)}'),
+                  Text('Birthdate: ${data.get(ModelFields.birthDate)}'),
+                  Text('Address: ${data.get(ModelFields.address)}'),
+                  if (data.get(ModelFields.uhsIdNumber) != '')
+                    Text('UHS ID Number: ${data.get(ModelFields.uhsIdNumber)}'),
+                  if (data.get(ModelFields.classification) != '')
+                    Text(
+                        'Classification: ${data.get(ModelFields.classification)}'),
+                  Text('Civil Status: ${data.get(ModelFields.civilStatus)}'),
+                  Text(
+                      'Vaccination Status: ${data.get(ModelFields.vaccinationStatus)}'),
+                  firebaseNotifier.getLoading
+                      ? loading(color: Colors.blue)
+                      : ElevatedButton(
+                          onPressed: () async {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Change Password'),
+                                    content: StatefulBuilder(
+                                      builder: (BuildContext context,
+                                          StateSetter setState) {
+                                        return Form(
+                                          key: formKeyUpdatePassword,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              registrationNotifier
+                                                  .buildPassword(setState),
+                                              registrationNotifier
+                                                  .buildRepeatPassword(
+                                                      setState),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => context.pop(),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          if (formKeyUpdatePassword
+                                              .currentState!
+                                              .validate()) {
+                                            formKeyUpdatePassword.currentState
+                                                ?.save();
+                                            context.pop();
+                                            await firebaseNotifier
+                                                .updatePassword(
+                                                    registrationNotifier
+                                                        .password);
+                                          }
+                                        },
+                                        child: const Text('Update Password'),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
+                          child: const Text('Change Password'),
+                        ),
+                ],
+              ),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text(Prompts.errorDueToWeakInternet),
+            );
+          }
+
+          return loading();
+        },
       ),
     );
   }

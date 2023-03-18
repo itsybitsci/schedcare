@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/utilities/helpers.dart';
+import 'package:schedcare/utilities/widgets.dart';
 
 class DoctorHomeScreen extends HookConsumerWidget {
   const DoctorHomeScreen({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class DoctorHomeScreen extends HookConsumerWidget {
                 )
               ],
             )
-          : const Center(child: CircularProgressIndicator()),
+          : loading(),
     );
   }
 }

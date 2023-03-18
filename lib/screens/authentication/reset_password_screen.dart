@@ -15,29 +15,16 @@ class ResetPasswordScreen extends HookConsumerWidget {
   Future sendPasswordResetEMail(
       FirebaseProvider firebaseNotifier,
       RegistrationProvider registrationNotifier,
-      ValueNotifier canResendEmail,
-      ValueNotifier emailSent) async {
+      ValueNotifier canResendEmail) async {
     if (formKeyResetPassword.currentState!.validate()) {
       formKeyResetPassword.currentState?.save();
       canResendEmail.value = false;
 
-      await firebaseNotifier.getAuthService
-          .sendPasswordResetEmail(registrationNotifier.email)
-          .then(
-        (value) {
-          emailSent.value = true;
-        },
-      );
+      await firebaseNotifier.sendPasswordResetEmail(registrationNotifier.email);
 
       await Future.delayed(
-        const Duration(seconds: 10),
-      ).then(
-        (value) {
-          emailSent.value = false;
-        },
-      );
-
-      canResendEmail.value = true;
+        const Duration(seconds: 5),
+      ).then((value) => canResendEmail.value = true);
     }
   }
 
@@ -45,7 +32,6 @@ class ResetPasswordScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
     final registrationNotifier = ref.watch(registrationProvider);
-    final emailSent = useValueNotifier(false);
 
     return Scaffold(
       appBar: AppBar(
@@ -62,12 +48,12 @@ class ResetPasswordScreen extends HookConsumerWidget {
               registrationNotifier.buildEmail(),
               HookBuilder(
                 builder: (_) {
-                  final canResendEmail = useValueNotifier(true);
+                  final canResendEmail = useState(true);
 
                   return ElevatedButton(
                     onPressed: canResendEmail.value
                         ? () => sendPasswordResetEMail(firebaseNotifier,
-                            registrationNotifier, canResendEmail, emailSent)
+                            registrationNotifier, canResendEmail)
                         : null,
                     child: const Text('Send Password Reset Email'),
                   );
@@ -76,8 +62,6 @@ class ResetPasswordScreen extends HookConsumerWidget {
               const SizedBox(
                 height: 10,
               ),
-              if (useValueListenable(emailSent))
-                const Text('An email has been sent to your email address.'),
               const SizedBox(
                 height: 50,
               ),

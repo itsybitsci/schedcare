@@ -63,7 +63,8 @@ class RouteNames {
   static const String doctorHome = 'doctor_home';
   static const String doctorRegistration = 'doctor_registration';
   static const String approval = 'approval';
-  static const String profile = 'profile';
+  static const String patientProfile = 'patient_profile';
+  static const String editPatientProfile = 'edit_patient_profile';
 }
 
 //Route Paths
@@ -77,7 +78,8 @@ class RoutePaths {
   static const String doctorHome = '/doctor_home';
   static const String doctorRegistration = '/doctor_registration';
   static const String approval = '/approval';
-  static const String profile = '/profile';
+  static const String patientProfile = '/patient_profile';
+  static const String editPatientProfile = '/edit_patient_profile';
 }
 
 class ModelFields {

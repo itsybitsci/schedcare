@@ -11,3 +11,9 @@ Widget materialLoading({String toastMessage = ''}) {
     ),
   );
 }
+
+Widget loading({Color color = Colors.white}) {
+  return Center(
+    child: CircularProgressIndicator(color: color),
+  );
+}

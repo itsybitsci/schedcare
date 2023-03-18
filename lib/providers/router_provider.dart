@@ -9,6 +9,7 @@ import 'package:schedcare/screens/authentication/reset_password_screen.dart';
 import 'package:schedcare/screens/authentication/verify_email_screen.dart';
 import 'package:schedcare/screens/home/doctor_home_screen.dart';
 import 'package:schedcare/screens/home/patient_home_screen.dart';
+import 'package:schedcare/screens/profile/edit_patient_profile_screen.dart';
 import 'package:schedcare/screens/profile/patient_profile_screen.dart';
 import 'package:schedcare/utilities/auth_wrapper.dart';
 import 'package:schedcare/utilities/constants.dart';
@@ -71,9 +72,14 @@ class RouterNotifier extends ChangeNotifier {
           builder: (context, state) => const ApprovalScreen(),
         ),
         GoRoute(
-          name: RouteNames.profile,
-          path: RoutePaths.profile,
-          builder: (context, state) => PatientProfilePage(),
+          name: RouteNames.patientProfile,
+          path: RoutePaths.patientProfile,
+          builder: (context, state) => PatientProfileScreen(),
+        ),
+        GoRoute(
+          name: RouteNames.editPatientProfile,
+          path: RoutePaths.editPatientProfile,
+          builder: (context, state) => EditPatientProfileScreen(),
         ),
       ];
 }

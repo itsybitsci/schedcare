@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
+import 'package:schedcare/utilities/widgets.dart';
 
 class LoginScreen extends HookConsumerWidget {
   LoginScreen({super.key});
@@ -91,21 +92,19 @@ class LoginScreen extends HookConsumerWidget {
               SizedBox(
                 height: 20.h,
               ),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  if (formKeyLogin.currentState!.validate()) {
-                    formKeyLogin.currentState?.save();
-                    await firebaseNotifier.logInWithEmailAndPassword(
-                        emailController.text, passwordController.text);
-                  }
-                },
-                icon: const Icon(Icons.lock_open),
-                label: firebaseNotifier.getLoading
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
-                    : const Text('Login'),
-              ),
+              firebaseNotifier.getLoading
+                  ? loading(color: Colors.blue)
+                  : ElevatedButton.icon(
+                      onPressed: () async {
+                        if (formKeyLogin.currentState!.validate()) {
+                          formKeyLogin.currentState?.save();
+                          await firebaseNotifier.logInWithEmailAndPassword(
+                              emailController.text, passwordController.text);
+                        }
+                      },
+                      icon: const Icon(Icons.lock_open),
+                      label: const Text('Login'),
+                    ),
               SizedBox(
                 height: 10.h,
               ),

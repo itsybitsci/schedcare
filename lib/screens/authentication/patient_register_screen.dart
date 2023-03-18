@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/providers/registration_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
+import 'package:schedcare/utilities/widgets.dart';
 
 class PatientRegisterScreen extends HookConsumerWidget {
   PatientRegisterScreen({super.key});
@@ -77,9 +78,7 @@ class PatientRegisterScreen extends HookConsumerWidget {
                   }
                 },
                 child: firebaseNotifier.getLoading
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
+                    ? loading()
                     : const Text('Register'),
               ),
               ElevatedButton(

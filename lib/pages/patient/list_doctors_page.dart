@@ -6,6 +6,7 @@ import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
+import 'package:schedcare/utilities/widgets.dart';
 
 class ListDoctorsPage extends ConsumerStatefulWidget {
   const ListDoctorsPage({Key? key}) : super(key: key);
@@ -67,9 +68,7 @@ class _ListDoctorsPageState extends ConsumerState<ListDoctorsPage> {
               );
             }
 
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return loading();
           },
         );
       },
