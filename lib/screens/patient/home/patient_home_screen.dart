@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/pages/patient/list_doctors_page.dart';
-import 'package:schedcare/pages/notifications_page.dart';
+import 'package:schedcare/pages/patient/notifications_page.dart';
 import 'package:schedcare/pages/patient/patient_home_page.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
