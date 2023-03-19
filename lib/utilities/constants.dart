@@ -1,6 +1,7 @@
 // Firestore Constants
 class FirestoreConstants {
   static const String usersCollection = 'users';
+  static const String consultationRequestsCollection = 'consultation_requests';
 }
 
 //Registration Screen
@@ -102,4 +103,11 @@ class ModelFields {
   static const String specialization = 'specialization';
   static const String lastLogin = 'lastLogin';
   static const String createdAt = 'createdAt';
+  static const String patientUid = 'patientUid';
+  static const String doctorUid = 'doctorUid';
+  static const String requestBody = 'requestBody';
+  static const String status = 'status';
+  static const String consultationType = 'consultationType';
+  static const String consultationDate = 'consultationDate';
+  static const String meetingId = 'meetingId';
 }
