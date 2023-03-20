@@ -54,7 +54,7 @@ class EditPatientProfileScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('Edit Profile'),
       ),
       body: Form(
         key: formKeyEditPatientProfile,

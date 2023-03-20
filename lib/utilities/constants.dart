@@ -66,6 +66,7 @@ class RouteNames {
   static const String approval = 'approval';
   static const String patientProfile = 'patient_profile';
   static const String editPatientProfile = 'edit_patient_profile';
+  static const String sendConsultationRequest = 'send_consultation_request';
 }
 
 //Route Paths
@@ -81,6 +82,7 @@ class RoutePaths {
   static const String approval = '/approval';
   static const String patientProfile = '/patient_profile';
   static const String editPatientProfile = '/edit_patient_profile';
+  static const String sendConsultationRequest = '/send_consultation_request';
 }
 
 class ModelFields {

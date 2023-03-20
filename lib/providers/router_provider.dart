@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/screens/common/authentication/approval_screen.dart';
 import 'package:schedcare/screens/doctor/authentication/doctor_register_screen.dart';
 import 'package:schedcare/screens/common/authentication/login_screen.dart';
@@ -8,6 +9,7 @@ import 'package:schedcare/screens/patient/authentication/patient_register_screen
 import 'package:schedcare/screens/common/authentication/reset_password_screen.dart';
 import 'package:schedcare/screens/common/authentication/verify_email_screen.dart';
 import 'package:schedcare/screens/doctor/home/doctor_home_screen.dart';
+import 'package:schedcare/screens/patient/consultation_requests/send_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/home/patient_home_screen.dart';
 import 'package:schedcare/screens/patient/profile/edit_patient_profile_screen.dart';
 import 'package:schedcare/screens/patient/profile/patient_profile_screen.dart';
@@ -80,6 +82,16 @@ class RouterNotifier extends ChangeNotifier {
           name: RouteNames.editPatientProfile,
           path: RoutePaths.editPatientProfile,
           builder: (context, state) => EditPatientProfileScreen(),
+        ),
+        GoRoute(
+          name: RouteNames.sendConsultationRequest,
+          path: RoutePaths.sendConsultationRequest,
+          builder: (context, state) {
+            Doctor doctor = state.extra as Doctor;
+            return SendConsultationRequest(
+              doctor: doctor,
+            );
+          },
         ),
       ];
 }
