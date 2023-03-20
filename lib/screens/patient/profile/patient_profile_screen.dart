@@ -43,7 +43,7 @@ class PatientProfileScreen extends HookConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  data.get(ModelFields.middleName) != ''
+                  (data.get(ModelFields.middleName)).toString().isNotEmpty
                       ? Text(
                           '${data.get(ModelFields.firstName)} ${data.get(ModelFields.middleName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}')
                       : Text(
@@ -53,9 +53,11 @@ class PatientProfileScreen extends HookConsumerWidget {
                   Text('Contact Number: ${data.get(ModelFields.phoneNumber)}'),
                   Text('Birthdate: ${data.get(ModelFields.birthDate)}'),
                   Text('Address: ${data.get(ModelFields.address)}'),
-                  if (data.get(ModelFields.uhsIdNumber) != '')
+                  if ((data.get(ModelFields.uhsIdNumber)).toString().isNotEmpty)
                     Text('UHS ID Number: ${data.get(ModelFields.uhsIdNumber)}'),
-                  if (data.get(ModelFields.classification) != '')
+                  if ((data.get(ModelFields.classification))
+                      .toString()
+                      .isNotEmpty)
                     Text(
                         'Classification: ${data.get(ModelFields.classification)}'),
                   Text('Civil Status: ${data.get(ModelFields.civilStatus)}'),

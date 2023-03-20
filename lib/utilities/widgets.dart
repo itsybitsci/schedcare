@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
 Widget materialLoading({String toastMessage = ''}) {
-  if (toastMessage != '') {
+  if (toastMessage.isNotEmpty) {
     showToast(toastMessage);
   }
   return const Material(
