@@ -11,8 +11,7 @@ class SendConsultationProvider extends ChangeNotifier {
   DateTime? _chosenDate;
   TimeOfDay? _chosenTime;
 
-  String _consultationTypeDropdownValue =
-      RegistrationConstants.consultationTypes.first;
+  String _consultationTypeDropdownValue = AppConstants.consultationTypes.first;
 
   DateTime get dateTime => DateTime(_chosenDate!.year, _chosenDate!.month,
       _chosenDate!.day, _chosenTime!.hour, _chosenTime!.minute);
@@ -135,8 +134,7 @@ class SendConsultationProvider extends ChangeNotifier {
           onChanged: (String? value) {
             _consultationTypeDropdownValue = value!;
           },
-          items: RegistrationConstants.consultationTypes
-              .map<DropdownMenuItem<String>>(
+          items: AppConstants.consultationTypes.map<DropdownMenuItem<String>>(
             (String value) {
               return DropdownMenuItem<String>(
                 alignment: AlignmentDirectional.center,

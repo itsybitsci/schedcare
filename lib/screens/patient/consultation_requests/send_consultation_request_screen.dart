@@ -81,7 +81,7 @@ class SendConsultationRequest extends HookConsumerWidget {
                                       sendConsultationNotifier.consultationType,
                                   consultationDate:
                                       sendConsultationNotifier.dateTime,
-                                  status: RegistrationConstants.pending,
+                                  status: AppConstants.pending,
                                   createdAt: DateTime.now());
                           await firebaseNotifier
                               .sendConsultationRequest(consultationRequest)

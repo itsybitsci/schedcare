@@ -44,7 +44,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
                     formKeyRegisterDoctor.currentState?.save();
                     Map<String, dynamic> userData = {
                       ModelFields.email: registrationNotifier.email,
-                      ModelFields.role: RegistrationConstants.doctor,
+                      ModelFields.role: AppConstants.doctor,
                       ModelFields.firstName: registrationNotifier.firstName,
                       ModelFields.middleName: registrationNotifier.middleName,
                       ModelFields.lastName: registrationNotifier.lastName,

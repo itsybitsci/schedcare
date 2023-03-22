@@ -1,10 +1,14 @@
-// Firestore Constants
+import 'package:flutter/material.dart';
+import 'package:schedcare/pages/patient/list_doctors_page.dart';
+import 'package:schedcare/pages/patient/notifications_page.dart';
+import 'package:schedcare/pages/patient/patient_home_page.dart';
+
 class FirestoreConstants {
   static const String usersCollection = 'users';
   static const String consultationRequestsCollection = 'consultation_requests';
 }
 
-class RegistrationConstants {
+class AppConstants {
   static const String patient = 'Patient';
   static const String doctor = 'Doctor';
 
@@ -61,6 +65,12 @@ class RegistrationConstants {
   static const List<String> consultationTypes = <String>[
     teleconsultation,
     inPersonConsultation
+  ];
+
+  static List<Widget> patientPages = const <Widget>[
+    PatientHomePage(),
+    ListDoctorsPage(),
+    NotificationsPage(),
   ];
 }
 

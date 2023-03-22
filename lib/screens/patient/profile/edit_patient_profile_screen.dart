@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/providers/registration_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
@@ -26,7 +27,10 @@ class EditPatientProfileScreen extends HookConsumerWidget {
       registrationNotifier.setAge = data.get(ModelFields.age).toString();
       registrationNotifier.setSexesDropdownValue = data.get(ModelFields.sex);
       registrationNotifier.setPhoneNumber = data.get(ModelFields.phoneNumber);
-      registrationNotifier.setBirthDate = data.get(ModelFields.birthDate);
+      registrationNotifier.setBirthDate =
+          DateFormat('yMMMMd').format(data.get(ModelFields.birthDate).toDate());
+      registrationNotifier.setChosenDate =
+          data.get(ModelFields.birthDate).toDate();
       registrationNotifier.setAddress = data.get(ModelFields.address);
       registrationNotifier.setUhsIdNumber = data.get(ModelFields.uhsIdNumber);
       registrationNotifier.setClassification =

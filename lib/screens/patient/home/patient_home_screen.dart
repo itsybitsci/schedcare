@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/pages/patient/list_doctors_page.dart';
-import 'package:schedcare/pages/patient/notifications_page.dart';
-import 'package:schedcare/pages/patient/patient_home_page.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/widgets.dart';
@@ -16,15 +13,6 @@ class PatientHomeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
     final index = useState(0);
-
-    Widget getBody(int index) {
-      if (index == 0) {
-        return const PatientHomePage();
-      } else if (index == 1) {
-        return const ListDoctorsPage();
-      }
-      return const NotificationsPage();
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -46,7 +34,9 @@ class PatientHomeScreen extends HookConsumerWidget {
           ),
         ],
       ),
-      body: !firebaseNotifier.getLoading ? getBody(index.value) : loading(),
+      body: !firebaseNotifier.getLoading
+          ? AppConstants.patientPages[index.value]
+          : loading(color: Colors.blue),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           indicatorColor: Colors.blue.shade100,

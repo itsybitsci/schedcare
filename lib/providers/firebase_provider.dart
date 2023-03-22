@@ -65,11 +65,11 @@ class FirebaseProvider extends ChangeNotifier {
           await _fireStoreService.getUserData(user!.uid);
 
       _role = snapshot.get(ModelFields.role).toString().toLowerCase() ==
-              RegistrationConstants.patient.toLowerCase()
-          ? RegistrationConstants.patient
-          : RegistrationConstants.doctor;
+              AppConstants.patient.toLowerCase()
+          ? AppConstants.patient
+          : AppConstants.doctor;
 
-      if (_role!.toLowerCase() == RegistrationConstants.patient.toLowerCase()) {
+      if (_role!.toLowerCase() == AppConstants.patient.toLowerCase()) {
         _patient = Patient.fromSnapshot(snapshot);
       } else {
         _doctor = Doctor.fromSnapshot(snapshot);

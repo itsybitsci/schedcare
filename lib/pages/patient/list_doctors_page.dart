@@ -34,7 +34,7 @@ class _ListDoctorsPageState extends ConsumerState<ListDoctorsPage> {
               doctors.value = snapshot.data!.docs
                   .where((snapshot) =>
                       snapshot[ModelFields.role].toLowerCase() ==
-                          RegistrationConstants.doctor.toLowerCase() &&
+                          AppConstants.doctor.toLowerCase() &&
                       snapshot[ModelFields.isApproved])
                   .map(
                 (QueryDocumentSnapshot snapshot) {
