@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/providers/registration_provider.dart';
 import 'package:schedcare/services/firestore_service.dart';
@@ -51,7 +52,8 @@ class PatientProfileScreen extends HookConsumerWidget {
                   Text('Age: ${data.get(ModelFields.age)}'),
                   Text('Sex: ${data.get(ModelFields.sex)}'),
                   Text('Contact Number: ${data.get(ModelFields.phoneNumber)}'),
-                  Text('Birthdate: ${data.get(ModelFields.birthDate)}'),
+                  Text(
+                      'Birthdate: ${DateFormat('yMMMMd').format(data.get(ModelFields.birthDate).toDate())}'),
                   Text('Address: ${data.get(ModelFields.address)}'),
                   if ((data.get(ModelFields.uhsIdNumber)).toString().isNotEmpty)
                     Text('UHS ID Number: ${data.get(ModelFields.uhsIdNumber)}'),

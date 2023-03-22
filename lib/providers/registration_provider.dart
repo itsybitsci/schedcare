@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:schedcare/utilities/constants.dart';
 
 class RegistrationProvider extends ChangeNotifier {
@@ -230,8 +229,7 @@ class RegistrationProvider extends ChangeNotifier {
         );
 
         if (pickedDate != null) {
-          String formattedBirthDate = DateFormat('yMMMMd').format(pickedDate);
-          _birthdateController.text = formattedBirthDate.toString();
+          _birthdateController.text = pickedDate.toString();
         }
       },
       validator: (value) {

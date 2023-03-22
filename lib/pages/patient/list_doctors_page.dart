@@ -50,7 +50,7 @@ class _ListDoctorsPageState extends ConsumerState<ListDoctorsPage> {
                       itemBuilder: (BuildContext context, int index) {
                         Doctor doctor = doctors.value[index];
                         return ListTile(
-                          onTap: () async {
+                          onTap: () {
                             context.push(RoutePaths.sendConsultationRequest,
                                 extra: doctor);
                           },

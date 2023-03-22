@@ -10,7 +10,7 @@ class Patient {
   final String lastName;
   final String suffix;
   final int age;
-  final String birthDate;
+  final DateTime birthDate;
   final String sex;
   final String phoneNumber;
   final String address;
@@ -54,7 +54,7 @@ class Patient {
       lastName: userData[ModelFields.lastName],
       suffix: userData[ModelFields.suffix] ?? '',
       age: userData[ModelFields.age],
-      birthDate: userData[ModelFields.birthDate],
+      birthDate: userData[ModelFields.birthDate].toDate(),
       sex: userData[ModelFields.sex],
       phoneNumber: userData[ModelFields.phoneNumber],
       address: userData[ModelFields.address],
