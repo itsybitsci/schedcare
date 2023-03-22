@@ -4,7 +4,6 @@ class FirestoreConstants {
   static const String consultationRequestsCollection = 'consultation_requests';
 }
 
-//Registration Screen
 class RegistrationConstants {
   static const String patient = 'Patient';
   static const String doctor = 'Doctor';
@@ -28,6 +27,13 @@ class RegistrationConstants {
   static const String junior = 'Junior';
   static const String senior = 'Senior';
 
+  static const String teleconsultation = 'Teleconsultation';
+  static const String inPersonConsultation = 'In-person Consultation';
+
+  static const String approved = 'Approved';
+  static const String rejected = 'Rejected';
+  static const String pending = 'Pending';
+
   static const List<String> sexes = <String>[male, female];
 
   static const List<String> classifications = <String>[
@@ -50,6 +56,11 @@ class RegistrationConstants {
     firstDoseOnly,
     fullyVaccinated,
     withBooster,
+  ];
+
+  static const List<String> consultationTypes = <String>[
+    teleconsultation,
+    inPersonConsultation
   ];
 }
 

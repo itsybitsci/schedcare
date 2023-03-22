@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/services/auth_service.dart';
 import 'package:schedcare/services/firestore_service.dart';
@@ -163,6 +164,22 @@ class FirebaseProvider extends ChangeNotifier {
     try {
       await _authService.updatePassword(newPassword);
       showToast('Successfully updated password');
+      setLoading(false);
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
+
+  Future<bool> sendConsultationRequest(
+      ConsultationRequest consultationRequest) async {
+    setLoading(true);
+    try {
+      await _fireStoreService.sendConsultationRequest(consultationRequest);
+      showToast('Successfully sent consultation request');
       setLoading(false);
       notifyListeners();
       return true;

@@ -19,6 +19,7 @@ class RegistrationProvider extends ChangeNotifier {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatPasswordController =
       TextEditingController();
+  DateTime? _chosenDate;
 
   String _sexesDropdownValue = RegistrationConstants.sexes.first;
   String _classificationsDropdownValue =
@@ -39,7 +40,7 @@ class RegistrationProvider extends ChangeNotifier {
 
   int get age => int.parse(_ageController.text.trim());
 
-  String get birthdate => _birthdateController.text.trim();
+  DateTime get birthdate => _chosenDate!;
 
   String get email => _emailController.text.trim();
 
@@ -218,7 +219,6 @@ class RegistrationProvider extends ChangeNotifier {
         labelText: 'Birthdate',
         hintText: 'Enter birthdate',
         suffixIcon: Icon(Icons.calendar_month),
-        icon: Icon(Icons.calendar_today),
       ),
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(

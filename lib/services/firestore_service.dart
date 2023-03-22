@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
@@ -78,5 +79,14 @@ class FirestoreService {
         .collection(FirestoreConstants.usersCollection)
         .doc(uid)
         .update(userData);
+  }
+
+  Future<DocumentReference<Map<String, dynamic>>> sendConsultationRequest(
+      ConsultationRequest consultationRequest) async {
+    return await _firebaseDb
+        .collection(FirestoreConstants.consultationRequestsCollection)
+        .add(
+          consultationRequest.toMap(),
+        );
   }
 }
