@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
-import 'package:schedcare/providers/registration_provider.dart';
+import 'package:schedcare/providers/generic_fields_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
@@ -14,7 +14,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
-    final registrationNotifier = ref.watch(registrationProvider);
+    final genericFieldsNotifier = ref.watch(genericFieldsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,35 +29,35 @@ class DoctorRegisterScreen extends HookConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              registrationNotifier.buildFirstName(),
-              registrationNotifier.buildMiddleName(),
-              registrationNotifier.buildLastName(),
-              registrationNotifier.buildSuffix(),
-              registrationNotifier.buildSexesDropdown(),
-              registrationNotifier.buildEmail(),
-              registrationNotifier.buildSpecialization(),
-              registrationNotifier.buildPassword(),
-              registrationNotifier.buildRepeatPassword(),
+              genericFieldsNotifier.buildFirstName(),
+              genericFieldsNotifier.buildMiddleName(),
+              genericFieldsNotifier.buildLastName(),
+              genericFieldsNotifier.buildSuffix(),
+              genericFieldsNotifier.buildSexesDropdown(),
+              genericFieldsNotifier.buildEmail(),
+              genericFieldsNotifier.buildSpecialization(),
+              genericFieldsNotifier.buildPassword(),
+              genericFieldsNotifier.buildRepeatPassword(),
               ElevatedButton(
                 onPressed: () async {
                   if (formKeyRegisterDoctor.currentState!.validate()) {
                     formKeyRegisterDoctor.currentState?.save();
                     Map<String, dynamic> userData = {
-                      ModelFields.email: registrationNotifier.email,
+                      ModelFields.email: genericFieldsNotifier.email,
                       ModelFields.role: AppConstants.doctor,
-                      ModelFields.firstName: registrationNotifier.firstName,
-                      ModelFields.middleName: registrationNotifier.middleName,
-                      ModelFields.lastName: registrationNotifier.lastName,
-                      ModelFields.suffix: registrationNotifier.suffix,
-                      ModelFields.sex: registrationNotifier.sex,
+                      ModelFields.firstName: genericFieldsNotifier.firstName,
+                      ModelFields.middleName: genericFieldsNotifier.middleName,
+                      ModelFields.lastName: genericFieldsNotifier.lastName,
+                      ModelFields.suffix: genericFieldsNotifier.suffix,
+                      ModelFields.sex: genericFieldsNotifier.sex,
                       ModelFields.specialization:
-                          registrationNotifier.specialization,
+                          genericFieldsNotifier.specialization,
                       ModelFields.isApproved: false,
                     };
 
                     await firebaseNotifier.createUserWithEmailAndPassword(
-                        registrationNotifier.email,
-                        registrationNotifier.password,
+                        genericFieldsNotifier.email,
+                        genericFieldsNotifier.password,
                         userData);
 
                     if (context.mounted) context.pop();

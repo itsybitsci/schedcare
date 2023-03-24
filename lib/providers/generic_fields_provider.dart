@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/utilities/constants.dart';
 
-class RegistrationProvider extends ChangeNotifier {
+class GenericFieldsProvider extends ChangeNotifier {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _middleNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -433,6 +433,6 @@ class RegistrationProvider extends ChangeNotifier {
       );
 }
 
-final registrationProvider =
-    ChangeNotifierProvider.autoDispose<RegistrationProvider>(
-        (ref) => RegistrationProvider());
+final genericFieldsProvider =
+    ChangeNotifierProvider.autoDispose<GenericFieldsProvider>(
+        (ref) => GenericFieldsProvider());

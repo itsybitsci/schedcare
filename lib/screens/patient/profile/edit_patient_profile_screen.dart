@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
-import 'package:schedcare/providers/registration_provider.dart';
+import 'package:schedcare/providers/generic_fields_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
@@ -16,27 +16,27 @@ class EditPatientProfileScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
-    final registrationNotifier = ref.watch(registrationProvider);
+    final genericFieldsNotifier = ref.watch(genericFieldsProvider);
 
     Future setData(DocumentSnapshot<Map<String, dynamic>> data) async {
-      registrationNotifier.setFirstName = data.get(ModelFields.firstName);
-      registrationNotifier.setFirstName = data.get(ModelFields.firstName);
-      registrationNotifier.setMiddleName = data.get(ModelFields.middleName);
-      registrationNotifier.setLastName = data.get(ModelFields.lastName);
-      registrationNotifier.setSuffix = data.get(ModelFields.suffix);
-      registrationNotifier.setAge = data.get(ModelFields.age).toString();
-      registrationNotifier.setSexesDropdownValue = data.get(ModelFields.sex);
-      registrationNotifier.setPhoneNumber = data.get(ModelFields.phoneNumber);
-      registrationNotifier.setBirthDate =
+      genericFieldsNotifier.setFirstName = data.get(ModelFields.firstName);
+      genericFieldsNotifier.setFirstName = data.get(ModelFields.firstName);
+      genericFieldsNotifier.setMiddleName = data.get(ModelFields.middleName);
+      genericFieldsNotifier.setLastName = data.get(ModelFields.lastName);
+      genericFieldsNotifier.setSuffix = data.get(ModelFields.suffix);
+      genericFieldsNotifier.setAge = data.get(ModelFields.age).toString();
+      genericFieldsNotifier.setSexesDropdownValue = data.get(ModelFields.sex);
+      genericFieldsNotifier.setPhoneNumber = data.get(ModelFields.phoneNumber);
+      genericFieldsNotifier.setBirthDate =
           DateFormat('yMMMMd').format(data.get(ModelFields.birthDate).toDate());
-      registrationNotifier.setChosenDate =
+      genericFieldsNotifier.setChosenDate =
           data.get(ModelFields.birthDate).toDate();
-      registrationNotifier.setAddress = data.get(ModelFields.address);
-      registrationNotifier.setUhsIdNumber = data.get(ModelFields.uhsIdNumber);
-      registrationNotifier.setClassification =
+      genericFieldsNotifier.setAddress = data.get(ModelFields.address);
+      genericFieldsNotifier.setUhsIdNumber = data.get(ModelFields.uhsIdNumber);
+      genericFieldsNotifier.setClassification =
           data.get(ModelFields.classification);
-      registrationNotifier.setCivilStatus = data.get(ModelFields.civilStatus);
-      registrationNotifier.setVaccinationStatus =
+      genericFieldsNotifier.setCivilStatus = data.get(ModelFields.civilStatus);
+      genericFieldsNotifier.setVaccinationStatus =
           data.get(ModelFields.vaccinationStatus);
     }
 
@@ -68,19 +68,19 @@ class EditPatientProfileScreen extends HookConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              registrationNotifier.buildFirstName(),
-              registrationNotifier.buildMiddleName(),
-              registrationNotifier.buildLastName(),
-              registrationNotifier.buildSuffix(),
-              registrationNotifier.buildAge(),
-              registrationNotifier.buildSexesDropdown(editProfile: true),
-              registrationNotifier.buildPhoneNumber(),
-              registrationNotifier.buildBirthdate(context),
-              registrationNotifier.buildAddress(),
-              registrationNotifier.buildUhsIdNumber(),
-              registrationNotifier.buildClassification(editProfile: true),
-              registrationNotifier.buildCivilStatus(editProfile: true),
-              registrationNotifier.buildVaccinationStatus(editProfile: true),
+              genericFieldsNotifier.buildFirstName(),
+              genericFieldsNotifier.buildMiddleName(),
+              genericFieldsNotifier.buildLastName(),
+              genericFieldsNotifier.buildSuffix(),
+              genericFieldsNotifier.buildAge(),
+              genericFieldsNotifier.buildSexesDropdown(editProfile: true),
+              genericFieldsNotifier.buildPhoneNumber(),
+              genericFieldsNotifier.buildBirthdate(context),
+              genericFieldsNotifier.buildAddress(),
+              genericFieldsNotifier.buildUhsIdNumber(),
+              genericFieldsNotifier.buildClassification(editProfile: true),
+              genericFieldsNotifier.buildCivilStatus(editProfile: true),
+              genericFieldsNotifier.buildVaccinationStatus(editProfile: true),
               firebaseNotifier.getLoading
                   ? loading(color: Colors.blue)
                   : ElevatedButton(
@@ -90,26 +90,27 @@ class EditPatientProfileScreen extends HookConsumerWidget {
                           formKeyEditPatientProfile.currentState?.save();
                           Map<String, dynamic> userData = {
                             ModelFields.firstName:
-                                registrationNotifier.firstName,
+                                genericFieldsNotifier.firstName,
                             ModelFields.middleName:
-                                registrationNotifier.middleName,
-                            ModelFields.lastName: registrationNotifier.lastName,
-                            ModelFields.suffix: registrationNotifier.suffix,
-                            ModelFields.age: registrationNotifier.age,
+                                genericFieldsNotifier.middleName,
+                            ModelFields.lastName:
+                                genericFieldsNotifier.lastName,
+                            ModelFields.suffix: genericFieldsNotifier.suffix,
+                            ModelFields.age: genericFieldsNotifier.age,
                             ModelFields.birthDate:
-                                registrationNotifier.birthdate,
-                            ModelFields.sex: registrationNotifier.sex,
+                                genericFieldsNotifier.birthdate,
+                            ModelFields.sex: genericFieldsNotifier.sex,
                             ModelFields.phoneNumber:
-                                registrationNotifier.phoneNumber,
-                            ModelFields.address: registrationNotifier.address,
+                                genericFieldsNotifier.phoneNumber,
+                            ModelFields.address: genericFieldsNotifier.address,
                             ModelFields.civilStatus:
-                                registrationNotifier.civilStatus,
+                                genericFieldsNotifier.civilStatus,
                             ModelFields.classification:
-                                registrationNotifier.classification,
+                                genericFieldsNotifier.classification,
                             ModelFields.uhsIdNumber:
-                                registrationNotifier.uhsIdNumber,
+                                genericFieldsNotifier.uhsIdNumber,
                             ModelFields.vaccinationStatus:
-                                registrationNotifier.vaccinationStatus,
+                                genericFieldsNotifier.vaccinationStatus,
                           };
 
                           await firebaseNotifier

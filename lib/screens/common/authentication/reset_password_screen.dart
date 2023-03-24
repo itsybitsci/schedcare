@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
-import 'package:schedcare/providers/registration_provider.dart';
+import 'package:schedcare/providers/generic_fields_provider.dart';
 
 class ResetPasswordScreen extends HookConsumerWidget {
   ResetPasswordScreen({super.key});
@@ -14,7 +14,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
 
   Future sendPasswordResetEMail(
       FirebaseProvider firebaseNotifier,
-      RegistrationProvider registrationNotifier,
+      GenericFieldsProvider registrationNotifier,
       ValueNotifier canResendEmail) async {
     if (formKeyResetPassword.currentState!.validate()) {
       formKeyResetPassword.currentState?.save();
@@ -31,7 +31,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
-    final registrationNotifier = ref.watch(registrationProvider);
+    final genericFieldsNotifier = ref.watch(genericFieldsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +45,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              registrationNotifier.buildEmail(),
+              genericFieldsNotifier.buildEmail(),
               HookBuilder(
                 builder: (_) {
                   final canResendEmail = useState(true);
@@ -53,7 +53,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
                   return ElevatedButton(
                     onPressed: canResendEmail.value
                         ? () => sendPasswordResetEMail(firebaseNotifier,
-                            registrationNotifier, canResendEmail)
+                            genericFieldsNotifier, canResendEmail)
                         : null,
                     child: const Text('Send Password Reset Email'),
                   );

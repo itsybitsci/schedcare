@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
-import 'package:schedcare/providers/registration_provider.dart';
+import 'package:schedcare/providers/generic_fields_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
@@ -22,7 +22,7 @@ class PatientProfileScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
-    final registrationNotifier = ref.watch(registrationProvider);
+    final genericFieldsNotifier = ref.watch(genericFieldsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -86,9 +86,9 @@ class PatientProfileScreen extends HookConsumerWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              registrationNotifier
+                                              genericFieldsNotifier
                                                   .buildPassword(setState),
-                                              registrationNotifier
+                                              genericFieldsNotifier
                                                   .buildRepeatPassword(
                                                       setState),
                                             ],
@@ -111,7 +111,7 @@ class PatientProfileScreen extends HookConsumerWidget {
                                             context.pop();
                                             await firebaseNotifier
                                                 .updatePassword(
-                                                    registrationNotifier
+                                                    genericFieldsNotifier
                                                         .password);
                                           }
                                         },
