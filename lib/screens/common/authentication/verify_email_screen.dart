@@ -75,7 +75,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   Widget build(BuildContext context) {
     if (isEmailVerified) {
       showToast('Successfully verified email.');
-      return const AuthWrapper();
+      return AuthWrapper();
     } else {
       return Scaffold(
         appBar: AppBar(

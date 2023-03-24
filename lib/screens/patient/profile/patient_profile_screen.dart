@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/providers/registration_provider.dart';
-import 'package:schedcare/services/firestore_service.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
@@ -13,10 +13,14 @@ import 'package:schedcare/utilities/widgets.dart';
 class PatientProfileScreen extends HookConsumerWidget {
   PatientProfileScreen({super.key});
   final GlobalKey<FormState> formKeyUpdatePassword = GlobalKey<FormState>();
+  final Stream<DocumentSnapshot<Map<String, dynamic>>> userSnapshots =
+      FirebaseFirestore.instance
+          .collection(FirestoreConstants.usersCollection)
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .snapshots();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    FirestoreService firestoreService = FirestoreService();
     final firebaseNotifier = ref.watch(firebaseProvider);
     final registrationNotifier = ref.watch(registrationProvider);
 
@@ -34,8 +38,7 @@ class PatientProfileScreen extends HookConsumerWidget {
         ],
       ),
       body: StreamBuilder(
-        stream:
-            firestoreService.getUserSnapshots(firebaseNotifier.getCurrentUser!),
+        stream: userSnapshots,
         builder: (BuildContext context,
             AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasData) {

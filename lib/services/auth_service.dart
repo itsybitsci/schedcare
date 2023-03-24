@@ -22,10 +22,6 @@ class AuthService {
     await _firebaseAuth.signOut();
   }
 
-  Stream<User?> userStream() {
-    return _firebaseAuth.authStateChanges();
-  }
-
   Future<void> sendEmailVerification(User user) async {
     try {
       await user.sendEmailVerification();

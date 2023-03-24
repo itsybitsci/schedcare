@@ -4,30 +4,24 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/user_models.dart';
-import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
-class ListDoctorsPage extends ConsumerStatefulWidget {
-  const ListDoctorsPage({Key? key}) : super(key: key);
+class ListDoctorsPage extends HookConsumerWidget {
+  ListDoctorsPage({super.key});
+  final Stream<QuerySnapshot<Map<String, dynamic>>> userSnapshots =
+      FirebaseFirestore.instance
+          .collection(FirestoreConstants.usersCollection)
+          .snapshots();
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() {
-    return _ListDoctorsPageState();
-  }
-}
-
-class _ListDoctorsPageState extends ConsumerState<ListDoctorsPage> {
-  @override
-  Widget build(BuildContext context) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return HookBuilder(
       builder: (context) {
         final doctors = useValueNotifier([]);
         return StreamBuilder(
-          stream: firebaseNotifier.getFirestoreService.getUsersSnapshots(),
+          stream: userSnapshots,
           builder: (context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.hasData) {

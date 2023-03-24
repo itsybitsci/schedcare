@@ -50,10 +50,6 @@ class FirebaseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Stream<User?> get userStream {
-    return _authService.userStream();
-  }
-
   Future<bool> logInWithEmailAndPassword(String email, String password) async {
     setLoading(true);
     try {
@@ -193,12 +189,6 @@ class FirebaseProvider extends ChangeNotifier {
 
 final firebaseProvider = ChangeNotifierProvider<FirebaseProvider>(
   (ref) => FirebaseProvider(),
-);
-
-final authStateChangeProvider = StreamProvider.autoDispose(
-  (ref) {
-    return FirebaseAuth.instance.authStateChanges();
-  },
 );
 
 final userSnapShotProvider = FutureProvider.family

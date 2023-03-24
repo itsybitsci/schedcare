@@ -12,14 +12,15 @@ import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
 class AuthWrapper extends HookConsumerWidget {
-  const AuthWrapper({super.key});
+  AuthWrapper({super.key});
+  final Stream<User?> userStream = FirebaseAuth.instance.authStateChanges();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
 
     return StreamBuilder(
-      stream: firebaseNotifier.userStream,
+      stream: userStream,
       builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.hasData) {
           User user = snapshot.data!;

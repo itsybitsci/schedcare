@@ -40,40 +40,6 @@ class FirestoreService {
     }
   }
 
-  Future<QuerySnapshot?> getUsersData() async {
-    try {
-      return await _firebaseDb
-          .collection(FirestoreConstants.usersCollection)
-          .get();
-    } on FirebaseException catch (e) {
-      showToast(e.code);
-      throw Exception(e.code);
-    }
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getUsersSnapshots() {
-    try {
-      return _firebaseDb
-          .collection(FirestoreConstants.usersCollection)
-          .snapshots();
-    } on FirebaseException catch (e) {
-      showToast(e.code);
-      throw Exception(e.code);
-    }
-  }
-
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getUserSnapshots(User user) {
-    try {
-      return _firebaseDb
-          .collection(FirestoreConstants.usersCollection)
-          .doc(user.uid)
-          .snapshots();
-    } on FirebaseException catch (e) {
-      showToast(e.code);
-      throw Exception(e.code);
-    }
-  }
-
   Future<void> updateUser(Map<String, dynamic> userData, String uid) async {
     return await _firebaseDb
         .collection(FirestoreConstants.usersCollection)

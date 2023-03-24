@@ -67,10 +67,10 @@ class AppConstants {
     inPersonConsultation
   ];
 
-  static List<Widget> patientPages = const <Widget>[
-    PatientHomePage(),
+  static List<Widget> patientPages = <Widget>[
+    const PatientHomePage(),
     ListDoctorsPage(),
-    NotificationsPage(),
+    const NotificationsPage(),
   ];
 }
 

@@ -31,7 +31,7 @@ class RouterNotifier extends ChangeNotifier {
         GoRoute(
           name: RouteNames.authWrapper,
           path: RoutePaths.authWrapper,
-          builder: (context, state) => const AuthWrapper(),
+          builder: (context, state) => AuthWrapper(),
         ),
         GoRoute(
           name: RouteNames.login,
