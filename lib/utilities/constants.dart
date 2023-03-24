@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:schedcare/pages/patient/list_doctors_page.dart';
-import 'package:schedcare/pages/patient/notifications_page.dart';
-import 'package:schedcare/pages/patient/patient_home_page.dart';
+import 'package:schedcare/screens/patient/pages/list_doctors_page.dart';
+import 'package:schedcare/screens/patient/pages/notifications_page.dart';
+import 'package:schedcare/screens/patient/pages/patient_home_page.dart';
 
 class FirestoreConstants {
   static const String usersCollection = 'users';
@@ -11,6 +11,7 @@ class FirestoreConstants {
 class AppConstants {
   static const String patient = 'Patient';
   static const String doctor = 'Doctor';
+  static const String consultationRequest = 'ConsultationRequest';
 
   static const String male = 'Male';
   static const String female = 'Female';
@@ -68,7 +69,7 @@ class AppConstants {
   ];
 
   static List<Widget> patientPages = <Widget>[
-    const PatientHomePage(),
+    PatientHomePage(),
     ListDoctorsPage(),
     const NotificationsPage(),
   ];
@@ -88,6 +89,8 @@ class RouteNames {
   static const String patientProfile = 'patient_profile';
   static const String editPatientProfile = 'edit_patient_profile';
   static const String sendConsultationRequest = 'send_consultation_request';
+  static const String viewSentConsultationRequest =
+      'view_sent_consultation_request';
 }
 
 //Route Paths
@@ -104,6 +107,8 @@ class RoutePaths {
   static const String patientProfile = '/patient_profile';
   static const String editPatientProfile = '/edit_patient_profile';
   static const String sendConsultationRequest = '/send_consultation_request';
+  static const String viewSentConsultationRequest =
+      '/view_sent_consultation_request';
 }
 
 class ModelFields {
@@ -128,9 +133,10 @@ class ModelFields {
   static const String createdAt = 'createdAt';
   static const String patientUid = 'patientUid';
   static const String doctorUid = 'doctorUid';
-  static const String requestBody = 'requestBody';
+  static const String consultationRequestBody = 'consultationRequestBody';
   static const String status = 'status';
   static const String consultationType = 'consultationType';
-  static const String consultationDate = 'consultationDate';
+  static const String consultationDateTime = 'consultationDate';
   static const String meetingId = 'meetingId';
+  static const String docId = 'docId';
 }

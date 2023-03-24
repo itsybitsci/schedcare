@@ -18,7 +18,7 @@ class ListDoctorsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return HookBuilder(
-      builder: (context) {
+      builder: (BuildContext context) {
         final doctors = useValueNotifier([]);
         return StreamBuilder(
           stream: userSnapshots,

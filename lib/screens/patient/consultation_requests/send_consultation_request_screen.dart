@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -71,15 +72,23 @@ class SendConsultationRequest extends HookConsumerWidget {
                         if (formKeySendConsultationRequest.currentState!
                             .validate()) {
                           formKeySendConsultationRequest.currentState?.save();
+                          DocumentReference docRef = FirebaseFirestore.instance
+                              .collection(FirestoreConstants
+                                  .consultationRequestsCollection)
+                              .doc();
+                          String docId = docRef.id;
                           ConsultationRequest consultationRequest =
                               ConsultationRequest(
+                                  docId: docId,
                                   patientUid:
                                       firebaseNotifier.getCurrentUser!.uid,
                                   doctorUid: doctor.uid,
-                                  body: sendConsultationNotifier.body,
+                                  consultationRequestBody:
+                                      sendConsultationNotifier
+                                          .consultationRequestBody,
                                   consultationType:
                                       sendConsultationNotifier.consultationType,
-                                  consultationDate:
+                                  consultationDateTime:
                                       sendConsultationNotifier.dateTime,
                                   status: AppConstants.pending,
                                   createdAt: DateTime.now());

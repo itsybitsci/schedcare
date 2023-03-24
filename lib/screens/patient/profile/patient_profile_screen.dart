@@ -141,7 +141,7 @@ class PatientProfileScreen extends HookConsumerWidget {
             );
           }
 
-          return loading();
+          return loading(color: Colors.blue);
         },
       ),
     );

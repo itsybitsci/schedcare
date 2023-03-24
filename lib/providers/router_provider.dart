@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/screens/common/authentication/approval_screen.dart';
 import 'package:schedcare/screens/doctor/authentication/doctor_register_screen.dart';
@@ -10,6 +12,7 @@ import 'package:schedcare/screens/common/authentication/reset_password_screen.da
 import 'package:schedcare/screens/common/authentication/verify_email_screen.dart';
 import 'package:schedcare/screens/doctor/home/doctor_home_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/send_consultation_request_screen.dart';
+import 'package:schedcare/screens/patient/consultation_requests/view_sent_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/home/patient_home_screen.dart';
 import 'package:schedcare/screens/patient/profile/edit_patient_profile_screen.dart';
 import 'package:schedcare/screens/patient/profile/patient_profile_screen.dart';
@@ -90,6 +93,29 @@ class RouterNotifier extends ChangeNotifier {
             Doctor doctor = state.extra as Doctor;
             return SendConsultationRequest(
               doctor: doctor,
+            );
+          },
+        ),
+        GoRoute(
+          name: RouteNames.viewSentConsultationRequest,
+          path: RoutePaths.viewSentConsultationRequest,
+          builder: (context, state) {
+            ViewConsultationRequestObject viewConsultationRequestObject =
+                state.extra! as ViewConsultationRequestObject;
+            String consultationRequestId =
+                viewConsultationRequestObject.consultationRequestId;
+            Doctor doctor = viewConsultationRequestObject.doctor;
+            Stream<DocumentSnapshot<Map<String, dynamic>>>
+                consultationRequestSnapshots = FirebaseFirestore.instance
+                    .collection(
+                        FirestoreConstants.consultationRequestsCollection)
+                    .doc(consultationRequestId)
+                    .snapshots();
+
+            return ViewSentConsultationRequestScreen(
+              consultationRequestId: consultationRequestId,
+              doctor: doctor,
+              consultationRequestSnapshots: consultationRequestSnapshots,
             );
           },
         ),

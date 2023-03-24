@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:schedcare/utilities/constants.dart';
 
 class SendConsultationProvider extends ChangeNotifier {
-  final TextEditingController _bodyController = TextEditingController();
+  final TextEditingController _consultationRequestBodyController =
+      TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   DateTime? _chosenDate;
@@ -16,14 +17,15 @@ class SendConsultationProvider extends ChangeNotifier {
   DateTime get dateTime => DateTime(_chosenDate!.year, _chosenDate!.month,
       _chosenDate!.day, _chosenTime!.hour, _chosenTime!.minute);
 
-  String get body => _bodyController.text.trim();
+  String get consultationRequestBody =>
+      _consultationRequestBodyController.text.trim();
 
   String get consultationType => _consultationTypeDropdownValue;
 
   Widget buildBody() => ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 300.w, maxHeight: 280.h),
         child: TextFormField(
-          controller: _bodyController,
+          controller: _consultationRequestBodyController,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.blue, width: 3),

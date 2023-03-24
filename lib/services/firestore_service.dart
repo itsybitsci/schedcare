@@ -47,11 +47,12 @@ class FirestoreService {
         .update(userData);
   }
 
-  Future<DocumentReference<Map<String, dynamic>>> sendConsultationRequest(
+  Future<void> sendConsultationRequest(
       ConsultationRequest consultationRequest) async {
     return await _firebaseDb
         .collection(FirestoreConstants.consultationRequestsCollection)
-        .add(
+        .doc(consultationRequest.docId)
+        .set(
           consultationRequest.toMap(),
         );
   }

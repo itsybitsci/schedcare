@@ -1,22 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/utilities/constants.dart';
 
 class ConsultationRequest {
+  final String docId;
   final String patientUid;
   final String doctorUid;
-  final String body;
+  final String consultationRequestBody;
   final String status;
   final String consultationType;
-  final DateTime consultationDate;
+  final DateTime consultationDateTime;
   final DateTime createdAt;
   String? meetingId;
 
   ConsultationRequest(
-      {required this.patientUid,
+      {required this.docId,
+      required this.patientUid,
       required this.doctorUid,
-      required this.body,
+      required this.consultationRequestBody,
       required this.consultationType,
-      required this.consultationDate,
+      required this.consultationDateTime,
       required this.status,
       required this.createdAt,
       this.meetingId});
@@ -24,12 +27,13 @@ class ConsultationRequest {
   factory ConsultationRequest.fromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
     return ConsultationRequest(
+      docId: userData[ModelFields.docId],
       patientUid: userData[ModelFields.patientUid],
       doctorUid: userData[ModelFields.doctorUid],
-      body: userData[ModelFields.requestBody],
+      consultationRequestBody: userData[ModelFields.consultationRequestBody],
       status: userData[ModelFields.status],
       consultationType: userData[ModelFields.consultationType],
-      consultationDate: userData[ModelFields.consultationDate].toDate(),
+      consultationDateTime: userData[ModelFields.consultationDateTime].toDate(),
       createdAt: userData[ModelFields.createdAt].toDate(),
       meetingId: userData[ModelFields.meetingId] ?? '',
     );
@@ -37,14 +41,23 @@ class ConsultationRequest {
 
   Map<String, dynamic> toMap() {
     return {
+      ModelFields.docId: docId,
       ModelFields.patientUid: patientUid,
       ModelFields.doctorUid: doctorUid,
-      ModelFields.requestBody: body,
+      ModelFields.consultationRequestBody: consultationRequestBody,
       ModelFields.status: status,
       ModelFields.consultationType: consultationType,
-      ModelFields.consultationDate: consultationDate,
+      ModelFields.consultationDateTime: consultationDateTime,
       ModelFields.createdAt: createdAt,
       ModelFields.meetingId: meetingId ?? ''
     };
   }
+}
+
+class ViewConsultationRequestObject {
+  final Doctor doctor;
+  final String consultationRequestId;
+
+  ViewConsultationRequestObject(
+      {required this.doctor, required this.consultationRequestId});
 }

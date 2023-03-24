@@ -1,7 +1,7 @@
 import 'package:fluttertoast/fluttertoast.dart';
 
-Future<void> showToast(String message) async {
-  Fluttertoast.showToast(
+Future<bool?> showToast(String message) async {
+  return await Fluttertoast.showToast(
     msg: message,
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.SNACKBAR,
