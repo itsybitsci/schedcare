@@ -34,6 +34,9 @@ class SendConsultationProvider extends ChangeNotifier {
           maxLines: null,
           expands: true,
           keyboardType: TextInputType.multiline,
+          validator: (value) {
+            return value!.isEmpty ? 'Required' : null;
+          },
         ),
       );
 
