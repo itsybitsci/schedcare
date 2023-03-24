@@ -117,6 +117,11 @@ class GenericFieldsProvider extends ChangeNotifier {
     _vaccinationStatusDropdownValue = vaccinationStatus;
   }
 
+  void clearPasswordFields() {
+    _passwordController.text = '';
+    _repeatPasswordController.text = '';
+  }
+
   Widget buildFirstName() => TextFormField(
         keyboardType: TextInputType.name,
         controller: _firstNameController,

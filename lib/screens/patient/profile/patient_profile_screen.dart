@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +26,7 @@ class PatientProfileScreen extends HookConsumerWidget {
     final genericFieldsNotifier = ref.watch(genericFieldsProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Profile'),
         actions: [
@@ -73,14 +75,20 @@ class PatientProfileScreen extends HookConsumerWidget {
                       : ElevatedButton(
                           onPressed: () async {
                             showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text('Change Password'),
-                                    content: StatefulBuilder(
-                                      builder: (BuildContext context,
-                                          StateSetter setState) {
-                                        return Form(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Change Password'),
+                                  content: StatefulBuilder(
+                                    builder: (BuildContext context,
+                                        StateSetter setState) {
+                                      genericFieldsNotifier
+                                          .clearPasswordFields();
+
+                                      return ConstrainedBox(
+                                        constraints:
+                                            BoxConstraints(maxHeight: 200.h),
+                                        child: Form(
                                           key: formKeyUpdatePassword,
                                           child: Column(
                                             mainAxisAlignment:
@@ -93,33 +101,32 @@ class PatientProfileScreen extends HookConsumerWidget {
                                                       setState),
                                             ],
                                           ),
-                                        );
-                                      },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => context.pop(),
+                                      child: const Text('Cancel'),
                                     ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => context.pop(),
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () async {
-                                          if (formKeyUpdatePassword
-                                              .currentState!
-                                              .validate()) {
-                                            formKeyUpdatePassword.currentState
-                                                ?.save();
-                                            context.pop();
-                                            await firebaseNotifier
-                                                .updatePassword(
-                                                    genericFieldsNotifier
-                                                        .password);
-                                          }
-                                        },
-                                        child: const Text('Update Password'),
-                                      ),
-                                    ],
-                                  );
-                                });
+                                    TextButton(
+                                      onPressed: () async {
+                                        if (formKeyUpdatePassword.currentState!
+                                            .validate()) {
+                                          formKeyUpdatePassword.currentState
+                                              ?.save();
+                                          context.pop();
+                                          await firebaseNotifier.updatePassword(
+                                              genericFieldsNotifier.password);
+                                        }
+                                      },
+                                      child: const Text('Update Password'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           child: const Text('Change Password'),
                         ),
