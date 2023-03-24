@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/models/user_models.dart';
+import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
@@ -13,6 +15,7 @@ class ViewSentConsultationRequestScreen extends HookConsumerWidget {
   final Doctor doctor;
   final Stream<DocumentSnapshot<Map<String, dynamic>>>
       consultationRequestSnapshots;
+
   const ViewSentConsultationRequestScreen(
       {super.key,
       required this.consultationRequestId,
@@ -21,6 +24,8 @@ class ViewSentConsultationRequestScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final firebaseNotifier = ref.watch(firebaseProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Consultation Request'),
@@ -77,7 +82,42 @@ class ViewSentConsultationRequestScreen extends HookConsumerWidget {
                   SizedBox(
                     height: 20.h,
                   ),
-                  Text('Type: ${data.get(ModelFields.consultationType)}')
+                  Text('Type: ${data.get(ModelFields.consultationType)}'),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  firebaseNotifier.getLoading
+                      ? loading(color: Colors.blue)
+                      : ElevatedButton(
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                      'Confirm Cancellation of Consultation Request'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => context.pop(),
+                                      child: const Text('Keep Request'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        context.go(RoutePaths.authWrapper);
+                                        await firebaseNotifier.deleteDocument(
+                                            FirestoreConstants
+                                                .consultationRequestsCollection,
+                                            consultationRequestId);
+                                      },
+                                      child: const Text('Cancel Request'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: const Text('Cancel Request'),
+                        ),
                 ],
               ),
             );

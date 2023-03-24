@@ -185,6 +185,21 @@ class FirebaseProvider extends ChangeNotifier {
       throw Exception(e.code);
     }
   }
+
+  Future<bool> deleteDocument(String collection, String documentId) async {
+    setLoading(true);
+    try {
+      await _fireStoreService.deleteDocument(collection, documentId);
+      showToast('Successfully deleted document');
+      setLoading(false);
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
 }
 
 final firebaseProvider = ChangeNotifierProvider<FirebaseProvider>(

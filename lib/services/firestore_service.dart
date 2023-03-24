@@ -56,4 +56,8 @@ class FirestoreService {
           consultationRequest.toMap(),
         );
   }
+
+  Future<void> deleteDocument(String collection, String docId) async {
+    return await _firebaseDb.collection(collection).doc(docId).delete();
+  }
 }
