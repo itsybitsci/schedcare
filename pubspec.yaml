@@ -52,6 +52,7 @@ dependencies:
   fluttertoast: ^8.2.1
   flutter_screenutil: ^5.7.0
   syncfusion_flutter_calendar: ^20.4.54
+  firebase_ui_firestore: ^1.2.10
 
 flutter_icons:
   android: true

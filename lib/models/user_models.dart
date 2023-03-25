@@ -67,6 +67,30 @@ class Patient {
       createdAt: userData[ModelFields.createdAt].toDate(),
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      ModelFields.patientUid: uid,
+      ModelFields.email: email,
+      ModelFields.role: role,
+      ModelFields.firstName: firstName,
+      ModelFields.middleName: middleName,
+      ModelFields.lastName: lastName,
+      ModelFields.suffix: suffix,
+      ModelFields.age: age,
+      ModelFields.birthDate: birthDate,
+      ModelFields.sex: sex,
+      ModelFields.phoneNumber: phoneNumber,
+      ModelFields.address: address,
+      ModelFields.civilStatus: civilStatus,
+      ModelFields.classification: classification,
+      ModelFields.uhsIdNumber: uhsIdNumber,
+      ModelFields.vaccinationStatus: vaccinationStatus,
+      ModelFields.isApproved: isApproved,
+      ModelFields.lastLogin: lastLogin,
+      ModelFields.createdAt: createdAt,
+    };
+  }
 }
 
 class Doctor {
@@ -113,5 +137,22 @@ class Doctor {
       lastLogin: userData[ModelFields.lastLogin].toDate(),
       createdAt: userData[ModelFields.createdAt].toDate(),
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      ModelFields.doctorUid: uid,
+      ModelFields.email: email,
+      ModelFields.role: role,
+      ModelFields.firstName: firstName,
+      ModelFields.middleName: middleName,
+      ModelFields.lastName: lastName,
+      ModelFields.suffix: suffix,
+      ModelFields.sex: sex,
+      ModelFields.specialization: specialization,
+      ModelFields.isApproved: isApproved,
+      ModelFields.lastLogin: lastLogin,
+      ModelFields.createdAt: createdAt,
+    };
   }
 }
