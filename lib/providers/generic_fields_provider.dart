@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:schedcare/utilities/constants.dart';
 
 class GenericFieldsProvider extends ChangeNotifier {
@@ -225,7 +226,8 @@ class GenericFieldsProvider extends ChangeNotifier {
           );
 
           if (pickedDate != null) {
-            _birthdateController.text = pickedDate.toString();
+            _chosenDate = pickedDate;
+            _birthdateController.text = DateFormat('yMMMMd').format(pickedDate);
           }
         },
         validator: (value) {

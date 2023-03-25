@@ -53,6 +53,7 @@ dependencies:
   flutter_screenutil: ^5.7.0
   syncfusion_flutter_calendar: ^20.4.54
   firebase_ui_firestore: ^1.2.10
+  shimmer: ^2.0.0
 
 flutter_icons:
   android: true

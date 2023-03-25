@@ -29,45 +29,45 @@ class ListDoctorsPage extends HookConsumerWidget {
           return const Text(Prompts.errorDueToWeakInternet);
         }
 
-        if (snapshot.docs.isEmpty) {
-          return const Center(
-            child: Text(Prompts.noAvailableDoctors),
-          );
-        }
-
         if (snapshot.hasData) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              snapshot.fetchMore();
-            },
-            child: ListView.builder(
-              itemCount: snapshot.docs.length,
-              itemBuilder: (context, index) {
-                if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
-                  snapshot.fetchMore();
-                }
-
-                final Doctor doctor = snapshot.docs[index].data();
-
-                return ListTile(
-                  onTap: () {
-                    context.push(RoutePaths.sendConsultationRequest,
-                        extra: doctor);
+          return snapshot.docs.isEmpty
+              ? const Center(
+                  child: Text(Prompts.noAvailableDoctors),
+                )
+              : RefreshIndicator(
+                  onRefresh: () async {
+                    snapshot.fetchMore();
                   },
-                  title: Center(
-                    child: doctor.middleName.isEmpty
-                        ? Text('${doctor.firstName} ${doctor.lastName}')
-                        : Text(
-                            '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
-                  ),
-                  subtitle: Center(
-                    child: Text(doctor.role),
+                  child: ListView.builder(
+                    itemCount: snapshot.docs.length,
+                    itemBuilder: (context, index) {
+                      if (snapshot.hasMore &&
+                          index + 1 == snapshot.docs.length) {
+                        snapshot.fetchMore();
+                      }
+
+                      final Doctor doctor = snapshot.docs[index].data();
+
+                      return ListTile(
+                        onTap: () {
+                          context.push(RoutePaths.sendConsultationRequest,
+                              extra: doctor);
+                        },
+                        title: Center(
+                          child: doctor.middleName.isEmpty
+                              ? Text('${doctor.firstName} ${doctor.lastName}')
+                              : Text(
+                                  '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
+                        ),
+                        subtitle: Center(
+                          child: Text(doctor.role),
+                        ),
+                      );
+                    },
                   ),
                 );
-              },
-            ),
-          );
         }
+
         return loading(color: Colors.blue);
       },
     );
