@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/utilities/constants.dart';
 
-class SendConsultationProvider extends ChangeNotifier {
+class ConsultationRequestProvider extends ChangeNotifier {
   final TextEditingController _consultationRequestBodyController =
       TextEditingController();
   final TextEditingController _dateController = TextEditingController();
@@ -176,6 +176,6 @@ class SendConsultationProvider extends ChangeNotifier {
       );
 }
 
-final sendConsultationProvider =
-    ChangeNotifierProvider.autoDispose<SendConsultationProvider>(
-        (ref) => SendConsultationProvider());
+final consultationRequestProvider =
+    ChangeNotifierProvider.autoDispose<ConsultationRequestProvider>(
+        (ref) => ConsultationRequestProvider());

@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
-import 'package:schedcare/providers/send_consultation_provider.dart';
+import 'package:schedcare/providers/consultation_request_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
@@ -19,7 +19,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
-    final sendConsultationNotifier = ref.watch(sendConsultationProvider);
+    final consultationRequestNotifier = ref.watch(consultationRequestProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,24 +43,24 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
               SizedBox(
                 height: 30.h,
               ),
-              sendConsultationNotifier.buildBody(),
+              consultationRequestNotifier.buildBody(),
               SizedBox(
                 height: 20.h,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  sendConsultationNotifier.buildDatePicker(context),
+                  consultationRequestNotifier.buildDatePicker(context),
                   SizedBox(
                     width: 15.w,
                   ),
-                  sendConsultationNotifier.buildTimePicker(context),
+                  consultationRequestNotifier.buildTimePicker(context),
                 ],
               ),
               SizedBox(
                 height: 10.h,
               ),
-              sendConsultationNotifier.buildConsultationType(),
+              consultationRequestNotifier.buildConsultationType(),
               SizedBox(
                 height: 20.h,
               ),
@@ -82,12 +82,12 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                 firebaseNotifier.getCurrentUser!.uid,
                             ModelFields.doctorUid: doctor.uid,
                             ModelFields.consultationRequestBody:
-                                sendConsultationNotifier
+                                consultationRequestNotifier
                                     .consultationRequestBody,
                             ModelFields.consultationType:
-                                sendConsultationNotifier.consultationType,
+                                consultationRequestNotifier.consultationType,
                             ModelFields.consultationDateTime:
-                                sendConsultationNotifier.dateTime,
+                                consultationRequestNotifier.dateTime,
                             ModelFields.status: AppConstants.pending,
                             ModelFields.createdAt: DateTime.now()
                           };

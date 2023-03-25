@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
-import 'package:schedcare/providers/send_consultation_provider.dart';
+import 'package:schedcare/providers/consultation_request_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
@@ -21,14 +21,16 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
-    final sendConsultationNotifier = ref.watch(sendConsultationProvider);
+    final consultationRequestNotifier = ref.watch(consultationRequestProvider);
     ValueNotifier<bool> isEditing = useState(false);
 
-    sendConsultationNotifier.setConsultationRequestBody =
+    consultationRequestNotifier.setConsultationRequestBody =
         consultationRequest.consultationRequestBody;
-    sendConsultationNotifier.setDate = consultationRequest.consultationDateTime;
-    sendConsultationNotifier.setTime = consultationRequest.consultationDateTime;
-    sendConsultationNotifier.setConsultationTypeDropdownValue =
+    consultationRequestNotifier.setDate =
+        consultationRequest.consultationDateTime;
+    consultationRequestNotifier.setTime =
+        consultationRequest.consultationDateTime;
+    consultationRequestNotifier.setConsultationTypeDropdownValue =
         consultationRequest.consultationType;
 
     return Scaffold(
@@ -91,26 +93,26 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
               SizedBox(
                 height: 30.h,
               ),
-              sendConsultationNotifier.buildBody(enabled: isEditing.value),
+              consultationRequestNotifier.buildBody(enabled: isEditing.value),
               SizedBox(
                 height: 20.h,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  sendConsultationNotifier.buildDatePicker(context,
+                  consultationRequestNotifier.buildDatePicker(context,
                       enabled: isEditing.value),
                   SizedBox(
                     width: 15.w,
                   ),
-                  sendConsultationNotifier.buildTimePicker(context,
+                  consultationRequestNotifier.buildTimePicker(context,
                       enabled: isEditing.value),
                 ],
               ),
               SizedBox(
                 height: 10.h,
               ),
-              sendConsultationNotifier.buildConsultationType(
+              consultationRequestNotifier.buildConsultationType(
                   enabled: isEditing.value),
               SizedBox(
                 height: 20.h,
@@ -141,13 +143,13 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
                                               ?.save();
                                           Map<String, dynamic> data = {
                                             ModelFields.consultationRequestBody:
-                                                sendConsultationNotifier
+                                                consultationRequestNotifier
                                                     .consultationRequestBody,
                                             ModelFields.consultationDateTime:
-                                                sendConsultationNotifier
+                                                consultationRequestNotifier
                                                     .dateTime,
                                             ModelFields.consultationType:
-                                                sendConsultationNotifier
+                                                consultationRequestNotifier
                                                     .consultationType,
                                           };
                                           await firebaseNotifier
