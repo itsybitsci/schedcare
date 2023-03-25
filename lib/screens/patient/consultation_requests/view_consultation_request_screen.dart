@@ -33,7 +33,10 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
           IconButton(
             icon: const Icon(Icons.edit),
             tooltip: 'Edit Request',
-            onPressed: () {},
+            onPressed: () {
+              context.push(RoutePaths.editConsultationRequest,
+                  extra: consultationRequestId);
+            },
           ),
         ],
       ),

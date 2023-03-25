@@ -11,6 +11,7 @@ import 'package:schedcare/screens/patient/authentication/patient_register_screen
 import 'package:schedcare/screens/common/reset_password_screen.dart';
 import 'package:schedcare/screens/common/verify_email_screen.dart';
 import 'package:schedcare/screens/doctor/home/doctor_home_screen.dart';
+import 'package:schedcare/screens/patient/consultation_requests/edit_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/send_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/view_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/home/patient_home_screen.dart';
@@ -91,8 +92,18 @@ class RouterNotifier extends ChangeNotifier {
           path: RoutePaths.sendConsultationRequest,
           builder: (context, state) {
             Doctor doctor = state.extra as Doctor;
-            return SendConsultationRequest(
+            return SendConsultationRequestScreen(
               doctor: doctor,
+            );
+          },
+        ),
+        GoRoute(
+          name: RouteNames.editConsultationRequest,
+          path: RoutePaths.editConsultationRequest,
+          builder: (context, state) {
+            String consultationRequestId = state.extra as String;
+            return EditConsultationRequestScreen(
+              consultationRequestId: consultationRequestId,
             );
           },
         ),
