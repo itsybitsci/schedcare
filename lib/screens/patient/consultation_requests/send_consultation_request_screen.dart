@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/providers/send_consultation_provider.dart';
@@ -77,23 +76,27 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                   .consultationRequestsCollection)
                               .doc();
                           String docId = docRef.id;
-                          ConsultationRequest consultationRequest =
-                              ConsultationRequest(
-                                  docId: docId,
-                                  patientUid:
-                                      firebaseNotifier.getCurrentUser!.uid,
-                                  doctorUid: doctor.uid,
-                                  consultationRequestBody:
-                                      sendConsultationNotifier
-                                          .consultationRequestBody,
-                                  consultationType:
-                                      sendConsultationNotifier.consultationType,
-                                  consultationDateTime:
-                                      sendConsultationNotifier.dateTime,
-                                  status: AppConstants.pending,
-                                  createdAt: DateTime.now());
+                          Map<String, dynamic> data = {
+                            ModelFields.docId: docId,
+                            ModelFields.patientUid:
+                                firebaseNotifier.getCurrentUser!.uid,
+                            ModelFields.doctorUid: doctor.uid,
+                            ModelFields.consultationRequestBody:
+                                sendConsultationNotifier
+                                    .consultationRequestBody,
+                            ModelFields.consultationType:
+                                sendConsultationNotifier.consultationType,
+                            ModelFields.consultationDateTime:
+                                sendConsultationNotifier.dateTime,
+                            ModelFields.status: AppConstants.pending,
+                            ModelFields.createdAt: DateTime.now()
+                          };
                           await firebaseNotifier
-                              .sendConsultationRequest(consultationRequest)
+                              .sendConsultationRequest(
+                                  data,
+                                  FirestoreConstants
+                                      .consultationRequestsCollection,
+                                  docId)
                               .then(
                             (success) {
                               if (success) {

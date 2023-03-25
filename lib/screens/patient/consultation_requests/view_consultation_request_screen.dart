@@ -1,103 +1,179 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/firebase_provider.dart';
+import 'package:schedcare/providers/send_consultation_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
-import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
 class ViewConsultationRequestScreen extends HookConsumerWidget {
-  final String consultationRequestId;
+  final ConsultationRequest consultationRequest;
   final Doctor doctor;
-  final Stream<DocumentSnapshot<Map<String, dynamic>>>
-      consultationRequestSnapshots;
-
-  const ViewConsultationRequestScreen(
-      {super.key,
-      required this.consultationRequestId,
-      required this.doctor,
-      required this.consultationRequestSnapshots});
+  ViewConsultationRequestScreen(
+      {super.key, required this.consultationRequest, required this.doctor});
+  final GlobalKey<FormState> formKeyEditConsultationRequest =
+      GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
+    final sendConsultationNotifier = ref.watch(sendConsultationProvider);
+    ValueNotifier<bool> isEditing = useState(false);
+
+    sendConsultationNotifier.setConsultationRequestBody =
+        consultationRequest.consultationRequestBody;
+    sendConsultationNotifier.setDate = consultationRequest.consultationDateTime;
+    sendConsultationNotifier.setTime = consultationRequest.consultationDateTime;
+    sendConsultationNotifier.setConsultationTypeDropdownValue =
+        consultationRequest.consultationType;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Consultation Request'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            tooltip: 'Edit Request',
-            onPressed: () {
-              context.push(RoutePaths.editConsultationRequest,
-                  extra: consultationRequestId);
-            },
-          ),
+          isEditing.value
+              ? IconButton(
+                  icon: const Icon(Icons.close),
+                  tooltip: 'Stop Editing',
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title:
+                              const Text('Discard changes and stop editing?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => context.pop(),
+                              child: const Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                context.go(RoutePaths.authWrapper);
+                              },
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                )
+              : IconButton(
+                  icon: const Icon(Icons.edit),
+                  tooltip: 'Edit Request',
+                  onPressed: () {
+                    isEditing.value = !isEditing.value;
+                  },
+                ),
         ],
       ),
       resizeToAvoidBottomInset: false,
-      body: StreamBuilder(
-        stream: consultationRequestSnapshots,
-        builder: (BuildContext context,
-            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.hasData) {
-            DocumentSnapshot<Map<String, dynamic>> data = snapshot.data!;
-            return Center(
-              child: Column(
+      body: Form(
+        key: formKeyEditConsultationRequest,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 30.h,
+              ),
+              doctor.middleName.isEmpty
+                  ? Text('${doctor.firstName} ${doctor.lastName}')
+                  : Text(
+                      '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
+              Text('Sex: ${doctor.sex}'),
+              Text('Specialization: ${doctor.specialization}'),
+              SizedBox(
+                height: 30.h,
+              ),
+              sendConsultationNotifier.buildBody(enabled: isEditing.value),
+              SizedBox(
+                height: 20.h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  sendConsultationNotifier.buildDatePicker(context,
+                      enabled: isEditing.value),
                   SizedBox(
-                    height: 30.h,
+                    width: 15.w,
                   ),
-                  doctor.middleName.isEmpty
-                      ? Text('${doctor.firstName} ${doctor.lastName}')
-                      : Text(
-                          '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
-                  Text('Sex: ${doctor.sex}'),
-                  Text('Specialization: ${doctor.specialization}'),
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                  Container(
-                    height: 350.h,
-                    width: 300.w,
-                    decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5))),
-                    child: SingleChildScrollView(
-                      child: Text(
-                          '${data.get(ModelFields.consultationRequestBody)}'),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                          'Date: ${DateFormat('yMMMMd').format(data.get(ModelFields.consultationDateTime).toDate())}'),
-                      SizedBox(
-                        width: 15.w,
-                      ),
-                      Text(
-                          'Time: ${DateFormat('HH:mm a').format(data.get(ModelFields.consultationDateTime).toDate())}'),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Text('Type: ${data.get(ModelFields.consultationType)}'),
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                  firebaseNotifier.getLoading
-                      ? loading(color: Colors.blue)
+                  sendConsultationNotifier.buildTimePicker(context,
+                      enabled: isEditing.value),
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              sendConsultationNotifier.buildConsultationType(
+                  enabled: isEditing.value),
+              SizedBox(
+                height: 20.h,
+              ),
+              firebaseNotifier.getLoading
+                  ? loading(color: Colors.blue)
+                  : isEditing.value
+                      ? ElevatedButton(
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                      'Confirm Submission of Edited Request'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => context.pop(),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        if (formKeyEditConsultationRequest
+                                            .currentState!
+                                            .validate()) {
+                                          formKeyEditConsultationRequest
+                                              .currentState
+                                              ?.save();
+                                          Map<String, dynamic> data = {
+                                            ModelFields.consultationRequestBody:
+                                                sendConsultationNotifier
+                                                    .consultationRequestBody,
+                                            ModelFields.consultationDateTime:
+                                                sendConsultationNotifier
+                                                    .dateTime,
+                                            ModelFields.consultationType:
+                                                sendConsultationNotifier
+                                                    .consultationType,
+                                          };
+                                          await firebaseNotifier
+                                              .updateConsultationRequest(
+                                                data,
+                                                FirestoreConstants
+                                                    .consultationRequestsCollection,
+                                                consultationRequest.docId,
+                                              )
+                                              .then((success) => success
+                                                  ? context.go(
+                                                      RoutePaths.authWrapper)
+                                                  : null);
+                                        } else {
+                                          context.pop();
+                                        }
+                                      },
+                                      child: const Text('Proceed'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: const Text('Edit Request'),
+                        )
                       : ElevatedButton(
                           onPressed: () async {
                             showDialog(
@@ -117,9 +193,9 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
                                         await firebaseNotifier.deleteDocument(
                                             FirestoreConstants
                                                 .consultationRequestsCollection,
-                                            consultationRequestId);
+                                            consultationRequest.docId);
                                       },
-                                      child: const Text('Cancel Request'),
+                                      child: const Text('Delete Request'),
                                     ),
                                   ],
                                 );
@@ -128,19 +204,9 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
                           },
                           child: const Text('Cancel Request'),
                         ),
-                ],
-              ),
-            );
-          }
-
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text(Prompts.errorDueToWeakInternet),
-            );
-          }
-
-          return loading(color: Colors.blue);
-        },
+            ],
+          ),
+        ),
       ),
     );
   }

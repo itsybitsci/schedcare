@@ -88,7 +88,7 @@ class EditPatientProfileScreen extends HookConsumerWidget {
                         if (formKeyEditPatientProfile.currentState!
                             .validate()) {
                           formKeyEditPatientProfile.currentState?.save();
-                          Map<String, dynamic> userData = {
+                          Map<String, dynamic> data = {
                             ModelFields.firstName:
                                 genericFieldsNotifier.firstName,
                             ModelFields.middleName:
@@ -114,7 +114,9 @@ class EditPatientProfileScreen extends HookConsumerWidget {
                           };
 
                           await firebaseNotifier
-                              .updateUser(userData,
+                              .updateUserProfile(
+                                  data,
+                                  FirestoreConstants.usersCollection,
                                   firebaseNotifier.getCurrentUser!.uid)
                               .then(
                                   (success) => success ? context.pop() : null);

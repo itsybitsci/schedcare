@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/services/auth_service.dart';
 import 'package:schedcare/services/firestore_service.dart';
@@ -57,8 +56,8 @@ class FirebaseProvider extends ChangeNotifier {
           await _authService.logInWithEmailAndPassword(email, password);
       User? user = _userCredential!.user;
 
-      DocumentSnapshot? snapshot =
-          await _fireStoreService.getUserData(user!.uid);
+      DocumentSnapshot? snapshot = await _fireStoreService.getDocument(
+          FirestoreConstants.usersCollection, user!.uid);
 
       _role = snapshot.get(ModelFields.role).toString().toLowerCase() ==
               AppConstants.patient.toLowerCase()
@@ -71,7 +70,9 @@ class FirebaseProvider extends ChangeNotifier {
         _doctor = Doctor.fromSnapshot(snapshot);
       }
 
-      await _fireStoreService.logUser(user);
+      await _fireStoreService.updateDocument({
+        ModelFields.lastLogin: user.metadata.lastSignInTime,
+      }, FirestoreConstants.usersCollection, user.uid);
 
       setLoading(false);
       notifyListeners();
@@ -84,7 +85,7 @@ class FirebaseProvider extends ChangeNotifier {
   }
 
   Future<bool> createUserWithEmailAndPassword(
-      String email, String password, Map<String, dynamic> userData) async {
+      String email, String password, Map<String, dynamic> data) async {
     setLoading(true);
     try {
       _userCredential =
@@ -92,14 +93,15 @@ class FirebaseProvider extends ChangeNotifier {
 
       User user = _userCredential!.user!;
 
-      userData.addAll(
+      data.addAll(
         {
           ModelFields.lastLogin: user.metadata.lastSignInTime,
           ModelFields.createdAt: user.metadata.creationTime,
         },
       );
 
-      await _fireStoreService.registerUser(userData, user.uid);
+      await _fireStoreService.setDocument(
+          data, FirestoreConstants.usersCollection, user.uid);
 
       setLoading(false);
       notifyListeners();
@@ -125,11 +127,28 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateUser(Map<String, dynamic> userData, String uid) async {
+  Future<bool> updateUserProfile(
+      Map<String, dynamic> data, String collection, String id) async {
     setLoading(true);
     try {
-      await _fireStoreService.updateUser(userData, uid);
+      await _fireStoreService.updateDocument(data, collection, id);
       showToast('Successfully updated profile');
+      setLoading(false);
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
+
+  Future<bool> updateConsultationRequest(
+      Map<String, dynamic> data, String collection, String id) async {
+    setLoading(true);
+    try {
+      await _fireStoreService.updateDocument(data, collection, id);
+      showToast('Successfully updated consultation request');
       setLoading(false);
       notifyListeners();
       return true;
@@ -171,10 +190,10 @@ class FirebaseProvider extends ChangeNotifier {
   }
 
   Future<bool> sendConsultationRequest(
-      ConsultationRequest consultationRequest) async {
+      Map<String, dynamic> data, String collection, String id) async {
     setLoading(true);
     try {
-      await _fireStoreService.sendConsultationRequest(consultationRequest);
+      await _fireStoreService.setDocument(data, collection, id);
       showToast('Successfully sent consultation request');
       setLoading(false);
       notifyListeners();

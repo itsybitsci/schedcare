@@ -22,9 +22,28 @@ class SendConsultationProvider extends ChangeNotifier {
 
   String get consultationType => _consultationTypeDropdownValue;
 
-  Widget buildBody() => ConstrainedBox(
+  set setConsultationRequestBody(String consultationRequestBody) {
+    _consultationRequestBodyController.text = consultationRequestBody;
+  }
+
+  set setDate(DateTime dateTime) {
+    _chosenDate = dateTime;
+    _dateController.text = DateFormat('yMMMMd').format(dateTime);
+  }
+
+  set setTime(DateTime dateTime) {
+    _chosenTime = TimeOfDay.fromDateTime(dateTime);
+    _timeController.text = DateFormat('hh:mm a').format(dateTime);
+  }
+
+  set setConsultationTypeDropdownValue(String consultationType) {
+    _consultationTypeDropdownValue = consultationType;
+  }
+
+  Widget buildBody({enabled = true}) => ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 300.w, maxHeight: 280.h),
         child: TextFormField(
+          enabled: enabled,
           controller: _consultationRequestBodyController,
           decoration: InputDecoration(
             border: OutlineInputBorder(
@@ -42,10 +61,12 @@ class SendConsultationProvider extends ChangeNotifier {
         ),
       );
 
-  Widget buildDatePicker(BuildContext context) => ConstrainedBox(
+  Widget buildDatePicker(BuildContext context, {bool enabled = true}) =>
+      ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 198.w),
         child: TextFormField(
           readOnly: true,
+          enabled: enabled,
           enableInteractiveSelection: false,
           controller: _dateController,
           decoration: InputDecoration(
@@ -78,10 +99,12 @@ class SendConsultationProvider extends ChangeNotifier {
         ),
       );
 
-  Widget buildTimePicker(BuildContext context) => ConstrainedBox(
+  Widget buildTimePicker(BuildContext context, {bool enabled = true}) =>
+      ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 130.w),
         child: TextFormField(
           readOnly: true,
+          enabled: enabled,
           enableInteractiveSelection: false,
           controller: _timeController,
           decoration: InputDecoration(
@@ -103,7 +126,8 @@ class SendConsultationProvider extends ChangeNotifier {
             if (pickedTime != null) {
               if (context.mounted) {
                 _chosenTime = pickedTime;
-                _timeController.text = pickedTime.format(context);
+                _timeController.text = DateFormat('hh:mm a').format(
+                    DateTime(0, 0, 0, pickedTime.hour, pickedTime.minute));
               }
             }
           },
@@ -122,11 +146,10 @@ class SendConsultationProvider extends ChangeNotifier {
         ),
       );
 
-  Widget buildConsultationType() => ConstrainedBox(
+  Widget buildConsultationType({enabled = true}) => ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 300.w),
         child: DropdownButtonFormField<String>(
           value: _consultationTypeDropdownValue,
-          hint: const Text('Select sex'),
           alignment: AlignmentDirectional.center,
           decoration: InputDecoration(
             suffixIcon: const Icon(Icons.person),
@@ -136,9 +159,10 @@ class SendConsultationProvider extends ChangeNotifier {
             ),
           ),
           isExpanded: true,
-          onChanged: (String? value) {
-            _consultationTypeDropdownValue = value!;
-          },
+          onChanged: enabled
+              ? (String? value) => _consultationTypeDropdownValue = value!
+              : null,
+          focusNode: FocusNode(),
           items: AppConstants.consultationTypes.map<DropdownMenuItem<String>>(
             (String value) {
               return DropdownMenuItem<String>(
@@ -148,9 +172,6 @@ class SendConsultationProvider extends ChangeNotifier {
               );
             },
           ).toList(),
-          validator: (value) {
-            return value == null || value.isEmpty ? 'Required' : null;
-          },
         ),
       );
 }

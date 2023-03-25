@@ -44,46 +44,50 @@ class PatientRegisterScreen extends HookConsumerWidget {
               genericFieldsNotifier.buildVaccinationStatus(),
               genericFieldsNotifier.buildPassword(),
               genericFieldsNotifier.buildRepeatPassword(),
-              ElevatedButton(
-                onPressed: () async {
-                  if (formKeyRegisterPatient.currentState!.validate()) {
-                    formKeyRegisterPatient.currentState?.save();
-                    Map<String, dynamic> userData = {
-                      ModelFields.email: genericFieldsNotifier.email,
-                      ModelFields.role: AppConstants.patient,
-                      ModelFields.firstName: genericFieldsNotifier.firstName,
-                      ModelFields.middleName: genericFieldsNotifier.middleName,
-                      ModelFields.lastName: genericFieldsNotifier.lastName,
-                      ModelFields.suffix: genericFieldsNotifier.suffix,
-                      ModelFields.age: genericFieldsNotifier.age,
-                      ModelFields.birthDate: genericFieldsNotifier.birthdate,
-                      ModelFields.sex: genericFieldsNotifier.sex,
-                      ModelFields.phoneNumber:
-                          genericFieldsNotifier.phoneNumber,
-                      ModelFields.address: genericFieldsNotifier.address,
-                      ModelFields.civilStatus:
-                          genericFieldsNotifier.civilStatus,
-                      ModelFields.classification:
-                          genericFieldsNotifier.classification,
-                      ModelFields.uhsIdNumber:
-                          genericFieldsNotifier.uhsIdNumber,
-                      ModelFields.vaccinationStatus:
-                          genericFieldsNotifier.vaccinationStatus,
-                      ModelFields.isApproved: true,
-                    };
+              firebaseNotifier.getLoading
+                  ? loading(color: Colors.blue)
+                  : ElevatedButton(
+                      onPressed: () async {
+                        if (formKeyRegisterPatient.currentState!.validate()) {
+                          formKeyRegisterPatient.currentState?.save();
+                          Map<String, dynamic> data = {
+                            ModelFields.email: genericFieldsNotifier.email,
+                            ModelFields.role: AppConstants.patient,
+                            ModelFields.firstName:
+                                genericFieldsNotifier.firstName,
+                            ModelFields.middleName:
+                                genericFieldsNotifier.middleName,
+                            ModelFields.lastName:
+                                genericFieldsNotifier.lastName,
+                            ModelFields.suffix: genericFieldsNotifier.suffix,
+                            ModelFields.age: genericFieldsNotifier.age,
+                            ModelFields.birthDate:
+                                genericFieldsNotifier.birthdate,
+                            ModelFields.sex: genericFieldsNotifier.sex,
+                            ModelFields.phoneNumber:
+                                genericFieldsNotifier.phoneNumber,
+                            ModelFields.address: genericFieldsNotifier.address,
+                            ModelFields.civilStatus:
+                                genericFieldsNotifier.civilStatus,
+                            ModelFields.classification:
+                                genericFieldsNotifier.classification,
+                            ModelFields.uhsIdNumber:
+                                genericFieldsNotifier.uhsIdNumber,
+                            ModelFields.vaccinationStatus:
+                                genericFieldsNotifier.vaccinationStatus,
+                            ModelFields.isApproved: true,
+                          };
 
-                    await firebaseNotifier.createUserWithEmailAndPassword(
-                        genericFieldsNotifier.email,
-                        genericFieldsNotifier.password,
-                        userData);
+                          await firebaseNotifier.createUserWithEmailAndPassword(
+                              genericFieldsNotifier.email,
+                              genericFieldsNotifier.password,
+                              data);
 
-                    if (context.mounted) context.pop();
-                  }
-                },
-                child: firebaseNotifier.getLoading
-                    ? loading()
-                    : const Text('Register'),
-              ),
+                          if (context.mounted) context.pop();
+                        }
+                      },
+                      child: const Text('Register'),
+                    ),
               ElevatedButton(
                 onPressed: () {
                   context.pop();

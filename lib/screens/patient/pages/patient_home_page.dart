@@ -62,7 +62,8 @@ class PatientHomePage extends HookConsumerWidget {
 
                       return FutureBuilder(
                         future: firebaseNotifier.getFirestoreService
-                            .getUserData(consultationRequest.doctorUid),
+                            .getDocument(FirestoreConstants.usersCollection,
+                                consultationRequest.doctorUid),
                         builder: (BuildContext context,
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
@@ -76,8 +77,7 @@ class PatientHomePage extends HookConsumerWidget {
                                   RoutePaths.viewConsultationRequest,
                                   extra: ViewConsultationRequestObject(
                                       doctor: doctor,
-                                      consultationRequestId:
-                                          consultationRequest.docId),
+                                      consultationRequest: consultationRequest),
                                 );
                               },
                               title: Center(

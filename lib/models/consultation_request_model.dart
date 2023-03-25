@@ -56,8 +56,8 @@ class ConsultationRequest {
 
 class ViewConsultationRequestObject {
   final Doctor doctor;
-  final String consultationRequestId;
+  final ConsultationRequest consultationRequest;
 
   ViewConsultationRequestObject(
-      {required this.doctor, required this.consultationRequestId});
+      {required this.doctor, required this.consultationRequest});
 }
