@@ -4,19 +4,19 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
-import 'package:schedcare/screens/common/authentication/approval_screen.dart';
+import 'package:schedcare/screens/common/approval_screen.dart';
 import 'package:schedcare/screens/doctor/authentication/doctor_register_screen.dart';
-import 'package:schedcare/screens/common/authentication/login_screen.dart';
+import 'package:schedcare/screens/common/login_screen.dart';
 import 'package:schedcare/screens/patient/authentication/patient_register_screen.dart';
-import 'package:schedcare/screens/common/authentication/reset_password_screen.dart';
-import 'package:schedcare/screens/common/authentication/verify_email_screen.dart';
+import 'package:schedcare/screens/common/reset_password_screen.dart';
+import 'package:schedcare/screens/common/verify_email_screen.dart';
 import 'package:schedcare/screens/doctor/home/doctor_home_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/send_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/view_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/home/patient_home_screen.dart';
 import 'package:schedcare/screens/patient/profile/edit_patient_profile_screen.dart';
 import 'package:schedcare/screens/patient/profile/patient_profile_screen.dart';
-import 'package:schedcare/utilities/auth_wrapper.dart';
+import 'package:schedcare/screens/common/auth_wrapper.dart';
 import 'package:schedcare/utilities/constants.dart';
 
 final routerProvider = Provider<GoRouter>(

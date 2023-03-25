@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/services/auth_service.dart';
-import 'package:schedcare/utilities/auth_wrapper.dart';
+import 'package:schedcare/screens/common/auth_wrapper.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
 class VerifyEmailScreen extends ConsumerStatefulWidget {
