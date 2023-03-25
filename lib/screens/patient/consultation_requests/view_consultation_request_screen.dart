@@ -10,13 +10,13 @@ import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
-class ViewSentConsultationRequestScreen extends HookConsumerWidget {
+class ViewConsultationRequestScreen extends HookConsumerWidget {
   final String consultationRequestId;
   final Doctor doctor;
   final Stream<DocumentSnapshot<Map<String, dynamic>>>
       consultationRequestSnapshots;
 
-  const ViewSentConsultationRequestScreen(
+  const ViewConsultationRequestScreen(
       {super.key,
       required this.consultationRequestId,
       required this.doctor,
@@ -29,6 +29,13 @@ class ViewSentConsultationRequestScreen extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Consultation Request'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Edit Request',
+            onPressed: () {},
+          ),
+        ],
       ),
       resizeToAvoidBottomInset: false,
       body: StreamBuilder(

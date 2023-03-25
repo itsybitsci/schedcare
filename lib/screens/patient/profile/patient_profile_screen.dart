@@ -32,7 +32,7 @@ class PatientProfileScreen extends HookConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            tooltip: 'Profile',
+            tooltip: 'Edit Profile',
             onPressed: () {
               context.push(RoutePaths.editPatientProfile);
             },

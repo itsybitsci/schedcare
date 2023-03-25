@@ -89,8 +89,8 @@ class RouteNames {
   static const String patientProfile = 'patient_profile';
   static const String editPatientProfile = 'edit_patient_profile';
   static const String sendConsultationRequest = 'send_consultation_request';
-  static const String viewSentConsultationRequest =
-      'view_sent_consultation_request';
+  static const String viewConsultationRequest = 'view_consultation_request';
+  static const String editConsultationRequest = 'edit_consultation_request';
 }
 
 //Route Paths
@@ -107,8 +107,8 @@ class RoutePaths {
   static const String patientProfile = '/patient_profile';
   static const String editPatientProfile = '/edit_patient_profile';
   static const String sendConsultationRequest = '/send_consultation_request';
-  static const String viewSentConsultationRequest =
-      '/view_sent_consultation_request';
+  static const String viewConsultationRequest = '/view_consultation_request';
+  static const String editConsultationRequest = '/edit_consultation_request';
 }
 
 class ModelFields {

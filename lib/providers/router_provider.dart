@@ -12,7 +12,7 @@ import 'package:schedcare/screens/common/authentication/reset_password_screen.da
 import 'package:schedcare/screens/common/authentication/verify_email_screen.dart';
 import 'package:schedcare/screens/doctor/home/doctor_home_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/send_consultation_request_screen.dart';
-import 'package:schedcare/screens/patient/consultation_requests/view_sent_consultation_request_screen.dart';
+import 'package:schedcare/screens/patient/consultation_requests/view_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/home/patient_home_screen.dart';
 import 'package:schedcare/screens/patient/profile/edit_patient_profile_screen.dart';
 import 'package:schedcare/screens/patient/profile/patient_profile_screen.dart';
@@ -97,8 +97,8 @@ class RouterNotifier extends ChangeNotifier {
           },
         ),
         GoRoute(
-          name: RouteNames.viewSentConsultationRequest,
-          path: RoutePaths.viewSentConsultationRequest,
+          name: RouteNames.viewConsultationRequest,
+          path: RoutePaths.viewConsultationRequest,
           builder: (context, state) {
             ViewConsultationRequestObject viewConsultationRequestObject =
                 state.extra! as ViewConsultationRequestObject;
@@ -112,7 +112,7 @@ class RouterNotifier extends ChangeNotifier {
                     .doc(consultationRequestId)
                     .snapshots();
 
-            return ViewSentConsultationRequestScreen(
+            return ViewConsultationRequestScreen(
               consultationRequestId: consultationRequestId,
               doctor: doctor,
               consultationRequestSnapshots: consultationRequestSnapshots,
