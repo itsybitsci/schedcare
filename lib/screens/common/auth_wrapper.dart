@@ -35,6 +35,11 @@ class AuthWrapper extends HookConsumerWidget {
             data: (data) {
               String role = data.get(ModelFields.role);
 
+              // Check if user is admin approved
+              if (!data.get(ModelFields.isApproved)) {
+                return const ApprovalScreen();
+              }
+
               //Redirect based on role
               if (role.toLowerCase() == AppConstants.patient.toLowerCase()) {
                 // Persist login
@@ -45,10 +50,6 @@ class AuthWrapper extends HookConsumerWidget {
                 return const PatientHomeScreen();
               } else if (role.toLowerCase() ==
                   AppConstants.doctor.toLowerCase()) {
-                // Check if doctor is approved
-                if (!data.get(ModelFields.isApproved)) {
-                  return const ApprovalScreen();
-                }
                 // Persist login
                 if (firebaseNotifier.getDoctor == null) {
                   Doctor doctor = Doctor.fromSnapshot(data);
