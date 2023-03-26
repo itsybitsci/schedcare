@@ -151,6 +151,8 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
                                             ModelFields.consultationType:
                                                 consultationRequestNotifier
                                                     .consultationType,
+                                            ModelFields.modifiedAt:
+                                                DateTime.now(),
                                           };
                                           await firebaseNotifier
                                               .updateConsultationRequest(

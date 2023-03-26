@@ -84,11 +84,12 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                             ModelFields.consultationRequestBody:
                                 consultationRequestNotifier
                                     .consultationRequestBody,
+                            ModelFields.status: AppConstants.pending,
                             ModelFields.consultationType:
                                 consultationRequestNotifier.consultationType,
                             ModelFields.consultationDateTime:
                                 consultationRequestNotifier.dateTime,
-                            ModelFields.status: AppConstants.pending,
+                            ModelFields.modifiedAt: DateTime.now(),
                             ModelFields.createdAt: DateTime.now()
                           };
                           await firebaseNotifier

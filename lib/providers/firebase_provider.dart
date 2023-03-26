@@ -96,6 +96,7 @@ class FirebaseProvider extends ChangeNotifier {
       data.addAll(
         {
           ModelFields.lastLogin: user.metadata.lastSignInTime,
+          ModelFields.modifiedAt: user.metadata.creationTime,
           ModelFields.createdAt: user.metadata.creationTime,
         },
       );

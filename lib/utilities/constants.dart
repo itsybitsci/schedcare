@@ -128,6 +128,7 @@ class ModelFields {
   static const String isApproved = 'isApproved';
   static const String specialization = 'specialization';
   static const String lastLogin = 'lastLogin';
+  static const String modifiedAt = 'modifiedAt';
   static const String createdAt = 'createdAt';
   static const String patientUid = 'patientUid';
   static const String doctorUid = 'doctorUid';

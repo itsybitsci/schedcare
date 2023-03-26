@@ -10,6 +10,7 @@ class ConsultationRequest {
   final String status;
   final String consultationType;
   final DateTime consultationDateTime;
+  final DateTime modifiedAt;
   final DateTime createdAt;
   String? meetingId;
 
@@ -18,9 +19,10 @@ class ConsultationRequest {
       required this.patientUid,
       required this.doctorUid,
       required this.consultationRequestBody,
+      required this.status,
       required this.consultationType,
       required this.consultationDateTime,
-      required this.status,
+      required this.modifiedAt,
       required this.createdAt,
       this.meetingId});
 
@@ -34,6 +36,7 @@ class ConsultationRequest {
       status: userData[ModelFields.status],
       consultationType: userData[ModelFields.consultationType],
       consultationDateTime: userData[ModelFields.consultationDateTime].toDate(),
+      modifiedAt: userData[ModelFields.modifiedAt].toDate(),
       createdAt: userData[ModelFields.createdAt].toDate(),
       meetingId: userData[ModelFields.meetingId] ?? '',
     );
@@ -48,6 +51,7 @@ class ConsultationRequest {
       ModelFields.status: status,
       ModelFields.consultationType: consultationType,
       ModelFields.consultationDateTime: consultationDateTime,
+      ModelFields.modifiedAt: modifiedAt,
       ModelFields.createdAt: createdAt,
       ModelFields.meetingId: meetingId ?? ''
     };

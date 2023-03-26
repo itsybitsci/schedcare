@@ -20,6 +20,7 @@ class Patient {
   final String vaccinationStatus;
   final bool isApproved;
   final DateTime lastLogin;
+  final DateTime modifiedAt;
   final DateTime createdAt;
 
   Patient(
@@ -41,6 +42,7 @@ class Patient {
       required this.vaccinationStatus,
       required this.isApproved,
       required this.lastLogin,
+      required this.modifiedAt,
       required this.createdAt});
 
   factory Patient.fromSnapshot(DocumentSnapshot snapshot) {
@@ -64,6 +66,7 @@ class Patient {
       vaccinationStatus: userData[ModelFields.vaccinationStatus],
       isApproved: userData[ModelFields.isApproved],
       lastLogin: userData[ModelFields.lastLogin].toDate(),
+      modifiedAt: userData[ModelFields.modifiedAt].toDate(),
       createdAt: userData[ModelFields.createdAt].toDate(),
     );
   }
@@ -88,6 +91,7 @@ class Patient {
       ModelFields.vaccinationStatus: vaccinationStatus,
       ModelFields.isApproved: isApproved,
       ModelFields.lastLogin: lastLogin,
+      ModelFields.modifiedAt: modifiedAt,
       ModelFields.createdAt: createdAt,
     };
   }
@@ -105,6 +109,7 @@ class Doctor {
   final String specialization;
   final bool isApproved;
   final DateTime lastLogin;
+  final DateTime modifiedAt;
   final DateTime createdAt;
 
   Doctor(
@@ -119,6 +124,7 @@ class Doctor {
       required this.specialization,
       required this.isApproved,
       required this.lastLogin,
+      required this.modifiedAt,
       required this.createdAt});
 
   factory Doctor.fromSnapshot(DocumentSnapshot snapshot) {
@@ -135,6 +141,7 @@ class Doctor {
       specialization: userData[ModelFields.specialization],
       isApproved: userData[ModelFields.isApproved],
       lastLogin: userData[ModelFields.lastLogin].toDate(),
+      modifiedAt: userData[ModelFields.modifiedAt].toDate(),
       createdAt: userData[ModelFields.createdAt].toDate(),
     );
   }
@@ -152,6 +159,7 @@ class Doctor {
       ModelFields.specialization: specialization,
       ModelFields.isApproved: isApproved,
       ModelFields.lastLogin: lastLogin,
+      ModelFields.modifiedAt: modifiedAt,
       ModelFields.createdAt: createdAt,
     };
   }

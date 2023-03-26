@@ -111,6 +111,7 @@ class EditPatientProfileScreen extends HookConsumerWidget {
                                 genericFieldsNotifier.uhsIdNumber,
                             ModelFields.vaccinationStatus:
                                 genericFieldsNotifier.vaccinationStatus,
+                            ModelFields.modifiedAt: DateTime.now(),
                           };
 
                           await firebaseNotifier
