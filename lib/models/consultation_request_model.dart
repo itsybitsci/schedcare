@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/utilities/constants.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class ConsultationRequest {
   final String docId;
   final String patientUid;
   final String doctorUid;
+  final String consultationRequestTitle;
   final String consultationRequestBody;
   final String status;
   final String consultationType;
@@ -18,6 +21,7 @@ class ConsultationRequest {
       {required this.docId,
       required this.patientUid,
       required this.doctorUid,
+      required this.consultationRequestTitle,
       required this.consultationRequestBody,
       required this.status,
       required this.consultationType,
@@ -32,6 +36,7 @@ class ConsultationRequest {
       docId: userData[ModelFields.docId],
       patientUid: userData[ModelFields.patientUid],
       doctorUid: userData[ModelFields.doctorUid],
+      consultationRequestTitle: userData[ModelFields.consultationRequestTitle],
       consultationRequestBody: userData[ModelFields.consultationRequestBody],
       status: userData[ModelFields.status],
       consultationType: userData[ModelFields.consultationType],
@@ -47,6 +52,7 @@ class ConsultationRequest {
       ModelFields.docId: docId,
       ModelFields.patientUid: patientUid,
       ModelFields.doctorUid: doctorUid,
+      ModelFields.consultationRequestTitle: consultationRequestTitle,
       ModelFields.consultationRequestBody: consultationRequestBody,
       ModelFields.status: status,
       ModelFields.consultationType: consultationType,
@@ -56,6 +62,16 @@ class ConsultationRequest {
       ModelFields.meetingId: meetingId ?? ''
     };
   }
+
+  Meeting toMeeting() {
+    return Meeting(
+        eventName: consultationRequestTitle,
+        eventBody: consultationRequestBody,
+        from: consultationDateTime,
+        to: consultationDateTime
+            .add(const Duration(hours: AppConstants.defaultMeetingDuration)),
+        background: Colors.blue);
+  }
 }
 
 class ViewConsultationRequestObject {
@@ -64,4 +80,51 @@ class ViewConsultationRequestObject {
 
   ViewConsultationRequestObject(
       {required this.doctor, required this.consultationRequest});
+}
+
+class Meeting {
+  final String eventName;
+  final String eventBody;
+  final DateTime from;
+  final DateTime to;
+  final Color background;
+
+  Meeting({
+    required this.eventName,
+    required this.eventBody,
+    required this.from,
+    required this.to,
+    required this.background,
+  });
+}
+
+class MeetingDataSource extends CalendarDataSource {
+  MeetingDataSource(List<Meeting> source) {
+    appointments = source;
+  }
+
+  @override
+  DateTime getStartTime(int index) {
+    return appointments![index].from;
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    return appointments![index].to;
+  }
+
+  @override
+  String getSubject(int index) {
+    return appointments![index].eventName;
+  }
+
+  @override
+  String getNotes(int index) {
+    return appointments![index].eventBody;
+  }
+
+  @override
+  Color getColor(int index) {
+    return appointments![index].background;
+  }
 }

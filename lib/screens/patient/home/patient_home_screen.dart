@@ -29,7 +29,27 @@ class PatientHomeScreen extends HookConsumerWidget {
             icon: const Icon(Icons.logout),
             tooltip: 'Logout',
             onPressed: () async {
-              await firebaseNotifier.signOut();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Confirm signing out?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => context.pop(),
+                        child: const Text('No'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          context.pop();
+                          await firebaseNotifier.signOut();
+                        },
+                        child: const Text('Yes'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
@@ -62,9 +82,9 @@ class PatientHomeScreen extends HookConsumerWidget {
                 selectedIcon: Icon(Icons.local_hospital),
                 label: 'Doctors'),
             NavigationDestination(
-                icon: Icon(Icons.notification_add_outlined),
-                selectedIcon: Icon(Icons.notification_add),
-                label: 'Notifications'),
+                icon: Icon(Icons.calendar_month_outlined),
+                selectedIcon: Icon(Icons.calendar_month),
+                label: 'Schedule'),
           ],
         ),
       ),

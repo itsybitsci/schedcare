@@ -8,7 +8,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
-import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
@@ -18,27 +17,27 @@ class PatientHomePage extends HookConsumerWidget {
   final CollectionReference<Map<String, dynamic>>
       consultationRequestsCollectionReference = FirebaseFirestore.instance
           .collection(FirestoreConstants.consultationRequestsCollection);
+  final CollectionReference<Map<String, dynamic>> usersCollectionReference =
+      FirebaseFirestore.instance.collection(FirestoreConstants.usersCollection);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
-    final consultationRequestsQuery = consultationRequestsCollectionReference
-        .where(ModelFields.patientUid,
-            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .withConverter(
-          fromFirestore: (snapshot, _) =>
-              ConsultationRequest.fromSnapshot(snapshot),
-          toFirestore: (consultationRequest, _) => consultationRequest.toMap(),
-        );
+    final Query<ConsultationRequest> consultationRequestsQuery =
+        consultationRequestsCollectionReference
+            .where(ModelFields.patientUid,
+                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .orderBy(ModelFields.consultationDateTime)
+            .withConverter(
+              fromFirestore: (snapshot, _) =>
+                  ConsultationRequest.fromSnapshot(snapshot),
+              toFirestore: (consultationRequest, _) =>
+                  consultationRequest.toMap(),
+            );
 
     return FirestoreQueryBuilder<ConsultationRequest>(
       query: consultationRequestsQuery,
       pageSize: 10,
       builder: (context, consultationRequestSnapshot, _) {
-        if (consultationRequestSnapshot.hasError) {
-          return const Text(Prompts.errorDueToWeakInternet);
-        }
-
         if (consultationRequestSnapshot.hasData) {
           return consultationRequestSnapshot.docs.isEmpty
               ? const Center(
@@ -60,10 +59,10 @@ class PatientHomePage extends HookConsumerWidget {
                       final ConsultationRequest consultationRequest =
                           consultationRequestSnapshot.docs[index].data();
 
-                      return FutureBuilder(
-                        future: firebaseNotifier.getFirestoreService
-                            .getDocument(FirestoreConstants.usersCollection,
-                                consultationRequest.doctorUid),
+                      return StreamBuilder(
+                        stream: usersCollectionReference
+                            .doc(consultationRequest.doctorUid)
+                            .snapshots(),
                         builder: (BuildContext context,
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
@@ -81,11 +80,8 @@ class PatientHomePage extends HookConsumerWidget {
                                 );
                               },
                               title: Center(
-                                child: doctor.middleName.isEmpty
-                                    ? Text(
-                                        '${doctor.firstName} ${doctor.lastName}')
-                                    : Text(
-                                        '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
+                                child: Text(consultationRequest
+                                    .consultationRequestTitle),
                               ),
                               trailing: Text(
                                 consultationRequest.status,
@@ -93,17 +89,11 @@ class PatientHomePage extends HookConsumerWidget {
                               ),
                               subtitle: Center(
                                 child: Text(
-                                    DateFormat('MMMM d, y').format(
+                                    DateFormat('MMMM d, y - hh:mm a').format(
                                         consultationRequest
                                             .consultationDateTime),
                                     style: TextStyle(fontSize: 12.sp)),
                               ),
-                            );
-                          }
-
-                          if (doctorSnapshot.hasError) {
-                            return const Center(
-                              child: Text(Prompts.errorDueToWeakInternet),
                             );
                           }
 
@@ -115,7 +105,7 @@ class PatientHomePage extends HookConsumerWidget {
                 );
         }
 
-        return loading(color: Colors.blue);
+        return shimmerListTile();
       },
     );
   }

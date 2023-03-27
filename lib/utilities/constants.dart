@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schedcare/screens/patient/pages/list_doctors_page.dart';
-import 'package:schedcare/screens/patient/pages/notifications_page.dart';
+import 'package:schedcare/screens/patient/pages/schedules_page.dart';
 import 'package:schedcare/screens/patient/pages/patient_home_page.dart';
 
 class FirestoreConstants {
@@ -39,6 +39,8 @@ class AppConstants {
   static const String rejected = 'Rejected';
   static const String pending = 'Pending';
 
+  static const int defaultMeetingDuration = 1;
+
   static const List<String> sexes = <String>[male, female];
 
   static const List<String> classifications = <String>[
@@ -71,7 +73,7 @@ class AppConstants {
   static List<Widget> patientPages = <Widget>[
     PatientHomePage(),
     ListDoctorsPage(),
-    const NotificationsPage(),
+    SchedulesPage(),
   ];
 }
 
@@ -112,6 +114,7 @@ class RoutePaths {
 class ModelFields {
   static const String email = 'email';
   static const String role = 'role';
+  static const String prefix = 'prefix';
   static const String firstName = 'firstName';
   static const String middleName = 'middleName';
   static const String lastName = 'lastName';
@@ -132,10 +135,11 @@ class ModelFields {
   static const String createdAt = 'createdAt';
   static const String patientUid = 'patientUid';
   static const String doctorUid = 'doctorUid';
+  static const String consultationRequestTitle = 'consultationRequestTitle';
   static const String consultationRequestBody = 'consultationRequestBody';
   static const String status = 'status';
   static const String consultationType = 'consultationType';
-  static const String consultationDateTime = 'consultationDate';
+  static const String consultationDateTime = 'consultationDateTime';
   static const String meetingId = 'meetingId';
   static const String docId = 'docId';
 }

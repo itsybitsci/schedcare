@@ -139,7 +139,9 @@ class ConsultationRequestProvider extends ChangeNotifier {
               DateFormat.jm().parse(value),
             );
             return time.hour + time.minute / 60 < 8 ||
-                    time.hour + time.minute / 60 > 16
+                    (time.hour + time.minute / 60 > 11 &&
+                        time.hour + time.minute / 60 < 13) ||
+                    time.hour + time.minute / 60 > 15
                 ? 'Office hours only'
                 : null;
           },

@@ -55,9 +55,12 @@ class ListDoctorsPage extends HookConsumerWidget {
                         },
                         title: Center(
                           child: doctor.middleName.isEmpty
-                              ? Text('${doctor.firstName} ${doctor.lastName}')
+                              ? Text(
+                                  '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
+                                      .trim())
                               : Text(
-                                  '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
+                                  '${doctor.prefix} ${doctor.firstName} ${doctor.middleName} ${doctor.lastName} ${doctor.suffix}'
+                                      .trim()),
                         ),
                         subtitle: Center(
                           child: Text(doctor.role),

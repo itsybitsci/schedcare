@@ -101,6 +101,7 @@ class Doctor {
   final String uid;
   final String email;
   final String role;
+  final String prefix;
   final String firstName;
   final String middleName;
   final String lastName;
@@ -116,6 +117,7 @@ class Doctor {
       {required this.uid,
       required this.email,
       required this.role,
+      required this.prefix,
       required this.firstName,
       required this.middleName,
       required this.lastName,
@@ -133,6 +135,7 @@ class Doctor {
       uid: snapshot.id,
       email: userData[ModelFields.email],
       role: userData[ModelFields.role],
+      prefix: userData[ModelFields.prefix] ?? '',
       firstName: userData[ModelFields.firstName],
       middleName: userData[ModelFields.middleName] ?? '',
       lastName: userData[ModelFields.lastName],
@@ -151,6 +154,7 @@ class Doctor {
       ModelFields.doctorUid: uid,
       ModelFields.email: email,
       ModelFields.role: role,
+      ModelFields.prefix: prefix,
       ModelFields.firstName: firstName,
       ModelFields.middleName: middleName,
       ModelFields.lastName: lastName,
