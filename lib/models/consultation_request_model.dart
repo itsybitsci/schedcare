@@ -65,12 +65,13 @@ class ConsultationRequest {
 
   Meeting toMeeting() {
     return Meeting(
-        eventName: consultationRequestTitle,
-        eventBody: consultationRequestBody,
-        from: consultationDateTime,
-        to: consultationDateTime
-            .add(const Duration(hours: AppConstants.defaultMeetingDuration)),
-        background: Colors.blue);
+      eventName: consultationRequestTitle,
+      eventBody: consultationRequestBody,
+      from: consultationDateTime,
+      to: consultationDateTime
+          .add(const Duration(hours: AppConstants.defaultMeetingDuration)),
+      background: Colors.blue,
+    );
   }
 }
 

@@ -12,6 +12,7 @@ class PatientHomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseNotifier = ref.watch(firebaseProvider);
+    final pageController = usePageController();
     final index = useState(0);
 
     return Scaffold(
@@ -55,7 +56,12 @@ class PatientHomeScreen extends HookConsumerWidget {
         ],
       ),
       body: !firebaseNotifier.getLoading
-          ? AppConstants.patientPages[index.value]
+          ? PageView(
+              controller: pageController,
+              onPageChanged: (selectedIndex) {
+                index.value = selectedIndex;
+              },
+              children: AppConstants.patientPages)
           : loading(color: Colors.blue),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
@@ -71,6 +77,11 @@ class PatientHomeScreen extends HookConsumerWidget {
           selectedIndex: index.value,
           onDestinationSelected: (selectedIndex) {
             index.value = selectedIndex;
+            pageController.animateToPage(
+              selectedIndex,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.ease,
+            );
           },
           destinations: const [
             NavigationDestination(

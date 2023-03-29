@@ -22,14 +22,21 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
       consultationRequestsCollectionReference = FirebaseFirestore.instance
           .collection(FirestoreConstants.consultationRequestsCollection);
 
-  bool isOverlapping(
-      List<DateTime> consultationRequestStartTimes, DateTime compareDatetime) {
-    return consultationRequestStartTimes.any((datetime) =>
-        datetime.isBefore(compareDatetime
-            .add(const Duration(hours: AppConstants.defaultMeetingDuration))) &&
-        compareDatetime.isBefore(datetime
-            .add(const Duration(hours: AppConstants.defaultMeetingDuration))));
-  }
+  bool isOverlapping(List<DateTime> consultationRequestStartTimes,
+          DateTime compareDatetime) =>
+      consultationRequestStartTimes.any(
+        (datetime) =>
+            datetime.isBefore(
+              compareDatetime.add(
+                const Duration(hours: AppConstants.defaultMeetingDuration),
+              ),
+            ) &&
+            compareDatetime.isBefore(
+              datetime.add(
+                const Duration(hours: AppConstants.defaultMeetingDuration),
+              ),
+            ),
+      );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

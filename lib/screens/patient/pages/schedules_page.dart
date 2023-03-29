@@ -39,7 +39,6 @@ class SchedulesPage extends HookConsumerWidget {
             allowedViews: const [
               CalendarView.day,
               CalendarView.workWeek,
-              CalendarView.timelineWorkWeek,
               CalendarView.month,
             ],
             initialDisplayDate: DateTime.now(),
