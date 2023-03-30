@@ -54,6 +54,9 @@ dependencies:
   syncfusion_flutter_calendar: ^20.4.54
   firebase_ui_firestore: ^1.2.10
   shimmer: ^2.0.0
+  firebase_messaging: ^14.4.0
+  flutter_local_notifications: ^13.0.0
+  http: ^0.13.5
 
 flutter_icons:
   android: true

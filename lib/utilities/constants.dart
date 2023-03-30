@@ -6,9 +6,13 @@ import 'package:schedcare/screens/patient/pages/patient_home_page.dart';
 class FirestoreConstants {
   static const String usersCollection = 'users';
   static const String consultationRequestsCollection = 'consultation_requests';
+  static const String userTokensCollection = 'user_tokens';
 }
 
 class AppConstants {
+  static const String fcmKey =
+      'AAAAN4HTnQg:APA91bHKKsyn8br_UGidPC-zwuptWNDulQ_Hkx6rf7gwxO-ZPprA1WFbcZuDe8lRIcaYtq9Sd58VoqKdbFwHLKVRNTr3HFPCNDCVN5N_PsqadBpJJlvWEv3va_fzuI47GV-Oed1hJ9Aq';
+
   static const String patient = 'Patient';
   static const String doctor = 'Doctor';
   static const String consultationRequest = 'ConsultationRequest';
@@ -142,4 +146,5 @@ class ModelFields {
   static const String consultationDateTime = 'consultationDateTime';
   static const String meetingId = 'meetingId';
   static const String docId = 'docId';
+  static const String token = 'token';
 }

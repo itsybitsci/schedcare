@@ -18,7 +18,7 @@ class EditPatientProfileScreen extends HookConsumerWidget {
     final firebaseNotifier = ref.watch(firebaseProvider);
     final genericFieldsNotifier = ref.watch(genericFieldsProvider);
 
-    Future setData(DocumentSnapshot<Map<String, dynamic>> data) async {
+    setData(DocumentSnapshot<Map<String, dynamic>> data) {
       genericFieldsNotifier.setFirstName = data.get(ModelFields.firstName);
       genericFieldsNotifier.setFirstName = data.get(ModelFields.firstName);
       genericFieldsNotifier.setMiddleName = data.get(ModelFields.middleName);
@@ -40,21 +40,19 @@ class EditPatientProfileScreen extends HookConsumerWidget {
           data.get(ModelFields.vaccinationStatus);
     }
 
-    useEffect(
-      () {
-        Future.microtask(
-          () async {
-            DocumentSnapshot<Map<String, dynamic>> data =
-                await FirebaseFirestore.instance
-                    .collection(FirestoreConstants.usersCollection)
-                    .doc(firebaseNotifier.getCurrentUser!.uid)
-                    .get();
-            await setData(data);
-          },
-        );
-        return null;
-      },
-    );
+    useEffect(() {
+      Future<void> fetchData() async {
+        DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
+            .instance
+            .collection(FirestoreConstants.usersCollection)
+            .doc(firebaseNotifier.getCurrentUser!.uid)
+            .get();
+        setData(data);
+      }
+
+      fetchData();
+      return null;
+    }, []);
 
     return Scaffold(
       appBar: AppBar(

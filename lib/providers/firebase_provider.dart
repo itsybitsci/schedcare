@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/services/auth_service.dart';
+import 'package:schedcare/services/cloud_messaging_service.dart';
 import 'package:schedcare/services/firestore_service.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
@@ -16,6 +17,8 @@ class FirebaseProvider extends ChangeNotifier {
   String? _role;
   final AuthService _authService = AuthService();
   final FirestoreService _fireStoreService = FirestoreService();
+  final FirebaseCloudMessagingService _firebaseCloudMessagingService =
+      FirebaseCloudMessagingService();
 
   bool get getLoading => _isLoading;
 
@@ -34,6 +37,9 @@ class FirebaseProvider extends ChangeNotifier {
   AuthService get getAuthService => _authService;
 
   FirestoreService get getFirestoreService => _fireStoreService;
+
+  FirebaseCloudMessagingService get getFirebaseCloudMessagingService =>
+      _firebaseCloudMessagingService;
 
   set setPatient(Patient patient) {
     _patient = patient;
@@ -217,6 +223,23 @@ class FirebaseProvider extends ChangeNotifier {
     } on FirebaseException catch (e) {
       showToast(e.code);
       setLoading(false);
+      throw Exception(e.code);
+    }
+  }
+
+  Future<bool> getAndSaveToken() async {
+    try {
+      String? token = await _firebaseCloudMessagingService.getToken();
+      if (token != null) {
+        await _fireStoreService.setDocument(
+            {ModelFields.token: token, ModelFields.createdAt: DateTime.now()},
+            FirestoreConstants.userTokensCollection,
+            _authService.currentUser!.uid);
+      }
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
       throw Exception(e.code);
     }
   }

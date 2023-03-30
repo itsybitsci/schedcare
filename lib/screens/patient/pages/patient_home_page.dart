@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
+import 'package:schedcare/providers/firebase_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
@@ -19,9 +23,12 @@ class PatientHomePage extends HookConsumerWidget {
           .collection(FirestoreConstants.consultationRequestsCollection);
   final CollectionReference<Map<String, dynamic>> usersCollectionReference =
       FirebaseFirestore.instance.collection(FirestoreConstants.usersCollection);
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final firebaseNotifier = ref.watch(firebaseProvider);
     final Query<ConsultationRequest> consultationRequestsQuery =
         consultationRequestsCollectionReference
             .where(ModelFields.patientUid,
@@ -33,6 +40,34 @@ class PatientHomePage extends HookConsumerWidget {
               toFirestore: (consultationRequest, _) =>
                   consultationRequest.toMap(),
             );
+
+    useEffect(() {
+      firebaseNotifier.getAndSaveToken();
+
+      flutterLocalNotificationsPlugin.initialize(const InitializationSettings(
+          android: AndroidInitializationSettings('@mipmap/ic_launcher')));
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+        AndroidNotificationDetails androidPlatformChannelSpecifics =
+            const AndroidNotificationDetails(
+          'SchedCare',
+          'SchedCare',
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: true,
+          showWhen: false,
+        );
+        NotificationDetails platformChannelSpecifics =
+            NotificationDetails(android: androidPlatformChannelSpecifics);
+        await FlutterLocalNotificationsPlugin().show(
+          0,
+          message.notification!.title,
+          message.notification!.body,
+          platformChannelSpecifics,
+        );
+      });
+
+      return null;
+    }, []);
 
     return FirestoreQueryBuilder<ConsultationRequest>(
       query: consultationRequestsQuery,
