@@ -11,7 +11,7 @@ class PatientHomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
     final pageController = usePageController();
     final index = useState(0);
 
@@ -43,7 +43,7 @@ class PatientHomeScreen extends HookConsumerWidget {
                       TextButton(
                         onPressed: () async {
                           context.pop();
-                          await firebaseNotifier.signOut();
+                          await firebaseServicesNotifier.signOut();
                         },
                         child: const Text('Yes'),
                       ),
@@ -55,7 +55,7 @@ class PatientHomeScreen extends HookConsumerWidget {
           ),
         ],
       ),
-      body: !firebaseNotifier.getLoading
+      body: !firebaseServicesNotifier.getLoading
           ? PageView(
               controller: pageController,
               onPageChanged: (selectedIndex) {

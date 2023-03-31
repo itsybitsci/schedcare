@@ -22,7 +22,7 @@ class PatientProfileScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
     final genericFieldsNotifier = ref.watch(genericFieldsProvider);
 
     return Scaffold(
@@ -70,7 +70,7 @@ class PatientProfileScreen extends HookConsumerWidget {
                   Text('Civil Status: ${data.get(ModelFields.civilStatus)}'),
                   Text(
                       'Vaccination Status: ${data.get(ModelFields.vaccinationStatus)}'),
-                  firebaseNotifier.getLoading
+                  firebaseServicesNotifier.getLoading
                       ? loading(color: Colors.blue)
                       : ElevatedButton(
                           onPressed: () async {
@@ -117,8 +117,10 @@ class PatientProfileScreen extends HookConsumerWidget {
                                           formKeyUpdatePassword.currentState
                                               ?.save();
                                           context.pop();
-                                          await firebaseNotifier.updatePassword(
-                                              genericFieldsNotifier.password);
+                                          await firebaseServicesNotifier
+                                              .updatePassword(
+                                                  genericFieldsNotifier
+                                                      .password);
                                         }
                                       },
                                       child: const Text('Update Password'),

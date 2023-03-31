@@ -3,30 +3,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/user_models.dart';
-import 'package:schedcare/services/auth_service.dart';
-import 'package:schedcare/services/cloud_messaging_service.dart';
-import 'package:schedcare/services/firestore_service.dart';
+import 'package:schedcare/services/firebase_authentication_service.dart';
+import 'package:schedcare/services/firebase_cloud_messaging_service.dart';
+import 'package:schedcare/services/firebase_firestore_service.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
-class FirebaseProvider extends ChangeNotifier {
+class FirebaseServicesProvider extends ChangeNotifier {
   bool _isLoading = false;
   UserCredential? _userCredential;
   Patient? _patient;
   Doctor? _doctor;
   String? _role;
-  final AuthService _authService = AuthService();
-  final FirestoreService _fireStoreService = FirestoreService();
+  String? _deviceToken;
+  final FirebaseAuthenticationService _firebaseAuthenticationService =
+      FirebaseAuthenticationService();
+  final FirebaseFirestoreService _firebaseFirestoreService =
+      FirebaseFirestoreService();
   final FirebaseCloudMessagingService _firebaseCloudMessagingService =
       FirebaseCloudMessagingService();
 
   bool get getLoading => _isLoading;
 
-  User? get getLogin => _authService.currentUser;
+  User? get getLogin => _firebaseAuthenticationService.currentUser;
 
   UserCredential? get getUserCredential => _userCredential;
 
-  User? get getCurrentUser => _authService.currentUser;
+  User? get getCurrentUser => _firebaseAuthenticationService.currentUser;
 
   Patient? get getPatient => _patient;
 
@@ -34,9 +37,11 @@ class FirebaseProvider extends ChangeNotifier {
 
   String? get getRole => _role;
 
-  AuthService get getAuthService => _authService;
+  FirebaseAuthenticationService get getFirebaseAuthenticationService =>
+      _firebaseAuthenticationService;
 
-  FirestoreService get getFirestoreService => _fireStoreService;
+  FirebaseFirestoreService get getFirebaseFirestoreService =>
+      _firebaseFirestoreService;
 
   FirebaseCloudMessagingService get getFirebaseCloudMessagingService =>
       _firebaseCloudMessagingService;
@@ -58,11 +63,11 @@ class FirebaseProvider extends ChangeNotifier {
   Future<bool> logInWithEmailAndPassword(String email, String password) async {
     setLoading(true);
     try {
-      _userCredential =
-          await _authService.logInWithEmailAndPassword(email, password);
+      _userCredential = await _firebaseAuthenticationService
+          .logInWithEmailAndPassword(email, password);
       User? user = _userCredential!.user;
 
-      DocumentSnapshot? snapshot = await _fireStoreService.getDocument(
+      DocumentSnapshot? snapshot = await _firebaseFirestoreService.getDocument(
           FirestoreConstants.usersCollection, user!.uid);
 
       _role = snapshot.get(ModelFields.role).toString().toLowerCase() ==
@@ -76,7 +81,7 @@ class FirebaseProvider extends ChangeNotifier {
         _doctor = Doctor.fromSnapshot(snapshot);
       }
 
-      await _fireStoreService.updateDocument({
+      await _firebaseFirestoreService.updateDocument({
         ModelFields.lastLogin: user.metadata.lastSignInTime,
       }, FirestoreConstants.usersCollection, user.uid);
 
@@ -94,8 +99,8 @@ class FirebaseProvider extends ChangeNotifier {
       String email, String password, Map<String, dynamic> data) async {
     setLoading(true);
     try {
-      _userCredential =
-          await _authService.createUserWithEmailAndPassword(email, password);
+      _userCredential = await _firebaseAuthenticationService
+          .createUserWithEmailAndPassword(email, password);
 
       User user = _userCredential!.user!;
 
@@ -107,7 +112,7 @@ class FirebaseProvider extends ChangeNotifier {
         },
       );
 
-      await _fireStoreService.setDocument(
+      await _firebaseFirestoreService.setDocument(
           data, FirestoreConstants.usersCollection, user.uid);
 
       setLoading(false);
@@ -123,7 +128,11 @@ class FirebaseProvider extends ChangeNotifier {
   Future<void> signOut() async {
     setLoading(true);
     try {
-      await _authService.signOut();
+      _firebaseFirestoreService.updateDocument({
+        ModelFields.deviceTokens: FieldValue.arrayRemove([_deviceToken])
+      }, FirestoreConstants.userTokensCollection, getCurrentUser!.uid);
+
+      await _firebaseAuthenticationService.signOut();
       showToast('Successfully logged out');
       setLoading(false);
       notifyListeners();
@@ -138,7 +147,7 @@ class FirebaseProvider extends ChangeNotifier {
       Map<String, dynamic> data, String collection, String id) async {
     setLoading(true);
     try {
-      await _fireStoreService.updateDocument(data, collection, id);
+      await _firebaseFirestoreService.updateDocument(data, collection, id);
       showToast('Successfully updated profile');
       setLoading(false);
       notifyListeners();
@@ -154,7 +163,7 @@ class FirebaseProvider extends ChangeNotifier {
       Map<String, dynamic> data, String collection, String id) async {
     setLoading(true);
     try {
-      await _fireStoreService.updateDocument(data, collection, id);
+      await _firebaseFirestoreService.updateDocument(data, collection, id);
       showToast('Successfully updated consultation request');
       setLoading(false);
       notifyListeners();
@@ -169,7 +178,7 @@ class FirebaseProvider extends ChangeNotifier {
   Future<bool> sendPasswordResetEmail(String email) async {
     setLoading(true);
     try {
-      await _authService.sendPasswordResetEmail(email);
+      await _firebaseAuthenticationService.sendPasswordResetEmail(email);
       showToast('Kindly check your email');
       setLoading(false);
       notifyListeners();
@@ -184,7 +193,7 @@ class FirebaseProvider extends ChangeNotifier {
   Future<bool> updatePassword(String newPassword) async {
     setLoading(true);
     try {
-      await _authService.updatePassword(newPassword);
+      await _firebaseAuthenticationService.updatePassword(newPassword);
       showToast('Successfully updated password');
       setLoading(false);
       notifyListeners();
@@ -200,7 +209,7 @@ class FirebaseProvider extends ChangeNotifier {
       Map<String, dynamic> data, String collection, String id) async {
     setLoading(true);
     try {
-      await _fireStoreService.setDocument(data, collection, id);
+      await _firebaseFirestoreService.setDocument(data, collection, id);
       showToast('Successfully sent consultation request');
       setLoading(false);
       notifyListeners();
@@ -215,7 +224,7 @@ class FirebaseProvider extends ChangeNotifier {
   Future<bool> deleteDocument(String collection, String documentId) async {
     setLoading(true);
     try {
-      await _fireStoreService.deleteDocument(collection, documentId);
+      await _firebaseFirestoreService.deleteDocument(collection, documentId);
       showToast('Successfully deleted document');
       setLoading(false);
       notifyListeners();
@@ -227,14 +236,28 @@ class FirebaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> getAndSaveToken() async {
+  Future<bool> getAndSaveDeviceToken() async {
     try {
-      String? token = await _firebaseCloudMessagingService.getToken();
-      if (token != null) {
-        await _fireStoreService.setDocument(
-            {ModelFields.token: token, ModelFields.createdAt: DateTime.now()},
-            FirestoreConstants.userTokensCollection,
-            _authService.currentUser!.uid);
+      _deviceToken = await _firebaseCloudMessagingService.getDeviceToken();
+      if (_deviceToken != null) {
+        DocumentSnapshot<Map<String, dynamic>> data =
+            await _firebaseFirestoreService.getDocument(
+                FirestoreConstants.userTokensCollection, getCurrentUser!.uid);
+
+        if (data.exists) {
+          await _firebaseFirestoreService.updateDocument({
+            ModelFields.deviceTokens: FieldValue.arrayUnion([_deviceToken]),
+            ModelFields.modifiedAt: DateTime.now(),
+          }, FirestoreConstants.userTokensCollection,
+              _firebaseAuthenticationService.currentUser!.uid);
+        } else {
+          await _firebaseFirestoreService.setDocument({
+            ModelFields.deviceTokens: FieldValue.arrayUnion([_deviceToken]),
+            ModelFields.modifiedAt: DateTime.now(),
+            ModelFields.createdAt: DateTime.now(),
+          }, FirestoreConstants.userTokensCollection,
+              _firebaseAuthenticationService.currentUser!.uid);
+        }
       }
       notifyListeners();
       return true;
@@ -245,8 +268,9 @@ class FirebaseProvider extends ChangeNotifier {
   }
 }
 
-final firebaseProvider = ChangeNotifierProvider<FirebaseProvider>(
-  (ref) => FirebaseProvider(),
+final firebaseServicesProvider =
+    ChangeNotifierProvider<FirebaseServicesProvider>(
+  (ref) => FirebaseServicesProvider(),
 );
 
 final userSnapShotProvider = FutureProvider.family

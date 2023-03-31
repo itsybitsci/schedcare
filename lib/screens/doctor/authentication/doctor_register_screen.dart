@@ -13,7 +13,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
     final genericFieldsNotifier = ref.watch(genericFieldsProvider);
 
     return Scaffold(
@@ -38,7 +38,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
               genericFieldsNotifier.buildSpecialization(),
               genericFieldsNotifier.buildPassword(),
               genericFieldsNotifier.buildRepeatPassword(),
-              firebaseNotifier.getLoading
+              firebaseServicesNotifier.getLoading
                   ? loading(color: Colors.blue)
                   : ElevatedButton(
                       onPressed: () async {
@@ -60,10 +60,11 @@ class DoctorRegisterScreen extends HookConsumerWidget {
                             ModelFields.isApproved: false,
                           };
 
-                          await firebaseNotifier.createUserWithEmailAndPassword(
-                              genericFieldsNotifier.email,
-                              genericFieldsNotifier.password,
-                              userData);
+                          await firebaseServicesNotifier
+                              .createUserWithEmailAndPassword(
+                                  genericFieldsNotifier.email,
+                                  genericFieldsNotifier.password,
+                                  userData);
 
                           if (context.mounted) context.pop();
                         }

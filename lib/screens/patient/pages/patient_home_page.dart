@@ -28,7 +28,7 @@ class PatientHomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
     final Query<ConsultationRequest> consultationRequestsQuery =
         consultationRequestsCollectionReference
             .where(ModelFields.patientUid,
@@ -42,29 +42,35 @@ class PatientHomePage extends HookConsumerWidget {
             );
 
     useEffect(() {
-      firebaseNotifier.getAndSaveToken();
+      firebaseServicesNotifier.getAndSaveDeviceToken();
 
-      flutterLocalNotificationsPlugin.initialize(const InitializationSettings(
-          android: AndroidInitializationSettings('@mipmap/ic_launcher')));
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-        AndroidNotificationDetails androidPlatformChannelSpecifics =
-            const AndroidNotificationDetails(
-          'SchedCare',
-          'SchedCare',
-          importance: Importance.max,
-          priority: Priority.high,
-          playSound: true,
-          showWhen: false,
-        );
-        NotificationDetails platformChannelSpecifics =
-            NotificationDetails(android: androidPlatformChannelSpecifics);
-        await FlutterLocalNotificationsPlugin().show(
-          0,
-          message.notification!.title,
-          message.notification!.body,
-          platformChannelSpecifics,
-        );
-      });
+      flutterLocalNotificationsPlugin.initialize(
+        const InitializationSettings(
+          android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        ),
+      );
+
+      FirebaseMessaging.onMessage.listen(
+        (RemoteMessage message) async {
+          AndroidNotificationDetails androidPlatformChannelSpecifics =
+              const AndroidNotificationDetails(
+            'SchedCare',
+            'SchedCare',
+            importance: Importance.max,
+            priority: Priority.high,
+            playSound: true,
+            showWhen: false,
+          );
+          NotificationDetails platformChannelSpecifics =
+              NotificationDetails(android: androidPlatformChannelSpecifics);
+          await FlutterLocalNotificationsPlugin().show(
+            0,
+            message.notification!.title,
+            message.notification!.body,
+            platformChannelSpecifics,
+          );
+        },
+      );
 
       return null;
     }, []);

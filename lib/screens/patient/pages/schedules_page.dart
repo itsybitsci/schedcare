@@ -20,7 +20,7 @@ class SchedulesPage extends HookConsumerWidget {
         consultationRequestsStream = consultationRequestsCollectionReference
             .where(ModelFields.patientUid,
                 isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            // .where(ModelFields.isApproved, isEqualTo: true)
+            .where(ModelFields.isApproved, isEqualTo: true)
             .snapshots();
 
     return StreamBuilder(

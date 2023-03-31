@@ -20,7 +20,7 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
     final consultationRequestNotifier = ref.watch(consultationRequestProvider);
     ValueNotifier<bool> isEditing = useState(false);
 
@@ -117,7 +117,7 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
               SizedBox(
                 height: 20.h,
               ),
-              firebaseNotifier.getLoading
+              firebaseServicesNotifier.getLoading
                   ? loading(color: Colors.blue)
                   : isEditing.value
                       ? ElevatedButton(
@@ -154,7 +154,7 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
                                             ModelFields.modifiedAt:
                                                 DateTime.now(),
                                           };
-                                          await firebaseNotifier
+                                          await firebaseServicesNotifier
                                               .updateConsultationRequest(
                                                 data,
                                                 FirestoreConstants
@@ -194,10 +194,11 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
                                     TextButton(
                                       onPressed: () async {
                                         context.go(RoutePaths.authWrapper);
-                                        await firebaseNotifier.deleteDocument(
-                                            FirestoreConstants
-                                                .consultationRequestsCollection,
-                                            consultationRequest.docId);
+                                        await firebaseServicesNotifier
+                                            .deleteDocument(
+                                                FirestoreConstants
+                                                    .consultationRequestsCollection,
+                                                consultationRequest.docId);
                                       },
                                       child: const Text('Delete Request'),
                                     ),

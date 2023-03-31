@@ -7,7 +7,7 @@ class ApprovalScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +27,7 @@ class ApprovalScreen extends HookConsumerWidget {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () async {
-                await firebaseNotifier.signOut();
+                await firebaseServicesNotifier.signOut();
               },
               child: const Text('Go back to Login screen'),
             ),

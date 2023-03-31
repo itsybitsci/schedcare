@@ -7,11 +7,11 @@ import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
 class FirebaseCloudMessagingService {
-  final _firebaseCloudMessagingService = FirebaseMessaging.instance;
+  final _firebaseCloudMessagingInstance = FirebaseMessaging.instance;
 
-  Future<String?> getToken() async {
+  Future<String?> getDeviceToken() async {
     try {
-      return await _firebaseCloudMessagingService.getToken();
+      return await _firebaseCloudMessagingInstance.getToken();
     } on FirebaseException catch (e) {
       showToast(e.code);
       throw Exception(e.code);

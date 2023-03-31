@@ -15,7 +15,7 @@ class EditPatientProfileScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
     final genericFieldsNotifier = ref.watch(genericFieldsProvider);
 
     setData(DocumentSnapshot<Map<String, dynamic>> data) {
@@ -45,7 +45,7 @@ class EditPatientProfileScreen extends HookConsumerWidget {
         DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
             .instance
             .collection(FirestoreConstants.usersCollection)
-            .doc(firebaseNotifier.getCurrentUser!.uid)
+            .doc(firebaseServicesNotifier.getCurrentUser!.uid)
             .get();
         setData(data);
       }
@@ -79,7 +79,7 @@ class EditPatientProfileScreen extends HookConsumerWidget {
               genericFieldsNotifier.buildClassification(editProfile: true),
               genericFieldsNotifier.buildCivilStatus(editProfile: true),
               genericFieldsNotifier.buildVaccinationStatus(editProfile: true),
-              firebaseNotifier.getLoading
+              firebaseServicesNotifier.getLoading
                   ? loading(color: Colors.blue)
                   : ElevatedButton(
                       onPressed: () async {
@@ -112,11 +112,11 @@ class EditPatientProfileScreen extends HookConsumerWidget {
                             ModelFields.modifiedAt: DateTime.now(),
                           };
 
-                          await firebaseNotifier
+                          await firebaseServicesNotifier
                               .updateUserProfile(
                                   data,
                                   FirestoreConstants.usersCollection,
-                                  firebaseNotifier.getCurrentUser!.uid)
+                                  firebaseServicesNotifier.getCurrentUser!.uid)
                               .then(
                                   (success) => success ? context.pop() : null);
                         }

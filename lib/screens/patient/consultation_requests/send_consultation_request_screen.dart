@@ -40,7 +40,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
     final consultationRequestNotifier = ref.watch(consultationRequestProvider);
     final Stream<QuerySnapshot<Map<String, dynamic>>>
         consultationRequestsStream = consultationRequestsCollectionReference
@@ -102,7 +102,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                       SizedBox(
                         height: 20.h,
                       ),
-                      firebaseNotifier.getLoading
+                      firebaseServicesNotifier.getLoading
                           ? loading(color: Colors.blue)
                           : ElevatedButton(
                               onPressed: () async {
@@ -128,7 +128,8 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                   Map<String, dynamic> data = {
                                     ModelFields.docId: docId,
                                     ModelFields.patientUid:
-                                        firebaseNotifier.getCurrentUser!.uid,
+                                        firebaseServicesNotifier
+                                            .getCurrentUser!.uid,
                                     ModelFields.doctorUid: doctor.uid,
                                     ModelFields.consultationRequestTitle: doctor
                                             .middleName.isEmpty
@@ -148,7 +149,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                     ModelFields.modifiedAt: DateTime.now(),
                                     ModelFields.createdAt: DateTime.now()
                                   };
-                                  await firebaseNotifier
+                                  await firebaseServicesNotifier
                                       .sendConsultationRequest(
                                           data,
                                           FirestoreConstants

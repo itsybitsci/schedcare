@@ -17,7 +17,7 @@ class AuthWrapper extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
 
     return StreamBuilder(
       stream: userStream,
@@ -43,17 +43,17 @@ class AuthWrapper extends HookConsumerWidget {
               //Redirect based on role
               if (role.toLowerCase() == AppConstants.patient.toLowerCase()) {
                 // Persist login
-                if (firebaseNotifier.getPatient == null) {
+                if (firebaseServicesNotifier.getPatient == null) {
                   Patient patient = Patient.fromSnapshot(data);
-                  firebaseNotifier.setPatient = patient;
+                  firebaseServicesNotifier.setPatient = patient;
                 }
                 return const PatientHomeScreen();
               } else if (role.toLowerCase() ==
                   AppConstants.doctor.toLowerCase()) {
                 // Persist login
-                if (firebaseNotifier.getDoctor == null) {
+                if (firebaseServicesNotifier.getDoctor == null) {
                   Doctor doctor = Doctor.fromSnapshot(data);
-                  firebaseNotifier.setDoctor = doctor;
+                  firebaseServicesNotifier.setDoctor = doctor;
                 }
                 return const DoctorHomeScreen();
               }

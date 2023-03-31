@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/services/auth_service.dart';
+import 'package:schedcare/services/firebase_authentication_service.dart';
 import 'package:schedcare/screens/common/auth_wrapper.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
@@ -16,7 +16,8 @@ class VerifyEmailScreen extends ConsumerStatefulWidget {
 }
 
 class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
-  AuthService authService = AuthService();
+  FirebaseAuthenticationService firebaseAuthenticationService =
+      FirebaseAuthenticationService();
   late bool isEmailVerified;
   late bool canResendVerificationEmail;
   Timer? timer;
@@ -26,7 +27,8 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
     super.initState();
 
     isEmailVerified = false;
-    canResendVerificationEmail = authService.currentUser!.emailVerified;
+    canResendVerificationEmail =
+        firebaseAuthenticationService.currentUser!.emailVerified;
     if (!isEmailVerified) {
       sendVerificationEmail();
 
@@ -44,10 +46,10 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   }
 
   Future sendVerificationEmail() async {
-    final user = authService.currentUser!;
+    final user = firebaseAuthenticationService.currentUser!;
 
     if (!mounted) return;
-    await authService.sendEmailVerification(user);
+    await firebaseAuthenticationService.sendEmailVerification(user);
 
     setState(() => canResendVerificationEmail = false);
 
@@ -62,10 +64,11 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   }
 
   Future checkEmailVerified() async {
-    await authService.currentUser!.reload();
+    await firebaseAuthenticationService.currentUser!.reload();
 
     setState(() {
-      isEmailVerified = authService.currentUser!.emailVerified;
+      isEmailVerified =
+          firebaseAuthenticationService.currentUser!.emailVerified;
     });
 
     if (isEmailVerified) timer?.cancel();
@@ -111,7 +114,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
               TextButton(
                 onPressed: () async {
                   timer?.cancel();
-                  await authService.signOut();
+                  await firebaseAuthenticationService.signOut();
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(50),

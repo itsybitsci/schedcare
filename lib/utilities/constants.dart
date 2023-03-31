@@ -146,5 +146,5 @@ class ModelFields {
   static const String consultationDateTime = 'consultationDateTime';
   static const String meetingId = 'meetingId';
   static const String docId = 'docId';
-  static const String token = 'token';
+  static const String deviceTokens = 'deviceTokens';
 }

@@ -9,24 +9,24 @@ class DoctorHomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseNotifier = ref.watch(firebaseProvider);
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      body: !firebaseNotifier.getLoading
+      body: !firebaseServicesNotifier.getLoading
           ? Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                    'You\'re in the Home Screen as a Doctor ${firebaseNotifier.getDoctor!.email}'),
+                    'You\'re in the Home Screen as a Doctor ${firebaseServicesNotifier.getDoctor!.email}'),
                 Center(
                   child: ElevatedButton(
                     child: const Text('Logout'),
                     onPressed: () async {
                       showToast('Successfully logged out.');
-                      await firebaseNotifier.signOut();
+                      await firebaseServicesNotifier.signOut();
                     },
                   ),
                 )
