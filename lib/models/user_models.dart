@@ -46,34 +46,34 @@ class Patient {
       required this.createdAt});
 
   factory Patient.fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return Patient(
       uid: snapshot.id,
-      email: userData[ModelFields.email],
-      role: userData[ModelFields.role],
-      firstName: userData[ModelFields.firstName],
-      middleName: userData[ModelFields.middleName] ?? '',
-      lastName: userData[ModelFields.lastName],
-      suffix: userData[ModelFields.suffix] ?? '',
-      age: userData[ModelFields.age],
-      birthDate: userData[ModelFields.birthDate].toDate(),
-      sex: userData[ModelFields.sex],
-      phoneNumber: userData[ModelFields.phoneNumber],
-      address: userData[ModelFields.address],
-      civilStatus: userData[ModelFields.civilStatus],
-      classification: userData[ModelFields.classification] ?? '',
-      uhsIdNumber: userData[ModelFields.uhsIdNumber] ?? '',
-      vaccinationStatus: userData[ModelFields.vaccinationStatus],
-      isApproved: userData[ModelFields.isApproved],
-      lastLogin: userData[ModelFields.lastLogin].toDate(),
-      modifiedAt: userData[ModelFields.modifiedAt].toDate(),
-      createdAt: userData[ModelFields.createdAt].toDate(),
+      email: data[ModelFields.email],
+      role: data[ModelFields.role],
+      firstName: data[ModelFields.firstName],
+      middleName: data[ModelFields.middleName] ?? '',
+      lastName: data[ModelFields.lastName],
+      suffix: data[ModelFields.suffix] ?? '',
+      age: data[ModelFields.age],
+      birthDate: data[ModelFields.birthDate].toDate(),
+      sex: data[ModelFields.sex],
+      phoneNumber: data[ModelFields.phoneNumber],
+      address: data[ModelFields.address],
+      civilStatus: data[ModelFields.civilStatus],
+      classification: data[ModelFields.classification] ?? '',
+      uhsIdNumber: data[ModelFields.uhsIdNumber] ?? '',
+      vaccinationStatus: data[ModelFields.vaccinationStatus],
+      isApproved: data[ModelFields.isApproved],
+      lastLogin: data[ModelFields.lastLogin].toDate(),
+      modifiedAt: data[ModelFields.modifiedAt].toDate(),
+      createdAt: data[ModelFields.createdAt].toDate(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      ModelFields.patientUid: uid,
+      ModelFields.patientId: uid,
       ModelFields.email: email,
       ModelFields.role: role,
       ModelFields.firstName: firstName,
@@ -130,28 +130,28 @@ class Doctor {
       required this.createdAt});
 
   factory Doctor.fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return Doctor(
       uid: snapshot.id,
-      email: userData[ModelFields.email],
-      role: userData[ModelFields.role],
-      prefix: userData[ModelFields.prefix] ?? '',
-      firstName: userData[ModelFields.firstName],
-      middleName: userData[ModelFields.middleName] ?? '',
-      lastName: userData[ModelFields.lastName],
-      suffix: userData[ModelFields.suffix] ?? '',
-      sex: userData[ModelFields.sex],
-      specialization: userData[ModelFields.specialization],
-      isApproved: userData[ModelFields.isApproved],
-      lastLogin: userData[ModelFields.lastLogin].toDate(),
-      modifiedAt: userData[ModelFields.modifiedAt].toDate(),
-      createdAt: userData[ModelFields.createdAt].toDate(),
+      email: data[ModelFields.email],
+      role: data[ModelFields.role],
+      prefix: data[ModelFields.prefix] ?? '',
+      firstName: data[ModelFields.firstName],
+      middleName: data[ModelFields.middleName] ?? '',
+      lastName: data[ModelFields.lastName],
+      suffix: data[ModelFields.suffix] ?? '',
+      sex: data[ModelFields.sex],
+      specialization: data[ModelFields.specialization],
+      isApproved: data[ModelFields.isApproved],
+      lastLogin: data[ModelFields.lastLogin].toDate(),
+      modifiedAt: data[ModelFields.modifiedAt].toDate(),
+      createdAt: data[ModelFields.createdAt].toDate(),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      ModelFields.doctorUid: uid,
+      ModelFields.doctorId: uid,
       ModelFields.email: email,
       ModelFields.role: role,
       ModelFields.prefix: prefix,

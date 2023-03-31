@@ -159,7 +159,7 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
                                                 data,
                                                 FirestoreConstants
                                                     .consultationRequestsCollection,
-                                                consultationRequest.docId,
+                                                consultationRequest.id,
                                               )
                                               .then((success) => success
                                                   ? context.go(
@@ -198,7 +198,7 @@ class ViewConsultationRequestScreen extends HookConsumerWidget {
                                             .deleteDocument(
                                                 FirestoreConstants
                                                     .consultationRequestsCollection,
-                                                consultationRequest.docId);
+                                                consultationRequest.id);
                                       },
                                       child: const Text('Delete Request'),
                                     ),

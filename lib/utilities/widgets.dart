@@ -27,17 +27,21 @@ Widget shimmerListTile() {
     child: ListTile(
       title: Center(
         child: Container(
-          height: 20.h,
-          width: 280.w,
-          color: Colors.grey,
-        ),
+            height: 20.h,
+            width: 280.w,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(10.r),
+            )),
       ),
       subtitle: Center(
         child: Container(
-          height: 10.h,
-          width: 100.w,
-          color: Colors.grey,
-        ),
+            height: 10.h,
+            width: 100.w,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(10.r),
+            )),
       ),
     ),
   );

@@ -44,7 +44,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
     final consultationRequestNotifier = ref.watch(consultationRequestProvider);
     final Stream<QuerySnapshot<Map<String, dynamic>>>
         consultationRequestsStream = consultationRequestsCollectionReference
-            .where(ModelFields.patientUid,
+            .where(ModelFields.patientId,
                 isEqualTo: FirebaseAuth.instance.currentUser!.uid)
             .snapshots();
 
@@ -126,11 +126,11 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                       .doc();
                                   String docId = docRef.id;
                                   Map<String, dynamic> data = {
-                                    ModelFields.docId: docId,
-                                    ModelFields.patientUid:
+                                    ModelFields.id: docId,
+                                    ModelFields.patientId:
                                         firebaseServicesNotifier
                                             .getCurrentUser!.uid,
-                                    ModelFields.doctorUid: doctor.uid,
+                                    ModelFields.doctorId: doctor.uid,
                                     ModelFields.consultationRequestTitle: doctor
                                             .middleName.isEmpty
                                         ? 'Meeting with ${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'

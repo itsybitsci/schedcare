@@ -47,7 +47,7 @@ class AuthWrapper extends HookConsumerWidget {
                   Patient patient = Patient.fromSnapshot(data);
                   firebaseServicesNotifier.setPatient = patient;
                 }
-                return const PatientHomeScreen();
+                return PatientHomeScreen();
               } else if (role.toLowerCase() ==
                   AppConstants.doctor.toLowerCase()) {
                 // Persist login

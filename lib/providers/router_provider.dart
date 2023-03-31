@@ -53,7 +53,7 @@ class RouterNotifier extends ChangeNotifier {
         GoRoute(
           name: RouteNames.patientHome,
           path: RoutePaths.patientHome,
-          builder: (context, state) => const PatientHomeScreen(),
+          builder: (context, state) => PatientHomeScreen(),
         ),
         GoRoute(
           name: RouteNames.patientRegistration,

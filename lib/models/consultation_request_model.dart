@@ -5,9 +5,9 @@ import 'package:schedcare/utilities/constants.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class ConsultationRequest {
-  final String docId;
-  final String patientUid;
-  final String doctorUid;
+  final String id;
+  final String patientId;
+  final String doctorId;
   final String consultationRequestTitle;
   final String consultationRequestBody;
   final String status;
@@ -18,9 +18,9 @@ class ConsultationRequest {
   String? meetingId;
 
   ConsultationRequest(
-      {required this.docId,
-      required this.patientUid,
-      required this.doctorUid,
+      {required this.id,
+      required this.patientId,
+      required this.doctorId,
       required this.consultationRequestTitle,
       required this.consultationRequestBody,
       required this.status,
@@ -31,27 +31,27 @@ class ConsultationRequest {
       this.meetingId});
 
   factory ConsultationRequest.fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return ConsultationRequest(
-      docId: userData[ModelFields.docId],
-      patientUid: userData[ModelFields.patientUid],
-      doctorUid: userData[ModelFields.doctorUid],
-      consultationRequestTitle: userData[ModelFields.consultationRequestTitle],
-      consultationRequestBody: userData[ModelFields.consultationRequestBody],
-      status: userData[ModelFields.status],
-      consultationType: userData[ModelFields.consultationType],
-      consultationDateTime: userData[ModelFields.consultationDateTime].toDate(),
-      modifiedAt: userData[ModelFields.modifiedAt].toDate(),
-      createdAt: userData[ModelFields.createdAt].toDate(),
-      meetingId: userData[ModelFields.meetingId] ?? '',
+      id: data[ModelFields.id],
+      patientId: data[ModelFields.patientId],
+      doctorId: data[ModelFields.doctorId],
+      consultationRequestTitle: data[ModelFields.consultationRequestTitle],
+      consultationRequestBody: data[ModelFields.consultationRequestBody],
+      status: data[ModelFields.status],
+      consultationType: data[ModelFields.consultationType],
+      consultationDateTime: data[ModelFields.consultationDateTime].toDate(),
+      modifiedAt: data[ModelFields.modifiedAt].toDate(),
+      createdAt: data[ModelFields.createdAt].toDate(),
+      meetingId: data[ModelFields.meetingId] ?? '',
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      ModelFields.docId: docId,
-      ModelFields.patientUid: patientUid,
-      ModelFields.doctorUid: doctorUid,
+      ModelFields.id: id,
+      ModelFields.patientId: patientId,
+      ModelFields.doctorId: doctorId,
       ModelFields.consultationRequestTitle: consultationRequestTitle,
       ModelFields.consultationRequestBody: consultationRequestBody,
       ModelFields.status: status,

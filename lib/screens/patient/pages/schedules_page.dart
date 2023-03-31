@@ -18,7 +18,7 @@ class SchedulesPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Stream<QuerySnapshot<Map<String, dynamic>>>
         consultationRequestsStream = consultationRequestsCollectionReference
-            .where(ModelFields.patientUid,
+            .where(ModelFields.patientId,
                 isEqualTo: FirebaseAuth.instance.currentUser!.uid)
             .where(ModelFields.isApproved, isEqualTo: true)
             .snapshots();

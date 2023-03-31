@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:schedcare/screens/patient/pages/list_doctors_page.dart';
+import 'package:schedcare/screens/patient/pages/notifications_page.dart';
 import 'package:schedcare/screens/patient/pages/schedules_page.dart';
-import 'package:schedcare/screens/patient/pages/patient_home_page.dart';
+import 'package:schedcare/screens/patient/pages/sent_consultation_requests_page.dart';
 
 class FirestoreConstants {
   static const String usersCollection = 'users';
   static const String consultationRequestsCollection = 'consultation_requests';
   static const String userTokensCollection = 'user_tokens';
+  static const String notificationsCollection = 'notifications';
 }
 
 class AppConstants {
@@ -75,9 +77,10 @@ class AppConstants {
   ];
 
   static List<Widget> patientPages = <Widget>[
-    PatientHomePage(),
+    SentConsultationRequestsPage(),
     ListDoctorsPage(),
     SchedulesPage(),
+    NotificationsPage(),
   ];
 }
 
@@ -137,14 +140,18 @@ class ModelFields {
   static const String lastLogin = 'lastLogin';
   static const String modifiedAt = 'modifiedAt';
   static const String createdAt = 'createdAt';
-  static const String patientUid = 'patientUid';
-  static const String doctorUid = 'doctorUid';
+  static const String patientId = 'patientId';
+  static const String doctorId = 'doctorId';
   static const String consultationRequestTitle = 'consultationRequestTitle';
   static const String consultationRequestBody = 'consultationRequestBody';
   static const String status = 'status';
   static const String consultationType = 'consultationType';
   static const String consultationDateTime = 'consultationDateTime';
   static const String meetingId = 'meetingId';
-  static const String docId = 'docId';
+  static const String id = 'id';
   static const String deviceTokens = 'deviceTokens';
+  static const String title = 'title';
+  static const String body = 'body';
+  static const String sentAt = 'sentAt';
+  static const String isRead = 'isRead';
 }

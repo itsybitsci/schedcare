@@ -16,8 +16,8 @@ import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
-class PatientHomePage extends HookConsumerWidget {
-  PatientHomePage({Key? key}) : super(key: key);
+class SentConsultationRequestsPage extends HookConsumerWidget {
+  SentConsultationRequestsPage({Key? key}) : super(key: key);
   final CollectionReference<Map<String, dynamic>>
       consultationRequestsCollectionReference = FirebaseFirestore.instance
           .collection(FirestoreConstants.consultationRequestsCollection);
@@ -31,7 +31,7 @@ class PatientHomePage extends HookConsumerWidget {
     final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
     final Query<ConsultationRequest> consultationRequestsQuery =
         consultationRequestsCollectionReference
-            .where(ModelFields.patientUid,
+            .where(ModelFields.patientId,
                 isEqualTo: FirebaseAuth.instance.currentUser!.uid)
             .orderBy(ModelFields.consultationDateTime)
             .withConverter(
@@ -78,31 +78,34 @@ class PatientHomePage extends HookConsumerWidget {
     return FirestoreQueryBuilder<ConsultationRequest>(
       query: consultationRequestsQuery,
       pageSize: 10,
-      builder: (context, consultationRequestSnapshot, _) {
-        if (consultationRequestSnapshot.hasData) {
-          return consultationRequestSnapshot.docs.isEmpty
+      builder: (context, consultationRequestCollectionSnapshot, _) {
+        if (consultationRequestCollectionSnapshot.hasData) {
+          return consultationRequestCollectionSnapshot.docs.isEmpty
               ? const Center(
                   child: Text(Prompts.noSentConsultationRequests),
                 )
               : RefreshIndicator(
                   onRefresh: () async {
-                    consultationRequestSnapshot.fetchMore();
+                    consultationRequestCollectionSnapshot.fetchMore();
                   },
                   child: ListView.builder(
-                    itemCount: consultationRequestSnapshot.docs.length,
+                    itemCount:
+                        consultationRequestCollectionSnapshot.docs.length,
                     itemBuilder: (context, index) {
-                      if (consultationRequestSnapshot.hasMore &&
+                      if (consultationRequestCollectionSnapshot.hasMore &&
                           index + 1 ==
-                              consultationRequestSnapshot.docs.length) {
-                        consultationRequestSnapshot.fetchMore();
+                              consultationRequestCollectionSnapshot
+                                  .docs.length) {
+                        consultationRequestCollectionSnapshot.fetchMore();
                       }
 
                       final ConsultationRequest consultationRequest =
-                          consultationRequestSnapshot.docs[index].data();
+                          consultationRequestCollectionSnapshot.docs[index]
+                              .data();
 
                       return StreamBuilder(
                         stream: usersCollectionReference
-                            .doc(consultationRequest.doctorUid)
+                            .doc(consultationRequest.doctorId)
                             .snapshots(),
                         builder: (BuildContext context,
                             AsyncSnapshot<
@@ -146,7 +149,7 @@ class PatientHomePage extends HookConsumerWidget {
                 );
         }
 
-        return shimmerListTile();
+        return loading(color: Colors.blue);
       },
     );
   }

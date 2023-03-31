@@ -10,18 +10,18 @@ import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
 class FirebaseServicesProvider extends ChangeNotifier {
-  bool _isLoading = false;
-  UserCredential? _userCredential;
-  Patient? _patient;
-  Doctor? _doctor;
-  String? _role;
-  String? _deviceToken;
   final FirebaseAuthenticationService _firebaseAuthenticationService =
       FirebaseAuthenticationService();
   final FirebaseFirestoreService _firebaseFirestoreService =
       FirebaseFirestoreService();
   final FirebaseCloudMessagingService _firebaseCloudMessagingService =
       FirebaseCloudMessagingService();
+  bool _isLoading = false;
+  UserCredential? _userCredential;
+  Patient? _patient;
+  Doctor? _doctor;
+  String? _role;
+  String? _deviceToken;
 
   bool get getLoading => _isLoading;
 

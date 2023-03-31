@@ -10,7 +10,7 @@ import 'package:schedcare/utilities/widgets.dart';
 
 class ListDoctorsPage extends HookConsumerWidget {
   ListDoctorsPage({super.key});
-  final doctorsQuery = FirebaseFirestore.instance
+  final Query<Doctor> doctorsQuery = FirebaseFirestore.instance
       .collection(FirestoreConstants.usersCollection)
       .where(ModelFields.role, isEqualTo: AppConstants.doctor)
       .where(ModelFields.isApproved, isEqualTo: true)
@@ -60,7 +60,8 @@ class ListDoctorsPage extends HookConsumerWidget {
                                       .trim())
                               : Text(
                                   '${doctor.prefix} ${doctor.firstName} ${doctor.middleName} ${doctor.lastName} ${doctor.suffix}'
-                                      .trim()),
+                                      .trim(),
+                                ),
                         ),
                         subtitle: Center(
                           child: Text(doctor.role),
