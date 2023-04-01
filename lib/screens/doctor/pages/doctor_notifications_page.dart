@@ -27,7 +27,7 @@ class DoctorNotificationsPage extends HookConsumerWidget {
             .where(ModelFields.doctorId,
                 isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
             .where(ModelFields.sender, isEqualTo: AppConstants.patient)
-            .orderBy(ModelFields.sentAt)
+            .orderBy(ModelFields.sentAt, descending: true)
             .withConverter(
               fromFirestore: (snapshot, _) =>
                   AppNotification.fromSnapshot(snapshot),
@@ -54,16 +54,14 @@ class DoctorNotificationsPage extends HookConsumerWidget {
                     final AppNotification appNotification =
                         appNotificationCollectionSnapshot.docs[index].data();
 
-                    return StreamBuilder(
-                      stream: usersCollectionReference
-                          .doc(appNotification.patientId)
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                              patientSnapshot) {
-                        if (patientSnapshot.hasData) {
+                    final userSnapshotsNotifier = ref.watch(
+                        userSnapshotsProvider(appNotification.patientId));
+
+                    return userSnapshotsNotifier.when(
+                        data: (DocumentSnapshot<Map<String, dynamic>>
+                            patientSnapshot) {
                           Patient patient =
-                              Patient.fromSnapshot(patientSnapshot.data!);
+                              Patient.fromSnapshot(patientSnapshot);
 
                           return ListTile(
                             tileColor: appNotification.isRead
@@ -94,11 +92,10 @@ class DoctorNotificationsPage extends HookConsumerWidget {
                                   style: TextStyle(fontSize: 12.sp)),
                             ),
                           );
-                        }
-
-                        return shimmerListTile();
-                      },
-                    );
+                        },
+                        error: (Object error, StackTrace stackTrace) =>
+                            shimmerListTile(),
+                        loading: () => shimmerListTile());
                   },
                 );
         }

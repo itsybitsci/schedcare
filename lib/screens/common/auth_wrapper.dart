@@ -25,7 +25,7 @@ class AuthWrapper extends HookConsumerWidget {
         if (snapshot.hasData) {
           User user = snapshot.data!;
           final userSnapshotNotifier =
-              ref.watch(userSnapShotProvider(user.uid));
+              ref.watch(userSnapshotProvider(user.uid));
 
           // Verify user
           if (!user.emailVerified) return const VerifyEmailScreen();

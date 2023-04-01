@@ -218,9 +218,8 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                               (DocumentSnapshot<
                                                       Map<String, dynamic>>
                                                   snapshot) {
-                                                List<String> tokens =
-                                                    snapshot.get(ModelFields
-                                                        .deviceTokens);
+                                                List tokens = snapshot.get(
+                                                    ModelFields.deviceTokens);
 
                                                 for (String token in tokens) {
                                                   firebaseServicesNotifier

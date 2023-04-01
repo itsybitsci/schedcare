@@ -22,12 +22,13 @@ class PatientNotificationsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
+
     final Query<AppNotification> appNotificationsQuery =
         appNotificationsCollectionReference
             .where(ModelFields.patientId,
                 isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
             .where(ModelFields.sender, isEqualTo: AppConstants.doctor)
-            .orderBy(ModelFields.sentAt)
+            .orderBy(ModelFields.sentAt, descending: true)
             .withConverter(
               fromFirestore: (snapshot, _) =>
                   AppNotification.fromSnapshot(snapshot),
@@ -54,16 +55,13 @@ class PatientNotificationsPage extends HookConsumerWidget {
                     final AppNotification appNotification =
                         appNotificationCollectionSnapshot.docs[index].data();
 
-                    return StreamBuilder(
-                      stream: usersCollectionReference
-                          .doc(appNotification.doctorId)
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                              doctorSnapshot) {
-                        if (doctorSnapshot.hasData) {
-                          Doctor doctor =
-                              Doctor.fromSnapshot(doctorSnapshot.data!);
+                    final userSnapshotsNotifier = ref
+                        .watch(userSnapshotsProvider(appNotification.doctorId));
+
+                    return userSnapshotsNotifier.when(
+                        data: (DocumentSnapshot<Map<String, dynamic>>
+                            doctorSnapshot) {
+                          Doctor doctor = Doctor.fromSnapshot(doctorSnapshot);
 
                           return ListTile(
                             tileColor: appNotification.isRead
@@ -94,11 +92,9 @@ class PatientNotificationsPage extends HookConsumerWidget {
                                   style: TextStyle(fontSize: 12.sp)),
                             ),
                           );
-                        }
-
-                        return shimmerListTile();
-                      },
-                    );
+                        },
+                        error: (_, __) => shimmerListTile(),
+                        loading: () => shimmerListTile());
                   },
                 );
         }

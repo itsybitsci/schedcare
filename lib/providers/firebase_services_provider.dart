@@ -134,7 +134,6 @@ class FirebaseServicesProvider extends ChangeNotifier {
       await _firebaseAuthenticationService.signOut();
       showToast('Successfully logged out');
       setLoading(false);
-      notifyListeners();
     } on FirebaseException catch (e) {
       showToast(e.code);
       setLoading(false);
@@ -272,12 +271,22 @@ final firebaseServicesProvider =
   (ref) => FirebaseServicesProvider(),
 );
 
-final userSnapShotProvider = FutureProvider.family
+final userSnapshotProvider = FutureProvider.family
     .autoDispose<DocumentSnapshot<Map<String, dynamic>>, String>(
   (ref, uid) async {
     return await FirebaseFirestore.instance
         .collection(FirestoreConstants.usersCollection)
         .doc(uid)
         .get();
+  },
+);
+
+final userSnapshotsProvider = StreamProvider.family
+    .autoDispose<DocumentSnapshot<Map<String, dynamic>>, String>(
+  (ref, uid) {
+    return FirebaseFirestore.instance
+        .collection(FirestoreConstants.usersCollection)
+        .doc(uid)
+        .snapshots();
   },
 );

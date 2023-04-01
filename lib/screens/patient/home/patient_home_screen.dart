@@ -25,6 +25,7 @@ class PatientHomeScreen extends HookConsumerWidget {
         appNotificationsCollectionReference
             .where(ModelFields.patientId,
                 isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
+            .where(ModelFields.sender, isEqualTo: AppConstants.doctor)
             .where(ModelFields.isRead, isEqualTo: false)
             .snapshots();
     final pageController = usePageController();
