@@ -52,7 +52,6 @@ class FirebaseServicesProvider extends ChangeNotifier {
 
   set setDoctor(Doctor doctor) {
     _doctor = doctor;
-    notifyListeners();
   }
 
   setLoading(bool loader) {
@@ -128,7 +127,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
   Future<void> signOut() async {
     setLoading(true);
     try {
-      _firebaseFirestoreService.updateDocument({
+      await _firebaseFirestoreService.updateDocument({
         ModelFields.deviceTokens: FieldValue.arrayRemove([_deviceToken])
       }, FirestoreConstants.userTokensCollection, getCurrentUser!.uid);
 
