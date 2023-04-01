@@ -8,8 +8,8 @@ import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-class SchedulesPage extends HookConsumerWidget {
-  SchedulesPage({Key? key}) : super(key: key);
+class PatientSchedulesPage extends HookConsumerWidget {
+  PatientSchedulesPage({Key? key}) : super(key: key);
   final CollectionReference<Map<String, dynamic>>
       consultationRequestsCollectionReference = FirebaseFirestore.instance
           .collection(FirestoreConstants.consultationRequestsCollection);

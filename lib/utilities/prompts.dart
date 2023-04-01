@@ -6,4 +6,7 @@ class Prompts {
       'No notifications at the moment. Kindly check back later.';
   static const String errorDueToWeakInternet =
       'Error encountered due to weak internet connection. Kindly refresh the page.';
+  static const String confirmSigningOut = 'Are you sure you want to sign out?';
+  static const String yes = 'Yes';
+  static const String no = 'No';
 }

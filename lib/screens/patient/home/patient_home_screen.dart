@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
+import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
 class PatientHomeScreen extends HookConsumerWidget {
@@ -27,7 +28,7 @@ class PatientHomeScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SchedCare'),
+        title: const Text(AppConstants.appTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -44,18 +45,18 @@ class PatientHomeScreen extends HookConsumerWidget {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Confirm signing out?'),
+                    title: const Text(Prompts.confirmSigningOut),
                     actions: [
                       TextButton(
                         onPressed: () => context.pop(),
-                        child: const Text('No'),
+                        child: const Text(Prompts.no),
                       ),
                       TextButton(
                         onPressed: () async {
                           context.pop();
                           await firebaseServicesNotifier.signOut();
                         },
-                        child: const Text('Yes'),
+                        child: const Text(Prompts.yes),
                       ),
                     ],
                   );
@@ -87,10 +88,8 @@ class PatientHomeScreen extends HookConsumerWidget {
           selectedIndex: index.value,
           onDestinationSelected: (selectedIndex) {
             index.value = selectedIndex;
-            pageController.animateToPage(
+            pageController.jumpToPage(
               selectedIndex,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.ease,
             );
           },
           destinations: [

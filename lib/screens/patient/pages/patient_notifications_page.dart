@@ -11,8 +11,8 @@ import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
-class NotificationsPage extends HookConsumerWidget {
-  NotificationsPage({Key? key}) : super(key: key);
+class PatientNotificationsPage extends HookConsumerWidget {
+  PatientNotificationsPage({Key? key}) : super(key: key);
   final CollectionReference<Map<String, dynamic>>
       appNotificationsCollectionReference = FirebaseFirestore.instance
           .collection(FirestoreConstants.notificationsCollection);

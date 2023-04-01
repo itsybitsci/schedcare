@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:schedcare/screens/doctor/pages/doctor_notifications_page.dart';
+import 'package:schedcare/screens/doctor/pages/doctor_schedules_page.dart';
+import 'package:schedcare/screens/doctor/pages/received_consultation_requests_page.dart';
 import 'package:schedcare/screens/patient/pages/list_doctors_page.dart';
-import 'package:schedcare/screens/patient/pages/notifications_page.dart';
-import 'package:schedcare/screens/patient/pages/schedules_page.dart';
+import 'package:schedcare/screens/patient/pages/patient_notifications_page.dart';
+import 'package:schedcare/screens/patient/pages/patient_schedules_page.dart';
 import 'package:schedcare/screens/patient/pages/sent_consultation_requests_page.dart';
 
 class FirestoreConstants {
@@ -12,6 +15,8 @@ class FirestoreConstants {
 }
 
 class AppConstants {
+  static const appTitle = 'SchedCare';
+
   static const String fcmKey =
       'AAAAN4HTnQg:APA91bHKKsyn8br_UGidPC-zwuptWNDulQ_Hkx6rf7gwxO-ZPprA1WFbcZuDe8lRIcaYtq9Sd58VoqKdbFwHLKVRNTr3HFPCNDCVN5N_PsqadBpJJlvWEv3va_fzuI47GV-Oed1hJ9Aq';
 
@@ -79,43 +84,57 @@ class AppConstants {
   static List<Widget> patientPages = <Widget>[
     SentConsultationRequestsPage(),
     ListDoctorsPage(),
-    SchedulesPage(),
-    NotificationsPage(),
+    PatientSchedulesPage(),
+    PatientNotificationsPage(),
+  ];
+
+  static List<Widget> doctorPages = <Widget>[
+    ReceivedConsultationRequestsPage(),
+    DoctorSchedulesPage(),
+    DoctorNotificationsPage(),
   ];
 }
 
 //Routes Names
 class RouteNames {
-  static const String authWrapper = 'authWrapper';
+  static const String authWrapper = 'auth_wrapper';
   static const String login = 'login';
+  static const String approval = 'approval';
   static const String verifyEmail = 'verify_email';
   static const String resetPassword = 'reset_password';
-  static const String patientHome = 'patient_home';
+
   static const String patientRegistration = 'patient_registration';
-  static const String doctorHome = 'doctor_home';
-  static const String doctorRegistration = 'doctor_registration';
-  static const String approval = 'approval';
+  static const String patientHome = 'patient_home';
   static const String patientProfile = 'patient_profile';
   static const String editPatientProfile = 'edit_patient_profile';
   static const String sendConsultationRequest = 'send_consultation_request';
   static const String viewConsultationRequest = 'view_consultation_request';
+
+  static const String doctorRegistration = 'doctor_registration';
+  static const String doctorHome = 'doctor_home';
+  static const String doctorProfile = 'doctor_profile';
+  static const String editDoctorProfile = 'edit_doctor_profile';
 }
 
 //Route Paths
 class RoutePaths {
   static const String authWrapper = '/';
   static const String login = '/login';
+  static const String approval = '/approval';
   static const String verifyEmail = '/verify_email';
   static const String resetPassword = '/reset_password';
-  static const String patientHome = '/patient_home';
+
   static const String patientRegistration = '/patient_registration';
-  static const String doctorHome = '/doctor_home';
-  static const String doctorRegistration = '/doctor_registration';
-  static const String approval = '/approval';
+  static const String patientHome = '/patient_home';
   static const String patientProfile = '/patient_profile';
   static const String editPatientProfile = '/edit_patient_profile';
   static const String sendConsultationRequest = '/send_consultation_request';
   static const String viewConsultationRequest = '/view_consultation_request';
+
+  static const String doctorRegistration = '/doctor_registration';
+  static const String doctorHome = '/doctor_home';
+  static const String doctorProfile = '/doctor_profile';
+  static const String editDoctorProfile = '/edit_doctor_profile';
 }
 
 class ModelFields {

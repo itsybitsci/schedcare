@@ -4,22 +4,24 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/screens/common/approval_screen.dart';
-import 'package:schedcare/screens/doctor/authentication/doctor_register_screen.dart';
+import 'package:schedcare/screens/common/auth_wrapper.dart';
 import 'package:schedcare/screens/common/login_screen.dart';
-import 'package:schedcare/screens/patient/authentication/patient_register_screen.dart';
 import 'package:schedcare/screens/common/reset_password_screen.dart';
 import 'package:schedcare/screens/common/verify_email_screen.dart';
+import 'package:schedcare/screens/doctor/authentication/doctor_register_screen.dart';
 import 'package:schedcare/screens/doctor/home/doctor_home_screen.dart';
+import 'package:schedcare/screens/doctor/profile/doctor_profile_screen.dart';
+import 'package:schedcare/screens/doctor/profile/edit_doctor_profile_screen.dart';
+import 'package:schedcare/screens/patient/authentication/patient_register_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/send_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/view_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/home/patient_home_screen.dart';
 import 'package:schedcare/screens/patient/profile/edit_patient_profile_screen.dart';
 import 'package:schedcare/screens/patient/profile/patient_profile_screen.dart';
-import 'package:schedcare/screens/common/auth_wrapper.dart';
 import 'package:schedcare/utilities/constants.dart';
 
 final routerProvider = Provider<GoRouter>(
-  (ref) {
+  (ProviderRef<GoRouter> ref) {
     final router = RouterNotifier();
     return GoRouter(
       initialLocation: RoutePaths.authWrapper,
@@ -41,6 +43,11 @@ class RouterNotifier extends ChangeNotifier {
           builder: (context, state) => LoginScreen(),
         ),
         GoRoute(
+          name: RouteNames.approval,
+          path: RoutePaths.approval,
+          builder: (context, state) => const ApprovalScreen(),
+        ),
+        GoRoute(
           name: RouteNames.verifyEmail,
           path: RoutePaths.verifyEmail,
           builder: (context, state) => const VerifyEmailScreen(),
@@ -51,29 +58,14 @@ class RouterNotifier extends ChangeNotifier {
           builder: (context, state) => ResetPasswordScreen(),
         ),
         GoRoute(
-          name: RouteNames.patientHome,
-          path: RoutePaths.patientHome,
-          builder: (context, state) => PatientHomeScreen(),
-        ),
-        GoRoute(
           name: RouteNames.patientRegistration,
           path: RoutePaths.patientRegistration,
           builder: (context, state) => PatientRegisterScreen(),
         ),
         GoRoute(
-          name: RouteNames.doctorHome,
-          path: RoutePaths.doctorHome,
-          builder: (context, state) => const DoctorHomeScreen(),
-        ),
-        GoRoute(
-          name: RouteNames.doctorRegistration,
-          path: RoutePaths.doctorRegistration,
-          builder: (context, state) => DoctorRegisterScreen(),
-        ),
-        GoRoute(
-          name: RouteNames.approval,
-          path: RoutePaths.approval,
-          builder: (context, state) => const ApprovalScreen(),
+          name: RouteNames.patientHome,
+          path: RoutePaths.patientHome,
+          builder: (context, state) => PatientHomeScreen(),
         ),
         GoRoute(
           name: RouteNames.patientProfile,
@@ -110,6 +102,26 @@ class RouterNotifier extends ChangeNotifier {
               doctor: doctor,
             );
           },
+        ),
+        GoRoute(
+          name: RouteNames.doctorRegistration,
+          path: RoutePaths.doctorRegistration,
+          builder: (context, state) => DoctorRegisterScreen(),
+        ),
+        GoRoute(
+          name: RouteNames.doctorHome,
+          path: RoutePaths.doctorHome,
+          builder: (context, state) => DoctorHomeScreen(),
+        ),
+        GoRoute(
+          name: RouteNames.doctorProfile,
+          path: RoutePaths.doctorProfile,
+          builder: (context, state) => const DoctorProfileScreen(),
+        ),
+        GoRoute(
+          name: RouteNames.editDoctorProfile,
+          path: RoutePaths.editDoctorProfile,
+          builder: (context, state) => const EditDoctorProfileScreen(),
         ),
       ];
 }

@@ -55,7 +55,7 @@ class AuthWrapper extends HookConsumerWidget {
                   Doctor doctor = Doctor.fromSnapshot(data);
                   firebaseServicesNotifier.setDoctor = doctor;
                 }
-                return const DoctorHomeScreen();
+                return DoctorHomeScreen();
               }
               return materialLoading();
             },
