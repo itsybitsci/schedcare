@@ -8,6 +8,7 @@ class AppNotification {
   final String title;
   final String body;
   final DateTime sentAt;
+  final String sender;
   final bool isRead;
 
   AppNotification(
@@ -17,6 +18,7 @@ class AppNotification {
       required this.title,
       required this.body,
       required this.sentAt,
+      required this.sender,
       required this.isRead});
 
   factory AppNotification.fromSnapshot(DocumentSnapshot snapshot) {
@@ -28,6 +30,7 @@ class AppNotification {
       title: data[ModelFields.title],
       body: data[ModelFields.body],
       sentAt: data[ModelFields.sentAt].toDate(),
+      sender: data[ModelFields.sender],
       isRead: data[ModelFields.isRead],
     );
   }
@@ -40,6 +43,7 @@ class AppNotification {
       ModelFields.title: title,
       ModelFields.body: body,
       ModelFields.sentAt: sentAt,
+      ModelFields.sender: sender,
       ModelFields.isRead: isRead,
     };
   }

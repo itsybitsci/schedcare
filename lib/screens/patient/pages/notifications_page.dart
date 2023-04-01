@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/models/app_notification_model.dart';
 import 'package:schedcare/models/user_models.dart';
-import 'package:schedcare/providers/firebase_provider.dart';
+import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
@@ -26,7 +25,8 @@ class NotificationsPage extends HookConsumerWidget {
     final Query<AppNotification> appNotificationsQuery =
         appNotificationsCollectionReference
             .where(ModelFields.patientId,
-                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
+            .where(ModelFields.sender, isEqualTo: AppConstants.doctor)
             .orderBy(ModelFields.sentAt)
             .withConverter(
               fromFirestore: (snapshot, _) =>

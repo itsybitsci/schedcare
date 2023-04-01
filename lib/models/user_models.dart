@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:schedcare/utilities/constants.dart';
 
 class Patient {
-  final String uid;
+  final String id;
   final String email;
   final String role;
   final String firstName;
@@ -24,7 +24,7 @@ class Patient {
   final DateTime createdAt;
 
   Patient(
-      {required this.uid,
+      {required this.id,
       required this.email,
       required this.role,
       required this.firstName,
@@ -48,7 +48,7 @@ class Patient {
   factory Patient.fromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return Patient(
-      uid: snapshot.id,
+      id: snapshot.id,
       email: data[ModelFields.email],
       role: data[ModelFields.role],
       firstName: data[ModelFields.firstName],
@@ -73,7 +73,7 @@ class Patient {
 
   Map<String, dynamic> toMap() {
     return {
-      ModelFields.patientId: uid,
+      ModelFields.patientId: id,
       ModelFields.email: email,
       ModelFields.role: role,
       ModelFields.firstName: firstName,
@@ -98,7 +98,7 @@ class Patient {
 }
 
 class Doctor {
-  final String uid;
+  final String id;
   final String email;
   final String role;
   final String prefix;
@@ -114,7 +114,7 @@ class Doctor {
   final DateTime createdAt;
 
   Doctor(
-      {required this.uid,
+      {required this.id,
       required this.email,
       required this.role,
       required this.prefix,
@@ -132,7 +132,7 @@ class Doctor {
   factory Doctor.fromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return Doctor(
-      uid: snapshot.id,
+      id: snapshot.id,
       email: data[ModelFields.email],
       role: data[ModelFields.role],
       prefix: data[ModelFields.prefix] ?? '',
@@ -151,7 +151,7 @@ class Doctor {
 
   Map<String, dynamic> toMap() {
     return {
-      ModelFields.doctorId: uid,
+      ModelFields.doctorId: id,
       ModelFields.email: email,
       ModelFields.role: role,
       ModelFields.prefix: prefix,

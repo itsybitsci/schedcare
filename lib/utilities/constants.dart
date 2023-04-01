@@ -153,5 +153,6 @@ class ModelFields {
   static const String title = 'title';
   static const String body = 'body';
   static const String sentAt = 'sentAt';
+  static const String sender = 'sender';
   static const String isRead = 'isRead';
 }

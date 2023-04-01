@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/user_models.dart';
-import 'package:schedcare/providers/firebase_provider.dart';
+import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/screens/common/approval_screen.dart';
 import 'package:schedcare/screens/common/login_screen.dart';
 import 'package:schedcare/screens/common/verify_email_screen.dart';

@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/providers/firebase_provider.dart';
+import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
@@ -20,7 +19,7 @@ class PatientHomeScreen extends HookConsumerWidget {
     final Stream<QuerySnapshot<Map<String, dynamic>>> appNotificationsStream =
         appNotificationsCollectionReference
             .where(ModelFields.patientId,
-                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
             .where(ModelFields.isRead, isEqualTo: false)
             .snapshots();
     final pageController = usePageController();

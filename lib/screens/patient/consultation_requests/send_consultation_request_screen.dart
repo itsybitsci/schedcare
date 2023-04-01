@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/user_models.dart';
-import 'package:schedcare/providers/firebase_provider.dart';
+import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/providers/consultation_request_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
@@ -45,7 +44,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
     final Stream<QuerySnapshot<Map<String, dynamic>>>
         consultationRequestsStream = consultationRequestsCollectionReference
             .where(ModelFields.patientId,
-                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
             .snapshots();
 
     return Scaffold(
@@ -119,18 +118,19 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                     return;
                                   }
 
-                                  DocumentReference docRef = FirebaseFirestore
-                                      .instance
-                                      .collection(FirestoreConstants
-                                          .consultationRequestsCollection)
-                                      .doc();
-                                  String docId = docRef.id;
-                                  Map<String, dynamic> data = {
-                                    ModelFields.id: docId,
+                                  DocumentReference consultationRequestRef =
+                                      FirebaseFirestore.instance
+                                          .collection(FirestoreConstants
+                                              .consultationRequestsCollection)
+                                          .doc();
+                                  String consultationRequestId =
+                                      consultationRequestRef.id;
+                                  Map<String, dynamic> consultationRequest = {
+                                    ModelFields.id: consultationRequestId,
                                     ModelFields.patientId:
                                         firebaseServicesNotifier
                                             .getCurrentUser!.uid,
-                                    ModelFields.doctorId: doctor.uid,
+                                    ModelFields.doctorId: doctor.id,
                                     ModelFields.consultationRequestTitle: doctor
                                             .middleName.isEmpty
                                         ? 'Meeting with ${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
@@ -151,14 +151,89 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                   };
                                   await firebaseServicesNotifier
                                       .sendConsultationRequest(
-                                          data,
+                                          consultationRequest,
                                           FirestoreConstants
                                               .consultationRequestsCollection,
-                                          docId)
+                                          consultationRequestId)
                                       .then(
                                     (success) {
                                       if (success) {
                                         context.pop();
+
+                                        firebaseServicesNotifier
+                                            .getFirebaseFirestoreService
+                                            .getDocument(
+                                                FirestoreConstants
+                                                    .usersCollection,
+                                                firebaseServicesNotifier
+                                                    .getCurrentUser!.uid)
+                                            .then(
+                                          (snapshot) {
+                                            DocumentReference
+                                                appNotificationRef =
+                                                FirebaseFirestore.instance
+                                                    .collection(FirestoreConstants
+                                                        .notificationsCollection)
+                                                    .doc();
+                                            String appNotificationId =
+                                                appNotificationRef.id;
+                                            String notificationTitle =
+                                                'New Consultation Request';
+                                            String notificationBody =
+                                                'You have a new consultation request from ${snapshot.get(ModelFields.firstName)} ${snapshot.get(ModelFields.lastName)}';
+
+                                            Map<String, dynamic>
+                                                appNotification = {
+                                              ModelFields.id: appNotificationId,
+                                              ModelFields.patientId:
+                                                  firebaseServicesNotifier
+                                                      .getCurrentUser!.uid,
+                                              ModelFields.doctorId: doctor.id,
+                                              ModelFields.title:
+                                                  notificationTitle,
+                                              ModelFields.body:
+                                                  notificationBody,
+                                              ModelFields.sentAt:
+                                                  DateTime.now(),
+                                              ModelFields.sender:
+                                                  AppConstants.patient,
+                                              ModelFields.isRead: false,
+                                            };
+
+                                            firebaseServicesNotifier
+                                                .getFirebaseFirestoreService
+                                                .setDocument(
+                                                    appNotification,
+                                                    FirestoreConstants
+                                                        .notificationsCollection,
+                                                    appNotificationId);
+
+                                            firebaseServicesNotifier
+                                                .getFirebaseFirestoreService
+                                                .getDocument(
+                                                    FirestoreConstants
+                                                        .userTokensCollection,
+                                                    doctor.id)
+                                                .then(
+                                              (DocumentSnapshot<
+                                                      Map<String, dynamic>>
+                                                  snapshot) {
+                                                List<String> tokens =
+                                                    snapshot.get(ModelFields
+                                                        .deviceTokens);
+
+                                                for (String token in tokens) {
+                                                  firebaseServicesNotifier
+                                                      .getFirebaseCloudMessagingService
+                                                      .sendPushNotification(
+                                                          notificationTitle,
+                                                          notificationBody,
+                                                          token);
+                                                }
+                                              },
+                                            );
+                                          },
+                                        );
                                       }
                                     },
                                   );

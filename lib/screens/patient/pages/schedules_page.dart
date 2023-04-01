@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
+import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
@@ -16,10 +16,11 @@ class SchedulesPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
     final Stream<QuerySnapshot<Map<String, dynamic>>>
         consultationRequestsStream = consultationRequestsCollectionReference
             .where(ModelFields.patientId,
-                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
             .where(ModelFields.isApproved, isEqualTo: true)
             .snapshots();
 

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
-import 'package:schedcare/providers/firebase_provider.dart';
+import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
@@ -32,7 +31,7 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
     final Query<ConsultationRequest> consultationRequestsQuery =
         consultationRequestsCollectionReference
             .where(ModelFields.patientId,
-                isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
             .orderBy(ModelFields.consultationDateTime)
             .withConverter(
               fromFirestore: (snapshot, _) =>
