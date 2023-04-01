@@ -9,12 +9,13 @@ import 'package:schedcare/screens/common/login_screen.dart';
 import 'package:schedcare/screens/common/reset_password_screen.dart';
 import 'package:schedcare/screens/common/verify_email_screen.dart';
 import 'package:schedcare/screens/doctor/authentication/doctor_register_screen.dart';
+import 'package:schedcare/screens/doctor/consultation_requests/doctor_view_consultation_requests_screen.dart';
 import 'package:schedcare/screens/doctor/home/doctor_home_screen.dart';
 import 'package:schedcare/screens/doctor/profile/doctor_profile_screen.dart';
 import 'package:schedcare/screens/doctor/profile/edit_doctor_profile_screen.dart';
 import 'package:schedcare/screens/patient/authentication/patient_register_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/send_consultation_request_screen.dart';
-import 'package:schedcare/screens/patient/consultation_requests/view_consultation_request_screen.dart';
+import 'package:schedcare/screens/patient/consultation_requests/patient_view_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/home/patient_home_screen.dart';
 import 'package:schedcare/screens/patient/profile/edit_patient_profile_screen.dart';
 import 'package:schedcare/screens/patient/profile/patient_profile_screen.dart';
@@ -88,16 +89,17 @@ class RouterNotifier extends ChangeNotifier {
           },
         ),
         GoRoute(
-          name: RouteNames.viewConsultationRequest,
-          path: RoutePaths.viewConsultationRequest,
+          name: RouteNames.patientViewConsultationRequest,
+          path: RoutePaths.patientViewConsultationRequest,
           builder: (context, state) {
-            ViewConsultationRequestObject viewConsultationRequestObject =
-                state.extra! as ViewConsultationRequestObject;
+            PatientViewConsultationRequestObject
+                patientViewConsultationRequestObject =
+                state.extra! as PatientViewConsultationRequestObject;
             ConsultationRequest consultationRequest =
-                viewConsultationRequestObject.consultationRequest;
-            Doctor doctor = viewConsultationRequestObject.doctor;
+                patientViewConsultationRequestObject.consultationRequest;
+            Doctor doctor = patientViewConsultationRequestObject.doctor;
 
-            return ViewConsultationRequestScreen(
+            return PatientViewConsultationRequestScreen(
               consultationRequest: consultationRequest,
               doctor: doctor,
             );
@@ -122,6 +124,23 @@ class RouterNotifier extends ChangeNotifier {
           name: RouteNames.editDoctorProfile,
           path: RoutePaths.editDoctorProfile,
           builder: (context, state) => const EditDoctorProfileScreen(),
+        ),
+        GoRoute(
+          name: RouteNames.doctorViewConsultationRequest,
+          path: RoutePaths.doctorViewConsultationRequest,
+          builder: (context, state) {
+            DoctorViewConsultationRequestObject
+                doctorViewConsultationRequestObject =
+                state.extra! as DoctorViewConsultationRequestObject;
+            ConsultationRequest consultationRequest =
+                doctorViewConsultationRequestObject.consultationRequest;
+            Patient patient = doctorViewConsultationRequestObject.patient;
+
+            return DoctorViewConsultationRequestScreen(
+              consultationRequest: consultationRequest,
+              patient: patient,
+            );
+          },
         ),
       ];
 }

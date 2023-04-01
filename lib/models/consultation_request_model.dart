@@ -75,12 +75,20 @@ class ConsultationRequest {
   }
 }
 
-class ViewConsultationRequestObject {
+class PatientViewConsultationRequestObject {
   final Doctor doctor;
   final ConsultationRequest consultationRequest;
 
-  ViewConsultationRequestObject(
+  PatientViewConsultationRequestObject(
       {required this.doctor, required this.consultationRequest});
+}
+
+class DoctorViewConsultationRequestObject {
+  final Patient patient;
+  final ConsultationRequest consultationRequest;
+
+  DoctorViewConsultationRequestObject(
+      {required this.patient, required this.consultationRequest});
 }
 
 class Meeting {

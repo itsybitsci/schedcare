@@ -1,7 +1,9 @@
 class Prompts {
   static const String noAvailableDoctors = 'No available doctor at the moment.';
   static const String noSentConsultationRequests =
-      'No sent consultation requests.';
+      'No sent consultation requests. Kindly check back later.';
+  static const String noReceivedConsultationRequests =
+      'No received consultation requests. Kindly check back later.';
   static const String noNotifications =
       'No notifications at the moment. Kindly check back later.';
   static const String errorDueToWeakInternet =

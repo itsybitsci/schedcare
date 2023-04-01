@@ -10,10 +10,10 @@ import 'package:schedcare/providers/consultation_request_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
-class ViewConsultationRequestScreen extends HookConsumerWidget {
+class PatientViewConsultationRequestScreen extends HookConsumerWidget {
   final ConsultationRequest consultationRequest;
   final Doctor doctor;
-  ViewConsultationRequestScreen(
+  PatientViewConsultationRequestScreen(
       {super.key, required this.consultationRequest, required this.doctor});
   final GlobalKey<FormState> formKeyEditConsultationRequest =
       GlobalKey<FormState>();
