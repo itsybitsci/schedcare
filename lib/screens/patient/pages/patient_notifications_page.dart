@@ -59,42 +59,42 @@ class PatientNotificationsPage extends HookConsumerWidget {
                         .watch(userSnapshotsProvider(appNotification.doctorId));
 
                     return userSnapshotsNotifier.when(
-                        data: (DocumentSnapshot<Map<String, dynamic>>
-                            doctorSnapshot) {
-                          Doctor doctor = Doctor.fromSnapshot(doctorSnapshot);
+                      data: (DocumentSnapshot<Map<String, dynamic>>
+                          doctorSnapshot) {
+                        Doctor doctor = Doctor.fromSnapshot(doctorSnapshot);
 
-                          return ListTile(
-                            tileColor: appNotification.isRead
-                                ? Colors.white
-                                : Colors.blue[50],
-                            onTap: () {
-                              firebaseServicesNotifier
-                                  .getFirebaseFirestoreService
-                                  .updateDocument({
-                                ModelFields.isRead: true
-                              }, FirestoreConstants.notificationsCollection,
-                                      appNotification.id);
-                            },
-                            title: Center(
-                              child: Text(
-                                'Consultation request approved by ${doctor.middleName.isEmpty ? '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'.trim() : '${doctor.prefix} ${doctor.firstName} ${doctor.middleName} ${doctor.lastName} ${doctor.suffix}'.trim()}',
-                              ),
+                        return ListTile(
+                          tileColor: appNotification.isRead
+                              ? Colors.white
+                              : Colors.blue[50],
+                          onTap: () {
+                            firebaseServicesNotifier.getFirebaseFirestoreService
+                                .updateDocument(
+                                    {ModelFields.isRead: true},
+                                    FirestoreConstants.notificationsCollection,
+                                    appNotification.id);
+                          },
+                          title: Center(
+                            child: Text(
+                              'Consultation request approved by ${doctor.middleName.isEmpty ? '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'.trim() : '${doctor.prefix} ${doctor.firstName} ${doctor.middleName} ${doctor.lastName} ${doctor.suffix}'.trim()}',
                             ),
-                            trailing: Text(
-                              DateFormat('hh:mm a')
-                                  .format(appNotification.sentAt),
-                              style: TextStyle(fontSize: 10.sp),
-                            ),
-                            subtitle: Center(
-                              child: Text(
-                                  DateFormat('MMMM d, y')
-                                      .format(appNotification.sentAt),
-                                  style: TextStyle(fontSize: 12.sp)),
-                            ),
-                          );
-                        },
-                        error: (_, __) => shimmerListTile(),
-                        loading: () => shimmerListTile());
+                          ),
+                          trailing: Text(
+                            DateFormat('hh:mm a')
+                                .format(appNotification.sentAt),
+                            style: TextStyle(fontSize: 10.sp),
+                          ),
+                          subtitle: Center(
+                            child: Text(
+                                DateFormat('MMMM d, y')
+                                    .format(appNotification.sentAt),
+                                style: TextStyle(fontSize: 12.sp)),
+                          ),
+                        );
+                      },
+                      error: (_, __) => shimmerListTile(),
+                      loading: () => shimmerListTile(),
+                    );
                   },
                 );
         }

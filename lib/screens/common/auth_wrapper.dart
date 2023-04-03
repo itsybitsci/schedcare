@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/screens/common/approval_screen.dart';
 import 'package:schedcare/screens/common/login_screen.dart';
@@ -17,8 +16,6 @@ class AuthWrapper extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
-
     return StreamBuilder(
       stream: userStream,
       builder: (context, AsyncSnapshot<User?> snapshot) {
@@ -42,19 +39,9 @@ class AuthWrapper extends HookConsumerWidget {
 
               //Redirect based on role
               if (role.toLowerCase() == AppConstants.patient.toLowerCase()) {
-                // Persist login
-                if (firebaseServicesNotifier.getPatient == null) {
-                  Patient patient = Patient.fromSnapshot(data);
-                  firebaseServicesNotifier.setPatient = patient;
-                }
                 return PatientHomeScreen();
               } else if (role.toLowerCase() ==
                   AppConstants.doctor.toLowerCase()) {
-                // Persist login
-                if (firebaseServicesNotifier.getDoctor == null) {
-                  Doctor doctor = Doctor.fromSnapshot(data);
-                  firebaseServicesNotifier.setDoctor = doctor;
-                }
                 return DoctorHomeScreen();
               }
               return materialLoading();

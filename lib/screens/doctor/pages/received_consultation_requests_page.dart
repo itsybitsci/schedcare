@@ -88,7 +88,7 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                               },
                               title: Center(
                                 child: Text(consultationRequest
-                                    .consultationRequestTitle),
+                                    .consultationRequestDoctorTitle),
                               ),
                               trailing: Text(
                                 consultationRequest.status,

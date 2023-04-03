@@ -21,7 +21,7 @@ class PatientSchedulesPage extends HookConsumerWidget {
         consultationRequestsStream = consultationRequestsCollectionReference
             .where(ModelFields.patientId,
                 isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
-            .where(ModelFields.isApproved, isEqualTo: true)
+            .where(ModelFields.status, isEqualTo: AppConstants.approved)
             .snapshots();
 
     return StreamBuilder(

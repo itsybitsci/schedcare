@@ -8,7 +8,8 @@ class ConsultationRequest {
   final String id;
   final String patientId;
   final String doctorId;
-  final String consultationRequestTitle;
+  final String consultationRequestPatientTitle;
+  final String consultationRequestDoctorTitle;
   final String consultationRequestBody;
   final String status;
   final String consultationType;
@@ -21,7 +22,8 @@ class ConsultationRequest {
       {required this.id,
       required this.patientId,
       required this.doctorId,
-      required this.consultationRequestTitle,
+      required this.consultationRequestPatientTitle,
+      required this.consultationRequestDoctorTitle,
       required this.consultationRequestBody,
       required this.status,
       required this.consultationType,
@@ -36,7 +38,10 @@ class ConsultationRequest {
       id: data[ModelFields.id],
       patientId: data[ModelFields.patientId],
       doctorId: data[ModelFields.doctorId],
-      consultationRequestTitle: data[ModelFields.consultationRequestTitle],
+      consultationRequestPatientTitle:
+          data[ModelFields.consultationRequestPatientTitle],
+      consultationRequestDoctorTitle:
+          data[ModelFields.consultationRequestDoctorTitle],
       consultationRequestBody: data[ModelFields.consultationRequestBody],
       status: data[ModelFields.status],
       consultationType: data[ModelFields.consultationType],
@@ -52,7 +57,10 @@ class ConsultationRequest {
       ModelFields.id: id,
       ModelFields.patientId: patientId,
       ModelFields.doctorId: doctorId,
-      ModelFields.consultationRequestTitle: consultationRequestTitle,
+      ModelFields.consultationRequestPatientTitle:
+          consultationRequestPatientTitle,
+      ModelFields.consultationRequestDoctorTitle:
+          consultationRequestDoctorTitle,
       ModelFields.consultationRequestBody: consultationRequestBody,
       ModelFields.status: status,
       ModelFields.consultationType: consultationType,
@@ -63,9 +71,11 @@ class ConsultationRequest {
     };
   }
 
-  Meeting toMeeting() {
+  Meeting toMeeting({String type = AppConstants.patient}) {
     return Meeting(
-      eventName: consultationRequestTitle,
+      eventName: type == AppConstants.patient
+          ? consultationRequestPatientTitle
+          : consultationRequestDoctorTitle,
       eventBody: consultationRequestBody,
       from: consultationDateTime,
       to: consultationDateTime

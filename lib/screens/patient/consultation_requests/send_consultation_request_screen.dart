@@ -57,194 +57,223 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.hasData) {
-            List<DateTime> consultationRequestStartTimes = snapshot.data!.docs
-                .map((e) => e.data()[ModelFields.consultationDateTime].toDate()
-                    as DateTime)
-                .toList();
+            final userSnapshotNotifier = ref.watch(userSnapshotProvider(
+                firebaseServicesNotifier.getCurrentUser!.uid));
 
-            return Form(
-              key: formKeySendConsultationRequest,
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      doctor.middleName.isEmpty
-                          ? Text('${doctor.firstName} ${doctor.lastName}')
-                          : Text(
-                              '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
-                      Text('Sex: ${doctor.sex}'),
-                      Text('Specialization: ${doctor.specialization}'),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      consultationRequestNotifier.buildBody(),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          consultationRequestNotifier.buildDatePicker(context),
-                          SizedBox(
-                            width: 15.w,
-                          ),
-                          consultationRequestNotifier.buildTimePicker(context),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      consultationRequestNotifier.buildConsultationType(),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      firebaseServicesNotifier.getLoading
-                          ? loading(color: Colors.blue)
-                          : ElevatedButton(
-                              onPressed: () async {
-                                if (formKeySendConsultationRequest.currentState!
-                                    .validate()) {
-                                  formKeySendConsultationRequest.currentState
-                                      ?.save();
+            return userSnapshotNotifier.when(
+                data: (DocumentSnapshot<Map<String, dynamic>> data) {
+                  List<DateTime> consultationRequestStartTimes = snapshot
+                      .data!.docs
+                      .map((e) => e
+                          .data()[ModelFields.consultationDateTime]
+                          .toDate() as DateTime)
+                      .toList();
 
-                                  if (isOverlapping(
-                                      consultationRequestStartTimes,
-                                      consultationRequestNotifier.dateTime)) {
-                                    showToast(
-                                        'You already have a consultation request overlapping at this time.');
-                                    return;
-                                  }
+                  return Form(
+                    key: formKeySendConsultationRequest,
+                    child: SingleChildScrollView(
+                      child: Center(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 30.h,
+                            ),
+                            doctor.middleName.isEmpty
+                                ? Text('${doctor.firstName} ${doctor.lastName}')
+                                : Text(
+                                    '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
+                            Text('Sex: ${doctor.sex}'),
+                            Text('Specialization: ${doctor.specialization}'),
+                            SizedBox(
+                              height: 30.h,
+                            ),
+                            consultationRequestNotifier.buildBody(),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                consultationRequestNotifier
+                                    .buildDatePicker(context),
+                                SizedBox(
+                                  width: 15.w,
+                                ),
+                                consultationRequestNotifier
+                                    .buildTimePicker(context),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            consultationRequestNotifier.buildConsultationType(),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            firebaseServicesNotifier.getLoading
+                                ? loading(color: Colors.blue)
+                                : ElevatedButton(
+                                    onPressed: () async {
+                                      if (formKeySendConsultationRequest
+                                          .currentState!
+                                          .validate()) {
+                                        formKeySendConsultationRequest
+                                            .currentState
+                                            ?.save();
 
-                                  DocumentReference consultationRequestRef =
-                                      FirebaseFirestore.instance
-                                          .collection(FirestoreConstants
-                                              .consultationRequestsCollection)
-                                          .doc();
-                                  String consultationRequestId =
-                                      consultationRequestRef.id;
-                                  Map<String, dynamic> consultationRequest = {
-                                    ModelFields.id: consultationRequestId,
-                                    ModelFields.patientId:
-                                        firebaseServicesNotifier
-                                            .getCurrentUser!.uid,
-                                    ModelFields.doctorId: doctor.id,
-                                    ModelFields.consultationRequestTitle: doctor
-                                            .middleName.isEmpty
-                                        ? 'Meeting with ${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
-                                            .trim()
-                                        : 'Meeting with ${doctor.prefix} ${doctor.firstName} ${doctor.middleName} ${doctor.lastName} ${doctor.suffix}'
-                                            .trim(),
-                                    ModelFields.consultationRequestBody:
-                                        consultationRequestNotifier
-                                            .consultationRequestBody,
-                                    ModelFields.status: AppConstants.pending,
-                                    ModelFields.consultationType:
-                                        consultationRequestNotifier
-                                            .consultationType,
-                                    ModelFields.consultationDateTime:
-                                        consultationRequestNotifier.dateTime,
-                                    ModelFields.modifiedAt: DateTime.now(),
-                                    ModelFields.createdAt: DateTime.now()
-                                  };
-                                  await firebaseServicesNotifier
-                                      .sendConsultationRequest(
-                                          consultationRequest,
-                                          FirestoreConstants
-                                              .consultationRequestsCollection,
-                                          consultationRequestId)
-                                      .then(
-                                    (success) {
-                                      if (success) {
-                                        context.pop();
+                                        if (isOverlapping(
+                                            consultationRequestStartTimes,
+                                            consultationRequestNotifier
+                                                .dateTime)) {
+                                          showToast(
+                                              'You already have a consultation request overlapping at this time.');
+                                          return;
+                                        }
 
-                                        firebaseServicesNotifier
-                                            .getFirebaseFirestoreService
-                                            .getDocument(
+                                        DocumentReference
+                                            consultationRequestRef =
+                                            FirebaseFirestore.instance
+                                                .collection(FirestoreConstants
+                                                    .consultationRequestsCollection)
+                                                .doc();
+                                        String consultationRequestId =
+                                            consultationRequestRef.id;
+                                        Map<String, dynamic>
+                                            consultationRequest = {
+                                          ModelFields.id: consultationRequestId,
+                                          ModelFields.patientId:
+                                              firebaseServicesNotifier
+                                                  .getCurrentUser!.uid,
+                                          ModelFields.doctorId: doctor.id,
+                                          ModelFields
+                                                  .consultationRequestPatientTitle:
+                                              'Consultation with ${'${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'.trim()}',
+                                          ModelFields
+                                                  .consultationRequestDoctorTitle:
+                                              'Consultation with ${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
+                                                  .trim(),
+                                          ModelFields.consultationRequestBody:
+                                              consultationRequestNotifier
+                                                  .consultationRequestBody,
+                                          ModelFields.status:
+                                              AppConstants.pending,
+                                          ModelFields.consultationType:
+                                              consultationRequestNotifier
+                                                  .consultationType,
+                                          ModelFields.consultationDateTime:
+                                              consultationRequestNotifier
+                                                  .dateTime,
+                                          ModelFields.modifiedAt:
+                                              DateTime.now(),
+                                          ModelFields.createdAt: DateTime.now()
+                                        };
+                                        await firebaseServicesNotifier
+                                            .sendConsultationRequest(
+                                                consultationRequest,
                                                 FirestoreConstants
-                                                    .usersCollection,
-                                                firebaseServicesNotifier
-                                                    .getCurrentUser!.uid)
+                                                    .consultationRequestsCollection,
+                                                consultationRequestId)
                                             .then(
-                                          (snapshot) {
-                                            DocumentReference
-                                                appNotificationRef =
-                                                FirebaseFirestore.instance
-                                                    .collection(FirestoreConstants
-                                                        .notificationsCollection)
-                                                    .doc();
-                                            String appNotificationId =
-                                                appNotificationRef.id;
-                                            String notificationTitle =
-                                                'New Consultation Request';
-                                            String notificationBody =
-                                                'You have a new consultation request from ${snapshot.get(ModelFields.firstName)} ${snapshot.get(ModelFields.lastName)}';
+                                          (success) {
+                                            if (success) {
+                                              context.pop();
 
-                                            Map<String, dynamic>
-                                                appNotification = {
-                                              ModelFields.id: appNotificationId,
-                                              ModelFields.patientId:
+                                              firebaseServicesNotifier
+                                                  .getFirebaseFirestoreService
+                                                  .getDocument(
+                                                      FirestoreConstants
+                                                          .usersCollection,
+                                                      firebaseServicesNotifier
+                                                          .getCurrentUser!.uid)
+                                                  .then(
+                                                (snapshot) {
+                                                  DocumentReference
+                                                      appNotificationRef =
+                                                      FirebaseFirestore.instance
+                                                          .collection(
+                                                              FirestoreConstants
+                                                                  .notificationsCollection)
+                                                          .doc();
+                                                  String appNotificationId =
+                                                      appNotificationRef.id;
+                                                  String notificationTitle =
+                                                      'New Consultation Request';
+                                                  String notificationBody =
+                                                      'You have a new consultation request from ${snapshot.get(ModelFields.firstName)} ${snapshot.get(ModelFields.lastName)}';
+
+                                                  Map<String, dynamic>
+                                                      appNotification = {
+                                                    ModelFields.id:
+                                                        appNotificationId,
+                                                    ModelFields.patientId:
+                                                        firebaseServicesNotifier
+                                                            .getCurrentUser!
+                                                            .uid,
+                                                    ModelFields.doctorId:
+                                                        doctor.id,
+                                                    ModelFields.title:
+                                                        notificationTitle,
+                                                    ModelFields.body:
+                                                        notificationBody,
+                                                    ModelFields.sentAt:
+                                                        DateTime.now(),
+                                                    ModelFields.sender:
+                                                        AppConstants.patient,
+                                                    ModelFields.isRead: false,
+                                                  };
+
                                                   firebaseServicesNotifier
-                                                      .getCurrentUser!.uid,
-                                              ModelFields.doctorId: doctor.id,
-                                              ModelFields.title:
-                                                  notificationTitle,
-                                              ModelFields.body:
-                                                  notificationBody,
-                                              ModelFields.sentAt:
-                                                  DateTime.now(),
-                                              ModelFields.sender:
-                                                  AppConstants.patient,
-                                              ModelFields.isRead: false,
-                                            };
+                                                      .getFirebaseFirestoreService
+                                                      .setDocument(
+                                                          appNotification,
+                                                          FirestoreConstants
+                                                              .notificationsCollection,
+                                                          appNotificationId);
 
-                                            firebaseServicesNotifier
-                                                .getFirebaseFirestoreService
-                                                .setDocument(
-                                                    appNotification,
-                                                    FirestoreConstants
-                                                        .notificationsCollection,
-                                                    appNotificationId);
-
-                                            firebaseServicesNotifier
-                                                .getFirebaseFirestoreService
-                                                .getDocument(
-                                                    FirestoreConstants
-                                                        .userTokensCollection,
-                                                    doctor.id)
-                                                .then(
-                                              (DocumentSnapshot<
-                                                      Map<String, dynamic>>
-                                                  snapshot) {
-                                                List tokens = snapshot.get(
-                                                    ModelFields.deviceTokens);
-
-                                                for (String token in tokens) {
                                                   firebaseServicesNotifier
-                                                      .getFirebaseCloudMessagingService
-                                                      .sendPushNotification(
-                                                          notificationTitle,
-                                                          notificationBody,
-                                                          token);
-                                                }
-                                              },
-                                            );
+                                                      .getFirebaseFirestoreService
+                                                      .getDocument(
+                                                          FirestoreConstants
+                                                              .userTokensCollection,
+                                                          doctor.id)
+                                                      .then(
+                                                    (DocumentSnapshot<
+                                                            Map<String,
+                                                                dynamic>>
+                                                        snapshot) {
+                                                      List tokens = snapshot
+                                                          .get(ModelFields
+                                                              .deviceTokens);
+
+                                                      for (String token
+                                                          in tokens) {
+                                                        firebaseServicesNotifier
+                                                            .getFirebaseCloudMessagingService
+                                                            .sendPushNotification(
+                                                                notificationTitle,
+                                                                notificationBody,
+                                                                token);
+                                                      }
+                                                    },
+                                                  );
+                                                },
+                                              );
+                                            }
                                           },
                                         );
                                       }
                                     },
-                                  );
-                                }
-                              },
-                              child: const Text('Send Request'),
-                            ),
-                    ],
-                  ),
-                ),
-              ),
-            );
+                                    child: const Text('Send Request'),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                error: (Object error, StackTrace stackTrace) =>
+                    loading(color: Colors.blue),
+                loading: () => loading(color: Colors.blue));
           }
 
           if (snapshot.hasError) {

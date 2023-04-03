@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/services/firebase_authentication_service.dart';
 import 'package:schedcare/services/firebase_cloud_messaging_service.dart';
 import 'package:schedcare/services/firebase_firestore_service.dart';
@@ -17,9 +16,6 @@ class FirebaseServicesProvider extends ChangeNotifier {
   final FirebaseCloudMessagingService _firebaseCloudMessagingService =
       FirebaseCloudMessagingService();
   bool _isLoading = false;
-  UserCredential? _userCredential;
-  Patient? _patient;
-  Doctor? _doctor;
   String? _role;
   String? _deviceToken;
 
@@ -27,13 +23,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
 
   User? get getLogin => _firebaseAuthenticationService.currentUser;
 
-  UserCredential? get getUserCredential => _userCredential;
-
   User? get getCurrentUser => _firebaseAuthenticationService.currentUser;
-
-  Patient? get getPatient => _patient;
-
-  Doctor? get getDoctor => _doctor;
 
   String? get getRole => _role;
 
@@ -46,14 +36,6 @@ class FirebaseServicesProvider extends ChangeNotifier {
   FirebaseCloudMessagingService get getFirebaseCloudMessagingService =>
       _firebaseCloudMessagingService;
 
-  set setPatient(Patient patient) {
-    _patient = patient;
-  }
-
-  set setDoctor(Doctor doctor) {
-    _doctor = doctor;
-  }
-
   setLoading(bool loader) {
     _isLoading = loader;
     notifyListeners();
@@ -62,23 +44,17 @@ class FirebaseServicesProvider extends ChangeNotifier {
   Future<bool> logInWithEmailAndPassword(String email, String password) async {
     setLoading(true);
     try {
-      _userCredential = await _firebaseAuthenticationService
+      UserCredential? userCredential = await _firebaseAuthenticationService
           .logInWithEmailAndPassword(email, password);
-      User? user = _userCredential!.user;
+      User user = userCredential!.user!;
 
       DocumentSnapshot? snapshot = await _firebaseFirestoreService.getDocument(
-          FirestoreConstants.usersCollection, user!.uid);
+          FirestoreConstants.usersCollection, user.uid);
 
       _role = snapshot.get(ModelFields.role).toString().toLowerCase() ==
               AppConstants.patient.toLowerCase()
           ? AppConstants.patient
           : AppConstants.doctor;
-
-      if (_role!.toLowerCase() == AppConstants.patient.toLowerCase()) {
-        _patient = Patient.fromSnapshot(snapshot);
-      } else {
-        _doctor = Doctor.fromSnapshot(snapshot);
-      }
 
       await _firebaseFirestoreService.updateDocument({
         ModelFields.lastLogin: user.metadata.lastSignInTime,
@@ -98,10 +74,10 @@ class FirebaseServicesProvider extends ChangeNotifier {
       String email, String password, Map<String, dynamic> data) async {
     setLoading(true);
     try {
-      _userCredential = await _firebaseAuthenticationService
+      UserCredential? userCredential = await _firebaseAuthenticationService
           .createUserWithEmailAndPassword(email, password);
 
-      User user = _userCredential!.user!;
+      User user = userCredential!.user!;
 
       data.addAll(
         {
@@ -129,11 +105,14 @@ class FirebaseServicesProvider extends ChangeNotifier {
     try {
       await _firebaseFirestoreService.updateDocument({
         ModelFields.deviceTokens: FieldValue.arrayRemove([_deviceToken])
-      }, FirestoreConstants.userTokensCollection, getCurrentUser!.uid);
+      }, FirestoreConstants.userTokensCollection, getCurrentUser!.uid).then(
+          (_) async {
+        await _firebaseAuthenticationService.signOut();
+        showToast('Successfully logged out');
+      });
 
-      await _firebaseAuthenticationService.signOut();
-      showToast('Successfully logged out');
       setLoading(false);
+      notifyListeners();
     } on FirebaseException catch (e) {
       showToast(e.code);
       setLoading(false);

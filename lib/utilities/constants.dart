@@ -167,7 +167,10 @@ class ModelFields {
   static const String createdAt = 'createdAt';
   static const String patientId = 'patientId';
   static const String doctorId = 'doctorId';
-  static const String consultationRequestTitle = 'consultationRequestTitle';
+  static const String consultationRequestPatientTitle =
+      'consultationRequestPatientTitle';
+  static const String consultationRequestDoctorTitle =
+      'consultationRequestDoctorTitle';
   static const String consultationRequestBody = 'consultationRequestBody';
   static const String status = 'status';
   static const String consultationType = 'consultationType';
