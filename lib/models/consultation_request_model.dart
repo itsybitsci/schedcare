@@ -33,22 +33,23 @@ class ConsultationRequest {
       this.meetingId});
 
   factory ConsultationRequest.fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return ConsultationRequest(
-      id: data[ModelFields.id],
-      patientId: data[ModelFields.patientId],
-      doctorId: data[ModelFields.doctorId],
+      id: snapshot.get(ModelFields.id),
+      patientId: snapshot.get(ModelFields.patientId),
+      doctorId: snapshot.get(ModelFields.doctorId),
       consultationRequestPatientTitle:
-          data[ModelFields.consultationRequestPatientTitle],
+          snapshot.get(ModelFields.consultationRequestPatientTitle),
       consultationRequestDoctorTitle:
-          data[ModelFields.consultationRequestDoctorTitle],
-      consultationRequestBody: data[ModelFields.consultationRequestBody],
-      status: data[ModelFields.status],
-      consultationType: data[ModelFields.consultationType],
-      consultationDateTime: data[ModelFields.consultationDateTime].toDate(),
-      modifiedAt: data[ModelFields.modifiedAt].toDate(),
-      createdAt: data[ModelFields.createdAt].toDate(),
-      meetingId: data[ModelFields.meetingId] ?? '',
+          snapshot.get(ModelFields.consultationRequestDoctorTitle),
+      consultationRequestBody:
+          snapshot.get(ModelFields.consultationRequestBody),
+      status: snapshot.get(ModelFields.status),
+      consultationType: snapshot.get(ModelFields.consultationType),
+      consultationDateTime:
+          snapshot.get(ModelFields.consultationDateTime).toDate(),
+      modifiedAt: snapshot.get(ModelFields.modifiedAt).toDate(),
+      createdAt: snapshot.get(ModelFields.createdAt).toDate(),
+      meetingId: snapshot.get(ModelFields.meetingId) ?? '',
     );
   }
 

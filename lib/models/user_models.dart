@@ -46,28 +46,27 @@ class Patient {
       required this.createdAt});
 
   factory Patient.fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return Patient(
-      id: snapshot.id,
-      email: data[ModelFields.email],
-      role: data[ModelFields.role],
-      firstName: data[ModelFields.firstName],
-      middleName: data[ModelFields.middleName] ?? '',
-      lastName: data[ModelFields.lastName],
-      suffix: data[ModelFields.suffix] ?? '',
-      age: data[ModelFields.age],
-      birthDate: data[ModelFields.birthDate].toDate(),
-      sex: data[ModelFields.sex],
-      phoneNumber: data[ModelFields.phoneNumber],
-      address: data[ModelFields.address],
-      civilStatus: data[ModelFields.civilStatus],
-      classification: data[ModelFields.classification] ?? '',
-      uhsIdNumber: data[ModelFields.uhsIdNumber] ?? '',
-      vaccinationStatus: data[ModelFields.vaccinationStatus],
-      isApproved: data[ModelFields.isApproved],
-      lastLogin: data[ModelFields.lastLogin].toDate(),
-      modifiedAt: data[ModelFields.modifiedAt].toDate(),
-      createdAt: data[ModelFields.createdAt].toDate(),
+      id: snapshot.get(ModelFields.id),
+      email: snapshot.get(ModelFields.email),
+      role: snapshot.get(ModelFields.role),
+      firstName: snapshot.get(ModelFields.firstName),
+      middleName: snapshot.get(ModelFields.middleName) ?? '',
+      lastName: snapshot.get(ModelFields.lastName),
+      suffix: snapshot.get(ModelFields.suffix) ?? '',
+      age: snapshot.get(ModelFields.age),
+      birthDate: snapshot.get(ModelFields.birthDate).toDate(),
+      sex: snapshot.get(ModelFields.sex),
+      phoneNumber: snapshot.get(ModelFields.phoneNumber),
+      address: snapshot.get(ModelFields.address),
+      civilStatus: snapshot.get(ModelFields.civilStatus),
+      classification: snapshot.get(ModelFields.classification) ?? '',
+      uhsIdNumber: snapshot.get(ModelFields.uhsIdNumber) ?? '',
+      vaccinationStatus: snapshot.get(ModelFields.vaccinationStatus),
+      isApproved: snapshot.get(ModelFields.isApproved),
+      lastLogin: snapshot.get(ModelFields.lastLogin).toDate(),
+      modifiedAt: snapshot.get(ModelFields.modifiedAt).toDate(),
+      createdAt: snapshot.get(ModelFields.createdAt).toDate(),
     );
   }
 
@@ -130,22 +129,21 @@ class Doctor {
       required this.createdAt});
 
   factory Doctor.fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return Doctor(
-      id: snapshot.id,
-      email: data[ModelFields.email],
-      role: data[ModelFields.role],
-      prefix: data[ModelFields.prefix] ?? '',
-      firstName: data[ModelFields.firstName],
-      middleName: data[ModelFields.middleName] ?? '',
-      lastName: data[ModelFields.lastName],
-      suffix: data[ModelFields.suffix] ?? '',
-      sex: data[ModelFields.sex],
-      specialization: data[ModelFields.specialization],
-      isApproved: data[ModelFields.isApproved],
-      lastLogin: data[ModelFields.lastLogin].toDate(),
-      modifiedAt: data[ModelFields.modifiedAt].toDate(),
-      createdAt: data[ModelFields.createdAt].toDate(),
+      id: snapshot.get(ModelFields.id),
+      email: snapshot.get(ModelFields.email),
+      role: snapshot.get(ModelFields.role),
+      prefix: snapshot.get(ModelFields.prefix) ?? '',
+      firstName: snapshot.get(ModelFields.firstName),
+      middleName: snapshot.get(ModelFields.middleName) ?? '',
+      lastName: snapshot.get(ModelFields.lastName),
+      suffix: snapshot.get(ModelFields.suffix) ?? '',
+      sex: snapshot.get(ModelFields.sex),
+      specialization: snapshot.get(ModelFields.specialization),
+      isApproved: snapshot.get(ModelFields.isApproved),
+      lastLogin: snapshot.get(ModelFields.lastLogin).toDate(),
+      modifiedAt: snapshot.get(ModelFields.modifiedAt).toDate(),
+      createdAt: snapshot.get(ModelFields.createdAt).toDate(),
     );
   }
 

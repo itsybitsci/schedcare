@@ -64,8 +64,11 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                 data: (DocumentSnapshot<Map<String, dynamic>> data) {
                   List<DateTime> consultationRequestStartTimes = snapshot
                       .data!.docs
-                      .map((e) => e
-                          .data()[ModelFields.consultationDateTime]
+                      .where((snapshot) =>
+                          snapshot.get(ModelFields.status) !=
+                          AppConstants.rejected)
+                      .map((snapshot) => snapshot
+                          .get(ModelFields.consultationDateTime)
                           .toDate() as DateTime)
                       .toList();
 
@@ -165,7 +168,8 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                                   .dateTime,
                                           ModelFields.modifiedAt:
                                               DateTime.now(),
-                                          ModelFields.createdAt: DateTime.now()
+                                          ModelFields.createdAt: DateTime.now(),
+                                          ModelFields.meetingId: null,
                                         };
                                         await firebaseServicesNotifier
                                             .sendConsultationRequest(

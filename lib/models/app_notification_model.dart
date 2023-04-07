@@ -22,16 +22,15 @@ class AppNotification {
       required this.isRead});
 
   factory AppNotification.fromSnapshot(DocumentSnapshot snapshot) {
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return AppNotification(
-      id: data[ModelFields.id],
-      patientId: data[ModelFields.patientId],
-      doctorId: data[ModelFields.doctorId],
-      title: data[ModelFields.title],
-      body: data[ModelFields.body],
-      sentAt: data[ModelFields.sentAt].toDate(),
-      sender: data[ModelFields.sender],
-      isRead: data[ModelFields.isRead],
+      id: snapshot.get(ModelFields.id),
+      patientId: snapshot.get(ModelFields.patientId),
+      doctorId: snapshot.get(ModelFields.doctorId),
+      title: snapshot.get(ModelFields.title),
+      body: snapshot.get(ModelFields.body),
+      sentAt: snapshot.get(ModelFields.sentAt).toDate(),
+      sender: snapshot.get(ModelFields.sender),
+      isRead: snapshot.get(ModelFields.isRead),
     );
   }
 
