@@ -32,7 +32,7 @@ class FirebaseCloudMessagingService {
             'notification': <String, dynamic>{
               'body': body,
               'title': title,
-              'android_channel_id': 'SchedCare',
+              'android_channel_id': AppConstants.channelId,
             },
             'data': <String, dynamic>{
               'click_action': 'FLUTTER_NOTIFICATION_CLICK',

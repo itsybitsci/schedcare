@@ -44,8 +44,8 @@ class DoctorHomeScreen extends HookConsumerWidget {
         (RemoteMessage message) async {
           AndroidNotificationDetails androidPlatformChannelSpecifics =
               const AndroidNotificationDetails(
-            'SchedCare',
-            'SchedCare',
+            AppConstants.channelId,
+            AppConstants.channelId,
             importance: Importance.max,
             priority: Priority.high,
             playSound: true,

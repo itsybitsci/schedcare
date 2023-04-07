@@ -16,6 +16,7 @@ class FirestoreConstants {
 
 class AppConstants {
   static const appTitle = 'SchedCare';
+  static const channelId = 'SchedCare';
 
   static const String fcmKey =
       'AAAAN4HTnQg:APA91bHKKsyn8br_UGidPC-zwuptWNDulQ_Hkx6rf7gwxO-ZPprA1WFbcZuDe8lRIcaYtq9Sd58VoqKdbFwHLKVRNTr3HFPCNDCVN5N_PsqadBpJJlvWEv3va_fzuI47GV-Oed1hJ9Aq';
