@@ -49,6 +49,7 @@ class AppConstants {
   static const String approved = 'Approved';
   static const String rejected = 'Rejected';
   static const String pending = 'Pending';
+  static const String lapsed = 'Lapsed';
 
   static const int defaultMeetingDuration = 1;
 

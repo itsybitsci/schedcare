@@ -63,6 +63,9 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                           consultationRequestCollectionSnapshot.docs[index]
                               .data();
 
+                      final bool isLapsed = DateTime.now()
+                          .isAfter(consultationRequest.consultationDateTime);
+
                       return StreamBuilder(
                         stream: usersCollectionReference
                             .doc(consultationRequest.doctorId)
@@ -75,8 +78,9 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                             Doctor doctor =
                                 Doctor.fromSnapshot(doctorSnapshot.data!);
                             return ListTile(
-                              onTap: () => consultationRequest.status !=
-                                      AppConstants.rejected
+                              onTap: () => (consultationRequest.status !=
+                                          AppConstants.rejected) &&
+                                      !isLapsed
                                   ? context.push(
                                       RoutePaths.patientViewConsultationRequest,
                                       extra:
@@ -91,7 +95,9 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                                     .consultationRequestPatientTitle),
                               ),
                               trailing: Text(
-                                consultationRequest.status,
+                                isLapsed
+                                    ? AppConstants.lapsed
+                                    : consultationRequest.status,
                                 style: TextStyle(fontSize: 10.sp),
                               ),
                               subtitle: Center(
