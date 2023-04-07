@@ -186,7 +186,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                                       firebaseServicesNotifier
                                                           .getCurrentUser!.uid)
                                                   .then(
-                                                (snapshot) {
+                                                (userSnapshot) {
                                                   DocumentReference
                                                       appNotificationRef =
                                                       FirebaseFirestore.instance
@@ -199,7 +199,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                                   String notificationTitle =
                                                       'New Consultation Request';
                                                   String notificationBody =
-                                                      'You have a new consultation request from ${snapshot.get(ModelFields.firstName)} ${snapshot.get(ModelFields.lastName)}';
+                                                      'New consultation request received from ${userSnapshot.get(ModelFields.firstName)} ${userSnapshot.get(ModelFields.lastName)}';
 
                                                   Map<String, dynamic>
                                                       appNotification = {
@@ -240,10 +240,11 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                                     (DocumentSnapshot<
                                                             Map<String,
                                                                 dynamic>>
-                                                        snapshot) {
-                                                      List tokens = snapshot
-                                                          .get(ModelFields
-                                                              .deviceTokens);
+                                                        userTokenSnapshot) {
+                                                      List tokens =
+                                                          userTokenSnapshot.get(
+                                                              ModelFields
+                                                                  .deviceTokens);
 
                                                       for (String token
                                                           in tokens) {

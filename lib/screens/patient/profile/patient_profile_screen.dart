@@ -49,11 +49,13 @@ class PatientProfileScreen extends HookConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  (data.get(ModelFields.middleName)).toString().isNotEmpty
-                      ? Text(
-                          '${data.get(ModelFields.firstName)} ${data.get(ModelFields.middleName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}')
-                      : Text(
-                          '${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'),
+                  Text(
+                    data.get(ModelFields.middleName).toString().isNotEmpty
+                        ? '${data.get(ModelFields.firstName)} ${data.get(ModelFields.middleName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
+                            .trim()
+                        : '${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
+                            .trim(),
+                  ),
                   Text('Age: ${data.get(ModelFields.age)}'),
                   Text('Sex: ${data.get(ModelFields.sex)}'),
                   Text('Contact Number: ${data.get(ModelFields.phoneNumber)}'),

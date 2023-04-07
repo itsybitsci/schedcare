@@ -7,6 +7,7 @@ import 'package:schedcare/utilities/constants.dart';
 class ConsultationRequestProvider extends ChangeNotifier {
   final TextEditingController _consultationRequestBodyController =
       TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   DateTime? _chosenDate;
@@ -42,22 +43,27 @@ class ConsultationRequestProvider extends ChangeNotifier {
 
   Widget buildBody({enabled = true}) => ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 300.w, maxHeight: 280.h),
-        child: TextFormField(
-          enabled: enabled,
-          controller: _consultationRequestBodyController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.blue, width: 3),
-              borderRadius: BorderRadius.circular(10),
+        child: Scrollbar(
+          controller: _scrollController,
+          child: TextFormField(
+            readOnly: !enabled,
+            enabled: true,
+            scrollController: _scrollController,
+            controller: _consultationRequestBodyController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.blue, width: 3),
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
+            textAlignVertical: TextAlignVertical.top,
+            maxLines: null,
+            expands: true,
+            keyboardType: TextInputType.multiline,
+            validator: (value) {
+              return value!.isEmpty ? 'Required' : null;
+            },
           ),
-          textAlignVertical: TextAlignVertical.top,
-          maxLines: null,
-          expands: true,
-          keyboardType: TextInputType.multiline,
-          validator: (value) {
-            return value!.isEmpty ? 'Required' : null;
-          },
         ),
       );
 

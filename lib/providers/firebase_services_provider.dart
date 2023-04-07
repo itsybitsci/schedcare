@@ -243,6 +243,38 @@ class FirebaseServicesProvider extends ChangeNotifier {
       throw Exception(e.code);
     }
   }
+
+  Future<bool> rejectConsultationRequest(
+      Map<String, dynamic> data, String collection, String id) async {
+    setLoading(true);
+    try {
+      await _firebaseFirestoreService.updateDocument(data, collection, id);
+      showToast('Successfully rejected consultation request');
+      setLoading(false);
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
+
+  Future<bool> approveConsultationRequest(
+      Map<String, dynamic> data, String collection, String id) async {
+    setLoading(true);
+    try {
+      await _firebaseFirestoreService.updateDocument(data, collection, id);
+      showToast('Successfully approved consultation request');
+      setLoading(false);
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
 }
 
 final firebaseServicesProvider =

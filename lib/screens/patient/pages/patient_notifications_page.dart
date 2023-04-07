@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/models/app_notification_model.dart';
-import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
@@ -55,45 +54,30 @@ class PatientNotificationsPage extends HookConsumerWidget {
                     final AppNotification appNotification =
                         appNotificationCollectionSnapshot.docs[index].data();
 
-                    final userSnapshotsNotifier = ref
-                        .watch(userSnapshotsProvider(appNotification.doctorId));
-
-                    return userSnapshotsNotifier.when(
-                      data: (DocumentSnapshot<Map<String, dynamic>>
-                          doctorSnapshot) {
-                        Doctor doctor = Doctor.fromSnapshot(doctorSnapshot);
-
-                        return ListTile(
-                          tileColor: appNotification.isRead
-                              ? Colors.white
-                              : Colors.blue[50],
-                          onTap: () {
-                            firebaseServicesNotifier.getFirebaseFirestoreService
-                                .updateDocument(
-                                    {ModelFields.isRead: true},
-                                    FirestoreConstants.notificationsCollection,
-                                    appNotification.id);
-                          },
-                          title: Center(
-                            child: Text(
-                              'Consultation request approved by ${doctor.middleName.isEmpty ? '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'.trim() : '${doctor.prefix} ${doctor.firstName} ${doctor.middleName} ${doctor.lastName} ${doctor.suffix}'.trim()}',
-                            ),
-                          ),
-                          trailing: Text(
-                            DateFormat('hh:mm a')
-                                .format(appNotification.sentAt),
-                            style: TextStyle(fontSize: 10.sp),
-                          ),
-                          subtitle: Center(
-                            child: Text(
-                                DateFormat('MMMM d, y')
-                                    .format(appNotification.sentAt),
-                                style: TextStyle(fontSize: 12.sp)),
-                          ),
-                        );
+                    return ListTile(
+                      tileColor: appNotification.isRead
+                          ? Colors.white
+                          : Colors.blue[50],
+                      onTap: () {
+                        firebaseServicesNotifier.getFirebaseFirestoreService
+                            .updateDocument(
+                                {ModelFields.isRead: true},
+                                FirestoreConstants.notificationsCollection,
+                                appNotification.id);
                       },
-                      error: (_, __) => shimmerListTile(),
-                      loading: () => shimmerListTile(),
+                      title: Center(
+                        child: Text(appNotification.body),
+                      ),
+                      trailing: Text(
+                        DateFormat('hh:mm a').format(appNotification.sentAt),
+                        style: TextStyle(fontSize: 10.sp),
+                      ),
+                      subtitle: Center(
+                        child: Text(
+                            DateFormat('MMMM d, y')
+                                .format(appNotification.sentAt),
+                            style: TextStyle(fontSize: 12.sp)),
+                      ),
                     );
                   },
                 );

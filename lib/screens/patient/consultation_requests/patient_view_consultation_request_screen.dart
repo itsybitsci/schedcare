@@ -24,14 +24,17 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
     final consultationRequestNotifier = ref.watch(consultationRequestProvider);
     ValueNotifier<bool> isEditing = useState(false);
 
-    consultationRequestNotifier.setConsultationRequestBody =
-        consultationRequest.consultationRequestBody;
-    consultationRequestNotifier.setDate =
-        consultationRequest.consultationDateTime;
-    consultationRequestNotifier.setTime =
-        consultationRequest.consultationDateTime;
-    consultationRequestNotifier.setConsultationTypeDropdownValue =
-        consultationRequest.consultationType;
+    useEffect(() {
+      consultationRequestNotifier.setConsultationRequestBody =
+          consultationRequest.consultationRequestBody;
+      consultationRequestNotifier.setDate =
+          consultationRequest.consultationDateTime;
+      consultationRequestNotifier.setTime =
+          consultationRequest.consultationDateTime;
+      consultationRequestNotifier.setConsultationTypeDropdownValue =
+          consultationRequest.consultationType;
+      return null;
+    }, []);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +45,7 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                   icon: const Icon(Icons.close),
                   tooltip: 'Stop Editing',
                   onPressed: () async {
-                    showDialog(
+                    await showDialog(
                       context: context,
                       builder: (context) {
                         return AlertDialog(
@@ -84,10 +87,9 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
               SizedBox(
                 height: 30.h,
               ),
-              doctor.middleName.isEmpty
-                  ? Text('${doctor.firstName} ${doctor.lastName}')
-                  : Text(
-                      '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
+              Text(
+                  '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
+                      .trim()),
               Text('Sex: ${doctor.sex}'),
               Text('Specialization: ${doctor.specialization}'),
               SizedBox(
@@ -207,6 +209,10 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                               },
                             );
                           },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.red),
+                          ),
                           child: const Text('Cancel Request'),
                         ),
             ],
