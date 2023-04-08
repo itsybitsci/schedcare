@@ -14,28 +14,11 @@ import 'package:schedcare/utilities/widgets.dart';
 class SendConsultationRequestScreen extends HookConsumerWidget {
   final Doctor doctor;
   SendConsultationRequestScreen({super.key, required this.doctor});
-
   final GlobalKey<FormState> formKeySendConsultationRequest =
       GlobalKey<FormState>();
   final CollectionReference<Map<String, dynamic>>
       consultationRequestsCollectionReference = FirebaseFirestore.instance
           .collection(FirestoreConstants.consultationRequestsCollection);
-
-  bool isOverlapping(List<DateTime> consultationRequestStartTimes,
-          DateTime compareDatetime) =>
-      consultationRequestStartTimes.any(
-        (datetime) =>
-            datetime.isBefore(
-              compareDatetime.add(
-                const Duration(hours: AppConstants.defaultMeetingDuration),
-              ),
-            ) &&
-            compareDatetime.isBefore(
-              datetime.add(
-                const Duration(hours: AppConstants.defaultMeetingDuration),
-              ),
-            ),
-      );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -129,7 +112,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                             consultationRequestNotifier
                                                 .dateTime)) {
                                           showToast(
-                                              'You already have a consultation request overlapping at this time.');
+                                              Prompts.overlappingSchedule);
                                           return;
                                         }
 
