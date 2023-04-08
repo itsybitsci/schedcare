@@ -118,7 +118,7 @@ class RouterNotifier extends ChangeNotifier {
         GoRoute(
           name: RouteNames.doctorProfile,
           path: RoutePaths.doctorProfile,
-          builder: (context, state) => const DoctorProfileScreen(),
+          builder: (context, state) => DoctorProfileScreen(),
         ),
         GoRoute(
           name: RouteNames.editDoctorProfile,

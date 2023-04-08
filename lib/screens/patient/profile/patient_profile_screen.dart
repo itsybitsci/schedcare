@@ -13,7 +13,8 @@ import 'package:schedcare/utilities/widgets.dart';
 
 class PatientProfileScreen extends HookConsumerWidget {
   PatientProfileScreen({super.key});
-  final GlobalKey<FormState> formKeyUpdatePassword = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyUpdatePatientPassword =
+      GlobalKey<FormState>();
   final Stream<DocumentSnapshot<Map<String, dynamic>>> userSnapshots =
       FirebaseFirestore.instance
           .collection(FirestoreConstants.usersCollection)
@@ -79,19 +80,17 @@ class PatientProfileScreen extends HookConsumerWidget {
                             showDialog(
                               context: context,
                               builder: (context) {
+                                genericFieldsNotifier.clearPasswordFields();
                                 return AlertDialog(
                                   title: const Text('Change Password'),
                                   content: StatefulBuilder(
                                     builder: (BuildContext context,
                                         StateSetter setState) {
-                                      genericFieldsNotifier
-                                          .clearPasswordFields();
-
                                       return ConstrainedBox(
                                         constraints:
                                             BoxConstraints(maxHeight: 200.h),
                                         child: Form(
-                                          key: formKeyUpdatePassword,
+                                          key: formKeyUpdatePatientPassword,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -114,9 +113,11 @@ class PatientProfileScreen extends HookConsumerWidget {
                                     ),
                                     TextButton(
                                       onPressed: () async {
-                                        if (formKeyUpdatePassword.currentState!
+                                        if (formKeyUpdatePatientPassword
+                                            .currentState!
                                             .validate()) {
-                                          formKeyUpdatePassword.currentState
+                                          formKeyUpdatePatientPassword
+                                              .currentState
                                               ?.save();
                                           context.pop();
                                           await firebaseServicesNotifier
