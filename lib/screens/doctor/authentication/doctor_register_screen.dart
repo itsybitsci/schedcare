@@ -29,6 +29,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              genericFieldsNotifier.buildPrefix(),
               genericFieldsNotifier.buildFirstName(),
               genericFieldsNotifier.buildMiddleName(),
               genericFieldsNotifier.buildLastName(),
@@ -44,11 +45,12 @@ class DoctorRegisterScreen extends HookConsumerWidget {
                       onPressed: () async {
                         if (formKeyRegisterDoctor.currentState!.validate()) {
                           formKeyRegisterDoctor.currentState?.save();
-                          Map<String, dynamic> userData = {
+                          Map<String, dynamic> data = {
                             ModelFields.id:
                                 firebaseServicesNotifier.getCurrentUser!.uid,
                             ModelFields.email: genericFieldsNotifier.email,
                             ModelFields.role: AppConstants.doctor,
+                            ModelFields.prefix: genericFieldsNotifier.prefix,
                             ModelFields.firstName:
                                 genericFieldsNotifier.firstName,
                             ModelFields.middleName:
@@ -66,7 +68,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
                               .createUserWithEmailAndPassword(
                                   genericFieldsNotifier.email,
                                   genericFieldsNotifier.password,
-                                  userData);
+                                  data);
 
                           if (context.mounted) context.pop();
                         }

@@ -123,7 +123,7 @@ class RouterNotifier extends ChangeNotifier {
         GoRoute(
           name: RouteNames.editDoctorProfile,
           path: RoutePaths.editDoctorProfile,
-          builder: (context, state) => const EditDoctorProfileScreen(),
+          builder: (context, state) => EditDoctorProfileScreen(),
         ),
         GoRoute(
           name: RouteNames.doctorViewConsultationRequest,

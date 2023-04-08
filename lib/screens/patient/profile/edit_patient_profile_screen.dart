@@ -18,28 +18,6 @@ class EditPatientProfileScreen extends HookConsumerWidget {
     final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
     final genericFieldsNotifier = ref.watch(genericFieldsProvider);
 
-    setData(DocumentSnapshot<Map<String, dynamic>> data) {
-      genericFieldsNotifier.setFirstName = data.get(ModelFields.firstName);
-      genericFieldsNotifier.setFirstName = data.get(ModelFields.firstName);
-      genericFieldsNotifier.setMiddleName = data.get(ModelFields.middleName);
-      genericFieldsNotifier.setLastName = data.get(ModelFields.lastName);
-      genericFieldsNotifier.setSuffix = data.get(ModelFields.suffix);
-      genericFieldsNotifier.setAge = data.get(ModelFields.age).toString();
-      genericFieldsNotifier.setSexesDropdownValue = data.get(ModelFields.sex);
-      genericFieldsNotifier.setPhoneNumber = data.get(ModelFields.phoneNumber);
-      genericFieldsNotifier.setBirthDate =
-          DateFormat('yMMMMd').format(data.get(ModelFields.birthDate).toDate());
-      genericFieldsNotifier.setChosenDate =
-          data.get(ModelFields.birthDate).toDate();
-      genericFieldsNotifier.setAddress = data.get(ModelFields.address);
-      genericFieldsNotifier.setUhsIdNumber = data.get(ModelFields.uhsIdNumber);
-      genericFieldsNotifier.setClassification =
-          data.get(ModelFields.classification);
-      genericFieldsNotifier.setCivilStatus = data.get(ModelFields.civilStatus);
-      genericFieldsNotifier.setVaccinationStatus =
-          data.get(ModelFields.vaccinationStatus);
-    }
-
     useEffect(() {
       Future<void> fetchData() async {
         DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
@@ -47,7 +25,28 @@ class EditPatientProfileScreen extends HookConsumerWidget {
             .collection(FirestoreConstants.usersCollection)
             .doc(firebaseServicesNotifier.getCurrentUser!.uid)
             .get();
-        setData(data);
+        genericFieldsNotifier.setFirstName = data.get(ModelFields.firstName);
+        genericFieldsNotifier.setFirstName = data.get(ModelFields.firstName);
+        genericFieldsNotifier.setMiddleName = data.get(ModelFields.middleName);
+        genericFieldsNotifier.setLastName = data.get(ModelFields.lastName);
+        genericFieldsNotifier.setSuffix = data.get(ModelFields.suffix);
+        genericFieldsNotifier.setAge = data.get(ModelFields.age).toString();
+        genericFieldsNotifier.setSexesDropdownValue = data.get(ModelFields.sex);
+        genericFieldsNotifier.setPhoneNumber =
+            data.get(ModelFields.phoneNumber);
+        genericFieldsNotifier.setBirthDate = DateFormat('yMMMMd')
+            .format(data.get(ModelFields.birthDate).toDate());
+        genericFieldsNotifier.setChosenDate =
+            data.get(ModelFields.birthDate).toDate();
+        genericFieldsNotifier.setAddress = data.get(ModelFields.address);
+        genericFieldsNotifier.setUhsIdNumber =
+            data.get(ModelFields.uhsIdNumber);
+        genericFieldsNotifier.setClassification =
+            data.get(ModelFields.classification);
+        genericFieldsNotifier.setCivilStatus =
+            data.get(ModelFields.civilStatus);
+        genericFieldsNotifier.setVaccinationStatus =
+            data.get(ModelFields.vaccinationStatus);
       }
 
       fetchData();
@@ -118,7 +117,8 @@ class EditPatientProfileScreen extends HookConsumerWidget {
                                   FirestoreConstants.usersCollection,
                                   firebaseServicesNotifier.getCurrentUser!.uid)
                               .then(
-                                  (success) => success ? context.pop() : null);
+                                (success) => success ? context.pop() : null,
+                              );
                         }
                       },
                       child: const Text('Save Details'),

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:schedcare/utilities/constants.dart';
 
 class GenericFieldsProvider extends ChangeNotifier {
+  final TextEditingController _prefixController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _middleNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -29,6 +30,8 @@ class GenericFieldsProvider extends ChangeNotifier {
       AppConstants.vaccinationStatuses.first;
   bool _passwordVisible = false;
   bool _repeatPasswordVisible = false;
+
+  String get prefix => _prefixController.text.trim();
 
   String get firstName => _firstNameController.text.trim();
 
@@ -61,6 +64,10 @@ class GenericFieldsProvider extends ChangeNotifier {
   String get specialization => _specializationController.text.trim();
 
   String get password => _passwordController.text.trim();
+
+  set setPrefix(String prefix) {
+    _prefixController.text = prefix;
+  }
 
   set setFirstName(String firstName) {
     _firstNameController.text = firstName;
@@ -118,10 +125,24 @@ class GenericFieldsProvider extends ChangeNotifier {
     _vaccinationStatusDropdownValue = vaccinationStatus;
   }
 
+  set setSpecialization(String specialization) {
+    _specializationController.text = specialization;
+  }
+
   void clearPasswordFields() {
     _passwordController.text = '';
     _repeatPasswordController.text = '';
   }
+
+  Widget buildPrefix() => TextFormField(
+        keyboardType: TextInputType.name,
+        controller: _prefixController,
+        decoration: const InputDecoration(
+          labelText: 'Prefix (Optional)',
+          hintText: 'Enter prefix',
+          suffixIcon: Icon(Icons.person),
+        ),
+      );
 
   Widget buildFirstName() => TextFormField(
         keyboardType: TextInputType.name,

@@ -9,9 +9,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/router_provider.dart';
+import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/firebase_options.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {}
+
+FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,27 +45,26 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(
-    const ProviderScope(
+    ProviderScope(
       child: SchedcareApp(),
     ),
   );
 }
 
 class SchedcareApp extends HookConsumerWidget {
-  const SchedcareApp({super.key});
-
-  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  static FirebaseAnalyticsObserver observer =
+  SchedcareApp({super.key});
+  final FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final routeNotifier = ref.watch(routerProvider);
+
     return ScreenUtilInit(
       builder: (BuildContext context, Widget? child) {
         return MaterialApp.router(
-          title: 'SchedCare',
+          title: AppConstants.appTitle,
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
