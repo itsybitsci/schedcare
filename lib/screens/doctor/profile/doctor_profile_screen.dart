@@ -14,6 +14,7 @@ class DoctorProfileScreen extends HookConsumerWidget {
   DoctorProfileScreen({Key? key}) : super(key: key);
   final GlobalKey<FormState> formKeyUpdateDoctorPassword =
       GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyUpdateDoctorEmail = GlobalKey<FormState>();
   final Stream<DocumentSnapshot<Map<String, dynamic>>> userSnapshots =
       FirebaseFirestore.instance
           .collection(FirestoreConstants.usersCollection)
@@ -55,6 +56,7 @@ class DoctorProfileScreen extends HookConsumerWidget {
                         : '${data.get(ModelFields.prefix)} ${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
                             .trim(),
                   ),
+                  Text('Email: ${data.get(ModelFields.email)}'),
                   Text('Sex: ${data.get(ModelFields.sex)}'),
                   Text(
                       'Specialization: ${data.get(ModelFields.specialization)}'),
@@ -120,6 +122,80 @@ class DoctorProfileScreen extends HookConsumerWidget {
                           },
                           child: const Text('Change Password'),
                         ),
+                  firebaseServicesNotifier.getLoading
+                      ? loading(color: Colors.blue)
+                      : ElevatedButton(
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                genericFieldsNotifier.clearEmailField();
+                                return AlertDialog(
+                                  title: const Text('Enter New Email Address'),
+                                  content: ConstrainedBox(
+                                    constraints:
+                                        BoxConstraints(maxHeight: 200.h),
+                                    child: Form(
+                                      key: formKeyUpdateDoctorEmail,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          genericFieldsNotifier.buildEmail(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => context.pop(),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        if (formKeyUpdateDoctorEmail
+                                            .currentState!
+                                            .validate()) {
+                                          formKeyUpdateDoctorEmail.currentState
+                                              ?.save();
+                                          context.pop();
+                                          await firebaseServicesNotifier
+                                              .updateEmail(
+                                                  firebaseServicesNotifier
+                                                      .getCurrentUser!,
+                                                  genericFieldsNotifier.email)
+                                              .then(
+                                            (success) async {
+                                              if (success) {
+                                                await firebaseServicesNotifier
+                                                    .getFirebaseFirestoreService
+                                                    .updateDocument(
+                                                        {
+                                                      ModelFields.email:
+                                                          genericFieldsNotifier
+                                                              .email,
+                                                      ModelFields.modifiedAt:
+                                                          DateTime.now()
+                                                    },
+                                                        FirestoreConstants
+                                                            .usersCollection,
+                                                        firebaseServicesNotifier
+                                                            .getCurrentUser!
+                                                            .uid);
+                                              }
+                                            },
+                                          );
+                                        }
+                                      },
+                                      child: const Text('Confirm'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: const Text('Change Email Address'),
+                        )
                 ],
               ),
             );

@@ -182,6 +182,21 @@ class FirebaseServicesProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateEmail(User user, String email) async {
+    setLoading(true);
+    try {
+      await user.updateEmail(email);
+      showToast('Successfully updated email');
+      setLoading(false);
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
+
   Future<bool> sendConsultationRequest(
       Map<String, dynamic> data, String collection, String id) async {
     setLoading(true);

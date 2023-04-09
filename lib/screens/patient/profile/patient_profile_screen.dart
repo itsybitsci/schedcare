@@ -15,6 +15,7 @@ class PatientProfileScreen extends HookConsumerWidget {
   PatientProfileScreen({super.key});
   final GlobalKey<FormState> formKeyUpdatePatientPassword =
       GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyUpdatePatientEmail = GlobalKey<FormState>();
   final Stream<DocumentSnapshot<Map<String, dynamic>>> userSnapshots =
       FirebaseFirestore.instance
           .collection(FirestoreConstants.usersCollection)
@@ -57,6 +58,7 @@ class PatientProfileScreen extends HookConsumerWidget {
                         : '${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
                             .trim(),
                   ),
+                  Text('Email: ${data.get(ModelFields.email)}'),
                   Text('Age: ${data.get(ModelFields.age)}'),
                   Text('Sex: ${data.get(ModelFields.sex)}'),
                   Text('Contact Number: ${data.get(ModelFields.phoneNumber)}'),
@@ -82,7 +84,7 @@ class PatientProfileScreen extends HookConsumerWidget {
                               builder: (context) {
                                 genericFieldsNotifier.clearPasswordFields();
                                 return AlertDialog(
-                                  title: const Text('Change Password'),
+                                  title: const Text('Enter New Password'),
                                   content: StatefulBuilder(
                                     builder: (BuildContext context,
                                         StateSetter setState) {
@@ -135,6 +137,80 @@ class PatientProfileScreen extends HookConsumerWidget {
                           },
                           child: const Text('Change Password'),
                         ),
+                  firebaseServicesNotifier.getLoading
+                      ? loading(color: Colors.blue)
+                      : ElevatedButton(
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                genericFieldsNotifier.clearEmailField();
+                                return AlertDialog(
+                                  title: const Text('Enter New Email Address'),
+                                  content: ConstrainedBox(
+                                    constraints:
+                                        BoxConstraints(maxHeight: 200.h),
+                                    child: Form(
+                                      key: formKeyUpdatePatientEmail,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          genericFieldsNotifier.buildEmail(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => context.pop(),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        if (formKeyUpdatePatientEmail
+                                            .currentState!
+                                            .validate()) {
+                                          formKeyUpdatePatientEmail.currentState
+                                              ?.save();
+                                          context.pop();
+                                          await firebaseServicesNotifier
+                                              .updateEmail(
+                                                  firebaseServicesNotifier
+                                                      .getCurrentUser!,
+                                                  genericFieldsNotifier.email)
+                                              .then(
+                                            (success) async {
+                                              if (success) {
+                                                await firebaseServicesNotifier
+                                                    .getFirebaseFirestoreService
+                                                    .updateDocument(
+                                                        {
+                                                      ModelFields.email:
+                                                          genericFieldsNotifier
+                                                              .email,
+                                                      ModelFields.modifiedAt:
+                                                          DateTime.now()
+                                                    },
+                                                        FirestoreConstants
+                                                            .usersCollection,
+                                                        firebaseServicesNotifier
+                                                            .getCurrentUser!
+                                                            .uid);
+                                              }
+                                            },
+                                          );
+                                        }
+                                      },
+                                      child: const Text('Confirm'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: const Text('Change Email Address'),
+                        )
                 ],
               ),
             );

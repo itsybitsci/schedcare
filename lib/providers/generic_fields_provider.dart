@@ -134,6 +134,10 @@ class GenericFieldsProvider extends ChangeNotifier {
     _repeatPasswordController.text = '';
   }
 
+  void clearEmailField() {
+    _emailController.text = '';
+  }
+
   Widget buildPrefix() => TextFormField(
         keyboardType: TextInputType.name,
         controller: _prefixController,
