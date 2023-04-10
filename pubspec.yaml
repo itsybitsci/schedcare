@@ -57,6 +57,11 @@ dependencies:
   firebase_messaging: ^14.4.0
   flutter_local_notifications: ^13.0.0
   http: ^0.13.5
+  videosdk: ^1.0.13
+  camera: ^0.10.3+2
+  flutter_svg: ^2.0.4
+  touch_ripple_effect: ^2.2.4
+  lottie: ^2.3.2
 
 flutter_icons:
   android: true
@@ -93,6 +98,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/
+    - assets/video_sdk/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

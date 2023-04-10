@@ -21,6 +21,16 @@ class AppConstants {
   static const String fcmKey =
       'AAAAN4HTnQg:APA91bHKKsyn8br_UGidPC-zwuptWNDulQ_Hkx6rf7gwxO-ZPprA1WFbcZuDe8lRIcaYtq9Sd58VoqKdbFwHLKVRNTr3HFPCNDCVN5N_PsqadBpJJlvWEv3va_fzuI47GV-Oed1hJ9Aq';
 
+  static const String videoSdkEndpoint = 'https://api.videosdk.live/v2';
+
+  //Production
+  // static const String videoSdkToken =
+  //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI1MTg4NTAxMS01NGNiLTRlZDgtYWRkYi01MDFmZDVmNTViNjkiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTY4MTA1Mzk1NywiZXhwIjoxODM4ODQxOTU3fQ.LBk-ExQEb9DHabYjF9d7mBiacME6GanWfudNVQzCKWM';
+
+  //Staging
+  static const String videoSdkToken =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI0Y2FmNmQ5MC1mMWNlLTRkMTUtYWZmMS1iMzgyZDU3NDM4NzEiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTY4MTE1MjAzOSwiZXhwIjoxODM4OTQwMDM5fQ.1wSCruxqJ1ZRd_S8AqaRCKhB8rCTSHwOjTxQJ6MnPNQ';
+
   static const String patient = 'Patient';
   static const String doctor = 'Doctor';
   static const String consultationRequest = 'ConsultationRequest';
@@ -119,6 +129,8 @@ class RouteNames {
   static const String editDoctorProfile = 'edit_doctor_profile';
   static const String doctorViewConsultationRequest =
       'doctor_view_consultation_request';
+
+  static const String joinScreen = 'join_screen';
 }
 
 //Route Paths
@@ -143,6 +155,8 @@ class RoutePaths {
   static const String editDoctorProfile = '/edit_doctor_profile';
   static const String doctorViewConsultationRequest =
       '/doctor_view_consultation_request';
+
+  static const String joinScreen = '/join_screen';
 }
 
 class ModelFields {

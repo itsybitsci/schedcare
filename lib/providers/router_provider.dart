@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
+import 'package:schedcare/plugins/videosdk_plugin/screens/join_screen.dart';
 import 'package:schedcare/screens/common/approval_screen.dart';
 import 'package:schedcare/screens/common/auth_wrapper.dart';
 import 'package:schedcare/screens/common/login_screen.dart';
@@ -138,6 +139,17 @@ class RouterNotifier extends ChangeNotifier {
 
             return DoctorViewConsultationRequestScreen(
               consultationRequest: consultationRequest,
+              patient: patient,
+            );
+          },
+        ),
+        GoRoute(
+          name: RouteNames.joinScreen,
+          path: RoutePaths.joinScreen,
+          builder: (context, state) {
+            Patient patient = state.extra! as Patient;
+
+            return JoinScreen(
               patient: patient,
             );
           },

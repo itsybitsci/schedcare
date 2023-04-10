@@ -97,11 +97,21 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                                 child: Text(consultationRequest
                                     .consultationRequestDoctorTitle),
                               ),
-                              trailing: Text(
+                              leading: Text(
                                 isLapsed
                                     ? AppConstants.lapsed
                                     : consultationRequest.status,
                                 style: TextStyle(fontSize: 10.sp),
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(
+                                  Icons.call,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () {
+                                  context.push(RoutePaths.joinScreen,
+                                      extra: patient);
+                                },
                               ),
                               subtitle: Center(
                                 child: Text(
