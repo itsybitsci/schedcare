@@ -96,13 +96,11 @@ class RouterNotifier extends ChangeNotifier {
             PatientViewConsultationRequestObject
                 patientViewConsultationRequestObject =
                 state.extra! as PatientViewConsultationRequestObject;
-            ConsultationRequest consultationRequest =
-                patientViewConsultationRequestObject.consultationRequest;
-            Doctor doctor = patientViewConsultationRequestObject.doctor;
 
             return PatientViewConsultationRequestScreen(
-              consultationRequest: consultationRequest,
-              doctor: doctor,
+              consultationRequest:
+                  patientViewConsultationRequestObject.consultationRequest,
+              doctor: patientViewConsultationRequestObject.doctor,
             );
           },
         ),
@@ -133,13 +131,11 @@ class RouterNotifier extends ChangeNotifier {
             DoctorViewConsultationRequestObject
                 doctorViewConsultationRequestObject =
                 state.extra! as DoctorViewConsultationRequestObject;
-            ConsultationRequest consultationRequest =
-                doctorViewConsultationRequestObject.consultationRequest;
-            Patient patient = doctorViewConsultationRequestObject.patient;
 
             return DoctorViewConsultationRequestScreen(
-              consultationRequest: consultationRequest,
-              patient: patient,
+              consultationRequest:
+                  doctorViewConsultationRequestObject.consultationRequest,
+              patient: doctorViewConsultationRequestObject.patient,
             );
           },
         ),
@@ -148,13 +144,11 @@ class RouterNotifier extends ChangeNotifier {
           path: RoutePaths.joinScreen,
           builder: (context, state) {
             MeetingPayload meetingPayload = state.extra! as MeetingPayload;
-            ConsultationRequest consultationRequest =
-                meetingPayload.consultationRequest;
-            String role = meetingPayload.role;
 
             return JoinScreen(
-              consultationRequest: consultationRequest,
-              role: role,
+              consultationRequest: meetingPayload.consultationRequest,
+              role: meetingPayload.role,
+              meetingId: meetingPayload.meetingId,
             );
           },
         ),

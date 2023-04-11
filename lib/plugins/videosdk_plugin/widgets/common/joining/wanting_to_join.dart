@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
+import 'package:schedcare/utilities/constants.dart';
 
 class WaitingToJoin extends StatelessWidget {
-  const WaitingToJoin({Key? key}) : super(key: key);
+  final String role;
+  const WaitingToJoin({super.key, required this.role});
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +18,11 @@ class WaitingToJoin extends StatelessWidget {
           children: [
             Lottie.asset("assets/video_sdk/joining_lottie.json", width: 100),
             const VerticalSpacer(20),
-            const Text("Creating a Room",
-                style: TextStyle(
+            Text(
+                role != AppConstants.patient
+                    ? "Creating a Room"
+                    : 'Joining Room',
+                style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                     fontWeight: FontWeight.w500)),

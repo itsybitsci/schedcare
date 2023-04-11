@@ -9,7 +9,7 @@ import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/plugins/videosdk_plugin/screens/one_to_one_meeting.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/api.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
-import 'package:schedcare/plugins/videosdk_plugin/widgets/common/joining_details/joining_details.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
@@ -17,8 +17,12 @@ import 'package:schedcare/utilities/helpers.dart';
 class JoinScreen extends ConsumerStatefulWidget {
   final ConsultationRequest consultationRequest;
   final String role;
+  final String? meetingId;
   const JoinScreen(
-      {super.key, required this.consultationRequest, required this.role});
+      {super.key,
+      required this.consultationRequest,
+      required this.role,
+      this.meetingId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
@@ -27,8 +31,6 @@ class JoinScreen extends ConsumerStatefulWidget {
 }
 
 class _JoinScreenState extends ConsumerState<JoinScreen> {
-  String _token = "";
-
   // Control Status
   bool isMicOn = false;
   bool isCameraOn = false;
@@ -39,6 +41,8 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
   // Camera Controller
   CameraController? cameraController;
 
+  String displayName = "";
+
   @override
   void initState() {
     super.initState();
@@ -47,12 +51,8 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      const token = AppConstants.videoSdkToken;
-      setState(() => _token = token);
-    });
 
-    if (widget.role.toLowerCase() == AppConstants.patient) {
+    if (widget.role == AppConstants.patient) {
       isJoinMeetingSelected = true;
       isCreateMeetingSelected = false;
     } else {
@@ -100,8 +100,8 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
     });
   }
 
-  void _onClickMeetingJoin(
-      firebaseServicesNotifier, meetingId, callType, displayName) async {
+  void _onClickMeetingJoin(FirebaseServicesProvider firebaseServicesNotifier,
+      String? meetingId, String callType, String displayName) async {
     cameraController?.dispose();
     cameraController = null;
     if (displayName.toString().isEmpty) {
@@ -119,7 +119,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
       callType,
       displayName) async {
     try {
-      var meetingID = await createMeeting(_token);
+      var meetingID = await createMeeting(AppConstants.videoSdkToken);
       await firebaseServicesNotifier
           .setMeetingId(widget.consultationRequest.id, meetingID)
           .then(
@@ -130,7 +130,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
               MaterialPageRoute(
                 builder: (context) => OneToOneMeetingScreen(
                   consultationRequest: widget.consultationRequest,
-                  token: _token,
+                  token: AppConstants.videoSdkToken,
                   meetingId: meetingID,
                   role: widget.role,
                   displayName: displayName,
@@ -147,20 +147,21 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
     }
   }
 
-  Future<void> joinMeeting(
-      firebaseServicesNotifier, callType, displayName, meetingId) async {
-    if (meetingId.isEmpty) {
+  Future<void> joinMeeting(FirebaseServicesProvider firebaseServicesNotifier,
+      String callType, String displayName, String? meetingId) async {
+    if (meetingId == null) {
       showToast('Please enter Valid Meeting ID');
       return;
     }
-    var validMeeting = await validateMeeting(_token, meetingId);
+    var validMeeting =
+        await validateMeeting(AppConstants.videoSdkToken, meetingId);
     if (validMeeting && context.mounted) {
       await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => OneToOneMeetingScreen(
             consultationRequest: widget.consultationRequest,
-            token: _token,
+            token: AppConstants.videoSdkToken,
             meetingId: meetingId,
             role: widget.role,
             displayName: displayName,
@@ -338,20 +339,65 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              if (isJoinMeetingSelected != null &&
-                                  isCreateMeetingSelected != null)
-                                JoiningDetails(
-                                  consultationRequest:
-                                      widget.consultationRequest,
-                                  isCreateMeeting: isCreateMeetingSelected!,
-                                  onClickMeetingJoin:
-                                      (meetingId, callType, displayName) =>
-                                          _onClickMeetingJoin(
-                                              firebaseServicesNotifier,
-                                              meetingId,
-                                              callType,
-                                              displayName),
+                              // if (isJoinMeetingSelected != null &&
+                              //     isCreateMeetingSelected != null)
+                              // JoiningDetails(
+                              //   consultationRequest:
+                              //       widget.consultationRequest,
+                              //   isCreateMeeting: isCreateMeetingSelected!,
+                              //   meetingId: widget.customMeetingId,
+                              //   onClickMeetingJoin: (String meetingId,
+                              //           String callType,
+                              //           String displayName) =>
+                              //       _onClickMeetingJoin(
+                              //           firebaseServicesNotifier,
+                              //           meetingId,
+                              //           callType,
+                              //           displayName),
+                              // ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: ColorConstants.black750),
+                                child: TextField(
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  onChanged: ((value) => displayName = value),
+                                  decoration: const InputDecoration(
+                                      hintText: "Enter display name",
+                                      hintStyle: TextStyle(
+                                        color: ColorConstants.textGray,
+                                      ),
+                                      border: InputBorder.none),
                                 ),
+                              ),
+                              const VerticalSpacer(16),
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                color: ColorConstants.purple,
+                                child: Text(
+                                    widget.role == AppConstants.patient
+                                        ? "Join Meeting"
+                                        : 'Create Meeting',
+                                    style: const TextStyle(fontSize: 16)),
+                                onPressed: () {
+                                  if (displayName.trim().isEmpty) {
+                                    showToast('Please enter name');
+                                    return;
+                                  }
+
+                                  _onClickMeetingJoin(
+                                      firebaseServicesNotifier,
+                                      widget.meetingId,
+                                      "ONE_TO_ONE",
+                                      displayName.trim());
+                                },
+                              ),
                             ],
                           ),
                         )
@@ -371,9 +417,11 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
 class MeetingPayload {
   final ConsultationRequest consultationRequest;
   final String role;
+  final String? meetingId;
 
   MeetingPayload({
     required this.consultationRequest,
     required this.role,
+    this.meetingId,
   });
 }

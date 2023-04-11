@@ -118,7 +118,7 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                                 icon: consultationRequest.consultationType ==
                                         AppConstants.teleconsultation
                                     ? Icon(
-                                        Icons.call,
+                                        Icons.video_call,
                                         color: consultationRequest.status ==
                                                     AppConstants.approved &&
                                                 isWithinSchedule(

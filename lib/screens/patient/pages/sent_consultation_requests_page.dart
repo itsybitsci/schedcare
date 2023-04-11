@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
+import 'package:schedcare/plugins/videosdk_plugin/screens/join_screen.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
@@ -77,36 +78,98 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                           if (doctorSnapshot.hasData) {
                             Doctor doctor =
                                 Doctor.fromSnapshot(doctorSnapshot.data!);
-                            return ListTile(
-                              onTap: () => (consultationRequest.status !=
-                                          AppConstants.rejected) &&
-                                      !isLapsed
-                                  ? context.push(
-                                      RoutePaths.patientViewConsultationRequest,
-                                      extra:
-                                          PatientViewConsultationRequestObject(
-                                              doctor: doctor,
+
+                            return StreamBuilder(
+                              stream: consultationRequestsCollectionReference
+                                  .doc(consultationRequest.id)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<
+                                          DocumentSnapshot<
+                                              Map<String, dynamic>>>
+                                      snapshot) {
+                                if (snapshot.hasData) {
+                                  String? meetingId =
+                                      snapshot.data!.get(ModelFields.meetingId);
+                                  return ListTile(
+                                    onTap: () => (consultationRequest.status !=
+                                                AppConstants.rejected) &&
+                                            !isLapsed
+                                        ? context.push(
+                                            RoutePaths
+                                                .patientViewConsultationRequest,
+                                            extra:
+                                                PatientViewConsultationRequestObject(
+                                                    doctor: doctor,
+                                                    consultationRequest:
+                                                        consultationRequest),
+                                          )
+                                        : null,
+                                    title: Center(
+                                      child: Text(consultationRequest
+                                          .consultationRequestPatientTitle),
+                                    ),
+                                    leading: Text(
+                                      isLapsed
+                                          ? AppConstants.lapsed
+                                          : consultationRequest.status,
+                                      style: TextStyle(
+                                          fontSize: 10.sp,
+                                          color: isLapsed
+                                              ? Colors.black54
+                                              : consultationRequest.status ==
+                                                      AppConstants.rejected
+                                                  ? Colors.red
+                                                  : consultationRequest
+                                                              .status ==
+                                                          AppConstants.approved
+                                                      ? Colors.green
+                                                      : Colors.orange),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: consultationRequest
+                                                  .consultationType ==
+                                              AppConstants.teleconsultation
+                                          ? Icon(
+                                              Icons.video_call,
+                                              color: meetingId != null
+                                                  ? Colors.red
+                                                  : Colors.black54,
+                                            )
+                                          : Icon(
+                                              Icons.person_pin,
+                                              color: meetingId != null
+                                                  ? Colors.red
+                                                  : Colors.black54,
+                                            ),
+                                      onPressed: () {
+                                        if (meetingId != null) {
+                                          context.push(
+                                            RoutePaths.joinScreen,
+                                            extra: MeetingPayload(
+                                              meetingId: meetingId,
                                               consultationRequest:
-                                                  consultationRequest),
-                                    )
-                                  : null,
-                              title: Center(
-                                child: Text(consultationRequest
-                                    .consultationRequestPatientTitle),
-                              ),
-                              trailing: Text(
-                                isLapsed
-                                    ? AppConstants.lapsed
-                                    : consultationRequest.status,
-                                style: TextStyle(fontSize: 10.sp),
-                              ),
-                              subtitle: Center(
-                                child: Text(
-                                    DateFormat('MMMM d, y - hh:mm a').format(
-                                        consultationRequest
-                                            .consultationDateTime),
-                                    style: TextStyle(fontSize: 12.sp)),
-                              ),
+                                                  consultationRequest,
+                                              role: AppConstants.patient,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    subtitle: Center(
+                                      child: Text(
+                                        "${DateFormat('MMMM d, y  (hh:mm a - ').format(consultationRequest.consultationDateTime)} ${DateFormat(' hh:mm a) ').format(consultationRequest.consultationDateTime.add(
+                                          const Duration(
+                                              hours: AppConstants
+                                                  .defaultMeetingDuration),
+                                        ))}",
+                                        style: TextStyle(fontSize: 12.sp),
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return shimmerListTile();
+                              },
                             );
                           }
 

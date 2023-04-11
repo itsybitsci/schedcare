@@ -28,7 +28,9 @@ bool checkIfLapsed(ConsultationRequest consultationRequest) =>
     consultationRequest.status == AppConstants.pending &&
     DateTime.now().isAfter(consultationRequest.consultationDateTime);
 
-bool isWithinSchedule(DateTime start) =>
-    DateTime.now().isAfter(start.subtract(const Duration(minutes: 5))) &&
-    DateTime.now().isBefore(
-        start.add(const Duration(hours: AppConstants.defaultMeetingDuration)));
+bool isWithinSchedule(DateTime dateTime) {
+  return DateTime.now()
+          .isAfter(dateTime.subtract(const Duration(minutes: 5))) &&
+      DateTime.now().isBefore(dateTime
+          .add(const Duration(hours: AppConstants.defaultMeetingDuration)));
+}

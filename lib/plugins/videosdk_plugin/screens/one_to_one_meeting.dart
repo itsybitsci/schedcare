@@ -272,7 +272,9 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
               ? ParticipantLimitReached(
                   meeting: meeting,
                 )
-              : const WaitingToJoin(),
+              : WaitingToJoin(
+                  role: widget.role,
+                ),
     );
   }
 
