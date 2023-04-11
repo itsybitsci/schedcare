@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/plugins/videosdk_plugin/screens/one_to_one_meeting.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/api.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
@@ -14,8 +13,8 @@ import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
 class JoinScreen extends ConsumerStatefulWidget {
-  final Patient patient;
-  const JoinScreen({super.key, required this.patient});
+  final String role;
+  const JoinScreen({super.key, required this.role});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
@@ -49,7 +48,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
       setState(() => _token = token);
     });
 
-    if (widget.patient.role.toLowerCase() == AppConstants.patient) {
+    if (widget.role.toLowerCase() == AppConstants.patient) {
       isJoinMeetingSelected = true;
       isCreateMeetingSelected = false;
     } else {
@@ -120,6 +119,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
             builder: (context) => OneToOneMeetingScreen(
               token: _token,
               meetingId: meetingID,
+              role: widget.role,
               displayName: displayName,
               micEnabled: isMicOn,
               camEnabled: isCameraOn,
@@ -145,6 +145,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
           builder: (_) => OneToOneMeetingScreen(
             token: _token,
             meetingId: meetingId,
+            role: widget.role,
             displayName: displayName,
             micEnabled: isMicOn,
             camEnabled: isCameraOn,

@@ -17,12 +17,13 @@ import 'package:videosdk/videosdk.dart';
 
 // Meeting Screen
 class OneToOneMeetingScreen extends ConsumerStatefulWidget {
-  final String meetingId, token, displayName;
+  final String meetingId, token, role, displayName;
   final bool micEnabled, camEnabled, chatEnabled;
   const OneToOneMeetingScreen({
     Key? key,
     required this.meetingId,
     required this.token,
+    required this.role,
     required this.displayName,
     this.micEnabled = true,
     this.camEnabled = true,
@@ -128,6 +129,7 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
                           isMicEnabled: audioStream != null,
                           isCamEnabled: videoStream != null,
                           isScreenShareEnabled: shareStream != null,
+                          role: widget.role,
                           recordingState: recordingState,
                           // Called when Call End button is pressed
                           onCallEndButtonPressed: () {
@@ -172,7 +174,12 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
                               ),
                               items: outputDevice.map((e) {
                                 return PopupMenuItem(
-                                    value: e, child: Text(e.label));
+                                    value: e,
+                                    child: Text(
+                                      e.label,
+                                      style: const TextStyle(
+                                          color: ColorConstants.black200),
+                                    ));
                               }).toList(),
                               elevation: 8.0,
                             ).then((value) {
@@ -233,9 +240,6 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
                             } else if (option == "participants") {
                               showModalBottomSheet(
                                 context: context,
-                                // constraints: BoxConstraints(
-                                //     maxHeight: MediaQuery.of(context).size.height -
-                                //         statusbarHeight),
                                 isScrollControlled: false,
                                 builder: (context) =>
                                     ParticipantList(meeting: meeting),
@@ -366,8 +370,6 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
     meeting.pubSub.subscribe("CHAT", (message) {
       if (message.senderId != meeting.localParticipant.id) {
         if (mounted) {
-          // print("navigator key");
-          // print(navigatorKey.currentWidget?.key.toString());
           if (showChatSnackbar) {
             showToast("${message.senderName}: ${message.message}");
           }

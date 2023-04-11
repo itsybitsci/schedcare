@@ -13,7 +13,7 @@ class ParticipantView extends StatelessWidget {
   final bool isLocalScreenShare;
   final bool isScreenShare;
   final double avatarTextSize;
-  final Function() onStopScreeenSharePressed;
+  final Function() onStopScreenSharePressed;
   const ParticipantView(
       {Key? key,
       required this.stream,
@@ -23,7 +23,7 @@ class ParticipantView extends StatelessWidget {
       this.isLocalScreenShare = false,
       this.avatarTextSize = 50,
       required this.isScreenShare,
-      required this.onStopScreeenSharePressed})
+      required this.onStopScreenSharePressed})
       : super(key: key);
 
   @override
@@ -63,33 +63,43 @@ class ParticipantView extends StatelessWidget {
                             const Text(
                               "You are presenting to everyone",
                               style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w600),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: ColorConstants.black200,
+                              ),
                             ),
                             const VerticalSpacer(20),
                             MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 30),
-                                color: ColorConstants.purple,
-                                onPressed: onStopScreeenSharePressed,
-                                child: const Text("Stop Presenting",
-                                    style: TextStyle(fontSize: 16)))
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 30),
+                              color: ColorConstants.purple,
+                              onPressed: onStopScreenSharePressed,
+                              child: const Text(
+                                "Stop Presenting",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: ColorConstants.black200),
+                              ),
+                            )
                           ])),
         if (!isMicOn)
           Positioned(
             top: 8,
             right: 8,
             child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: ColorConstants.black700,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Icon(
-                  Icons.mic_off,
-                  size: avatarTextSize / 2,
-                )),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: ColorConstants.black700,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Icon(
+                Icons.mic_off,
+                size: avatarTextSize / 2,
+                color: ColorConstants.black200,
+              ),
+            ),
           ),
         if (isScreenShare)
           Positioned(
@@ -101,9 +111,12 @@ class ParticipantView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 color: ColorConstants.black700,
               ),
-              child: Text(isScreenShare
-                  ? "${isLocalScreenShare ? "You" : participant.displayName} is presenting"
-                  : participant.displayName),
+              child: Text(
+                isScreenShare
+                    ? "${participant.displayName} is presenting"
+                    : participant.displayName,
+                style: const TextStyle(color: ColorConstants.black200),
+              ),
             ),
           ),
         Positioned(top: 4, left: 4, child: CallStats(participant: participant)),

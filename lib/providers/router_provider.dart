@@ -147,10 +147,10 @@ class RouterNotifier extends ChangeNotifier {
           name: RouteNames.joinScreen,
           path: RoutePaths.joinScreen,
           builder: (context, state) {
-            Patient patient = state.extra! as Patient;
+            String role = state.extra! as String;
 
             return JoinScreen(
-              patient: patient,
+              role: role,
             );
           },
         ),

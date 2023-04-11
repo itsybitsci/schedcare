@@ -110,7 +110,7 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                                 ),
                                 onPressed: () {
                                   context.push(RoutePaths.joinScreen,
-                                      extra: patient);
+                                      extra: AppConstants.doctor);
                                 },
                               ),
                               subtitle: Center(

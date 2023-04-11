@@ -73,6 +73,7 @@ class MeetingAppBarState extends State<MeetingAppBar> {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
+                            color: ColorConstants.black200,
                           ),
                         ),
                         GestureDetector(
@@ -81,6 +82,7 @@ class MeetingAppBarState extends State<MeetingAppBar> {
                             child: Icon(
                               Icons.copy,
                               size: 16,
+                              color: ColorConstants.black200,
                             ),
                           ),
                           onTap: () {
@@ -99,7 +101,7 @@ class MeetingAppBarState extends State<MeetingAppBar> {
                       style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: ColorConstants.black400),
+                          color: ColorConstants.black200),
                     )
                   ],
                 ),

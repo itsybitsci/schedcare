@@ -75,7 +75,7 @@ class _OneToOneMeetingContainerState extends State<OneToOneMeetingContainer> {
                 isMicOn: remoteParticipant != null
                     ? remoteAudioStream != null
                     : localAudioStream != null,
-                onStopScreeenSharePressed: () =>
+                onStopScreenSharePressed: () =>
                     widget.meeting.disableScreenShare(),
                 participant: remoteParticipant != null
                     ? remoteParticipant!
@@ -121,7 +121,7 @@ class _OneToOneMeetingContainerState extends State<OneToOneMeetingContainer> {
                                 remoteShareStream == null) ||
                             (remoteAudioStream != null &&
                                 remoteShareStream != null),
-                        onStopScreeenSharePressed: () =>
+                        onStopScreenSharePressed: () =>
                             widget.meeting.disableScreenShare(),
                         participant: remoteShareStream != null
                             ? remoteParticipant!

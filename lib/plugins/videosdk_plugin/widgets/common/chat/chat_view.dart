@@ -53,12 +53,18 @@ class _ChatViewState extends State<ChatView> {
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
                     "Chat",
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        color: ColorConstants.black200),
                   ),
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.close),
+                icon: const Icon(
+                  Icons.close,
+                  color: ColorConstants.black200,
+                ),
                 onPressed: () => Navigator.pop(context),
               ),
             ],
@@ -104,6 +110,7 @@ class _ChatViewState extends State<ChatView> {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
+                          color: ColorConstants.black200,
                         ),
                         controller: msgTextController,
                         onChanged: (value) => setState(() {
@@ -128,16 +135,20 @@ class _ChatViewState extends State<ChatView> {
                               )
                               .then((value) => msgTextController.clear()),
                       child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 8),
-                          width: 45,
-                          margin: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: msgTextController.text.trim().isEmpty
-                                  ? null
-                                  : ColorConstants.purple,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: const Icon(Icons.send)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 8),
+                        width: 45,
+                        margin: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: msgTextController.text.trim().isEmpty
+                                ? null
+                                : ColorConstants.purple,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: const Icon(
+                          Icons.send,
+                          color: ColorConstants.black200,
+                        ),
+                      ),
                     )
                   ],
                 ),
