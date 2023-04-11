@@ -10,6 +10,7 @@ import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
+import 'package:schedcare/utilities/helpers.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
@@ -66,8 +67,7 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                           consultationRequestCollectionSnapshot.docs[index]
                               .data();
 
-                      final bool isLapsed = DateTime.now()
-                          .isAfter(consultationRequest.consultationDateTime);
+                      final bool isLapsed = checkIfLapsed(consultationRequest);
 
                       return StreamBuilder(
                         stream: usersCollectionReference
