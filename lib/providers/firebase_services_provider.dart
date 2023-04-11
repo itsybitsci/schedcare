@@ -290,6 +290,25 @@ class FirebaseServicesProvider extends ChangeNotifier {
       throw Exception(e.code);
     }
   }
+
+  Future<bool> setMeetingId(
+      String consultationRequestId, String meetingId) async {
+    setLoading(true);
+    try {
+      await _firebaseFirestoreService.updateDocument({
+        ModelFields.meetingId: meetingId,
+        ModelFields.modifiedAt: DateTime.now(),
+      }, FirestoreConstants.consultationRequestsCollection,
+          consultationRequestId);
+      setLoading(false);
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
 }
 
 final firebaseServicesProvider =

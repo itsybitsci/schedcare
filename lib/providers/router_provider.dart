@@ -147,9 +147,13 @@ class RouterNotifier extends ChangeNotifier {
           name: RouteNames.joinScreen,
           path: RoutePaths.joinScreen,
           builder: (context, state) {
-            String role = state.extra! as String;
+            MeetingPayload meetingPayload = state.extra! as MeetingPayload;
+            ConsultationRequest consultationRequest =
+                meetingPayload.consultationRequest;
+            String role = meetingPayload.role;
 
             return JoinScreen(
+              consultationRequest: consultationRequest,
               role: role,
             );
           },

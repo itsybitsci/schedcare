@@ -30,8 +30,6 @@ class DoctorSchedulesPage extends HookConsumerWidget {
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasData) {
           List<Meeting> meetings = snapshot.data!.docs
-              .where((snapshot) => DateTime.now().isBefore(
-                  snapshot.get(ModelFields.consultationDateTime).toDate()))
               .map(
                 (data) => ConsultationRequest.fromSnapshot(data)
                     .toMeeting(type: AppConstants.doctor),

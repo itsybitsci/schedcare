@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/app_bar/meeting_app_bar.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/chat/chat_view.dart';
@@ -12,6 +13,8 @@ import 'package:schedcare/plugins/videosdk_plugin/widgets/common/joining/wanting
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/meeting_controls/meeting_action_bar.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/participant/participant_list.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/one_to_one/one_to_one_meeting_container.dart';
+import 'package:schedcare/providers/firebase_services_provider.dart';
+import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 import 'package:videosdk/videosdk.dart';
 
@@ -19,12 +22,14 @@ import 'package:videosdk/videosdk.dart';
 class OneToOneMeetingScreen extends ConsumerStatefulWidget {
   final String meetingId, token, role, displayName;
   final bool micEnabled, camEnabled, chatEnabled;
+  final ConsultationRequest consultationRequest;
   const OneToOneMeetingScreen({
     Key? key,
     required this.meetingId,
     required this.token,
     required this.role,
     required this.displayName,
+    required this.consultationRequest,
     this.micEnabled = true,
     this.camEnabled = true,
     this.chatEnabled = true,
@@ -93,6 +98,7 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final firebaseServiceNotifier = ref.watch(firebaseServicesProvider);
     final statusBarHeight = MediaQuery.of(context).padding.top;
 
     return WillPopScope(
@@ -132,8 +138,19 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
                           role: widget.role,
                           recordingState: recordingState,
                           // Called when Call End button is pressed
-                          onCallEndButtonPressed: () {
-                            meeting.end();
+                          onCallEndButtonPressed: () async {
+                            await firebaseServiceNotifier
+                                .getFirebaseFirestoreService
+                                .updateDocument(
+                                    {
+                                  ModelFields.meetingId: null,
+                                  ModelFields.modifiedAt: DateTime.now()
+                                },
+                                    FirestoreConstants
+                                        .consultationRequestsCollection,
+                                    widget.consultationRequest.id).then(
+                              (_) => meeting.end(),
+                            );
                           },
 
                           onCallLeaveButtonPressed: () {

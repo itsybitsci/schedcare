@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
+import 'package:schedcare/plugins/videosdk_plugin/screens/join_screen.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
@@ -101,24 +102,84 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                                 isLapsed
                                     ? AppConstants.lapsed
                                     : consultationRequest.status,
-                                style: TextStyle(fontSize: 10.sp),
+                                style: TextStyle(
+                                    fontSize: 10.sp,
+                                    color: isLapsed
+                                        ? Colors.black54
+                                        : consultationRequest.status ==
+                                                AppConstants.rejected
+                                            ? Colors.red
+                                            : consultationRequest.status ==
+                                                    AppConstants.approved
+                                                ? Colors.green
+                                                : Colors.orange),
                               ),
                               trailing: IconButton(
-                                icon: const Icon(
-                                  Icons.call,
-                                  color: Colors.red,
-                                ),
+                                icon: consultationRequest.consultationType ==
+                                        AppConstants.teleconsultation
+                                    ? Icon(
+                                        Icons.call,
+                                        color: consultationRequest.status ==
+                                                    AppConstants.approved &&
+                                                isWithinSchedule(
+                                                    consultationRequest
+                                                        .consultationDateTime)
+                                            ? Colors.red
+                                            : Colors.black54,
+                                      )
+                                    : Icon(
+                                        Icons.person_pin,
+                                        color: consultationRequest.status ==
+                                                    AppConstants.approved &&
+                                                isWithinSchedule(
+                                                    consultationRequest
+                                                        .consultationDateTime)
+                                            ? Colors.red
+                                            : Colors.black54,
+                                      ),
                                 onPressed: () {
-                                  context.push(RoutePaths.joinScreen,
-                                      extra: AppConstants.doctor);
+                                  if (consultationRequest.status ==
+                                          AppConstants.approved &&
+                                      isWithinSchedule(consultationRequest
+                                          .consultationDateTime)) {
+                                    context.push(
+                                      RoutePaths.joinScreen,
+                                      extra: MeetingPayload(
+                                          consultationRequest:
+                                              consultationRequest,
+                                          role: AppConstants.doctor),
+                                    );
+                                  } else {
+                                    isLapsed
+                                        ? showToast(
+                                            Prompts.unableToStartLapsedMeeting)
+                                        : consultationRequest.status ==
+                                                AppConstants.rejected
+                                            ? showToast(Prompts
+                                                .unableToStartRejectedMeeting)
+                                            : consultationRequest.status ==
+                                                    AppConstants.pending
+                                                ? showToast(Prompts
+                                                    .unableToStartPendingMeeting)
+                                                : DateTime.now().isAfter(
+                                                        consultationRequest
+                                                            .consultationDateTime)
+                                                    ? showToast(Prompts
+                                                        .unableToStartMeetingInThePast)
+                                                    : showToast(Prompts
+                                                        .unableToStartApprovedMeeting);
+                                  }
                                 },
                               ),
                               subtitle: Center(
                                 child: Text(
-                                    DateFormat('MMMM d, y - hh:mm a').format(
-                                        consultationRequest
-                                            .consultationDateTime),
-                                    style: TextStyle(fontSize: 12.sp)),
+                                  "${DateFormat('MMMM d, y  (hh:mm a - ').format(consultationRequest.consultationDateTime)} ${DateFormat(' hh:mm a) ').format(consultationRequest.consultationDateTime.add(
+                                    const Duration(
+                                        hours: AppConstants
+                                            .defaultMeetingDuration),
+                                  ))}",
+                                  style: TextStyle(fontSize: 12.sp),
+                                ),
                               ),
                             );
                           }

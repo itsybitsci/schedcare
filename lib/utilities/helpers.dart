@@ -27,3 +27,8 @@ bool isOverlapping(List<DateTime> consultationRequestStartTimes,
 bool checkIfLapsed(ConsultationRequest consultationRequest) =>
     consultationRequest.status == AppConstants.pending &&
     DateTime.now().isAfter(consultationRequest.consultationDateTime);
+
+bool isWithinSchedule(DateTime start) =>
+    DateTime.now().isAfter(start.subtract(const Duration(minutes: 5))) &&
+    DateTime.now().isBefore(
+        start.add(const Duration(hours: AppConstants.defaultMeetingDuration)));

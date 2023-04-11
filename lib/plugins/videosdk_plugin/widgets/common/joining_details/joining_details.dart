@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
 class JoiningDetails extends StatefulWidget {
+  final ConsultationRequest consultationRequest;
   final bool isCreateMeeting;
   final Function onClickMeetingJoin;
 
   const JoiningDetails(
       {Key? key,
+      required this.consultationRequest,
       required this.isCreateMeeting,
       required this.onClickMeetingJoin})
       : super(key: key);

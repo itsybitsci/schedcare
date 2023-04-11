@@ -11,6 +11,16 @@ class Prompts {
   static const String overlappingSchedule =
       'You already have a consultation request overlapping at this time.';
   static const String confirmSigningOut = 'Are you sure you want to sign out?';
+  static const String unableToStartApprovedMeeting =
+      'Meeting cannot be started until before 5 minutes of the consultation schedule.';
+  static const String unableToStartMeetingInThePast =
+      'Meeting cannot be started for consultation requests scheduled in the past.';
+  static const String unableToStartRejectedMeeting =
+      'Meeting cannot be started for rejected consultation requests.';
+  static const String unableToStartPendingMeeting =
+      'Meeting cannot be started for pending consultation requests.';
+  static const String unableToStartLapsedMeeting =
+      'Meeting cannot be started for lapsed consultation requests.';
   static const String yes = 'Yes';
   static const String no = 'No';
 }
