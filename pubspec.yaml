@@ -62,6 +62,7 @@ dependencies:
   flutter_svg: ^2.0.4
   touch_ripple_effect: ^2.2.4
   lottie: ^2.3.2
+  cloud_functions: ^4.1.0
 
 flutter_icons:
   android: true
