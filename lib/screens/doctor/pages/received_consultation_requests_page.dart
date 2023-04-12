@@ -77,10 +77,10 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                         builder: (BuildContext context,
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
-                                doctorSnapshot) {
-                          if (doctorSnapshot.hasData) {
+                                patientSnapshot) {
+                          if (patientSnapshot.hasData) {
                             Patient patient =
-                                Patient.fromSnapshot(doctorSnapshot.data!);
+                                Patient.fromSnapshot(patientSnapshot.data!);
                             return ListTile(
                               onTap: () => (consultationRequest.status !=
                                           AppConstants.rejected) &&

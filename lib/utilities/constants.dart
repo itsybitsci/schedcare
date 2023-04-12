@@ -199,4 +199,7 @@ class ModelFields {
   static const String sentAt = 'sentAt';
   static const String sender = 'sender';
   static const String isRead = 'isRead';
+  static const String messages = 'messages';
+  static const String message = 'message';
+  static const String messageTimeStamp = 'messageTimeStamp';
 }

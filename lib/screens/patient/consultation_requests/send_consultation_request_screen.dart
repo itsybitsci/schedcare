@@ -153,6 +153,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                               DateTime.now(),
                                           ModelFields.createdAt: DateTime.now(),
                                           ModelFields.meetingId: null,
+                                          ModelFields.messages: [],
                                         };
                                         await firebaseServicesNotifier
                                             .sendConsultationRequest(

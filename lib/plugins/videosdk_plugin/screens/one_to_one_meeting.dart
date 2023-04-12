@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
@@ -218,8 +217,11 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
                                           statusBarHeight),
                               isScrollControlled: true,
                               builder: (context) => ChatView(
-                                  key: const Key("ChatScreen"),
-                                  meeting: meeting),
+                                meeting: meeting,
+                                consultationRequestId:
+                                    widget.consultationRequest.id,
+                                role: widget.role,
+                              ),
                             ).whenComplete(() => {
                                   setState(() {
                                     showChatSnackbar = true;
@@ -304,7 +306,7 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
       if (errorMsg != null) {
         showToast("Meeting left due to $errorMsg !!");
       }
-      context.pop();
+      Navigator.popUntil(context, ModalRoute.withName(RouteNames.authWrapper));
     });
 
     // Called when recording is started

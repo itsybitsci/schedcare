@@ -1,21 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/chat/chat_widget.dart';
+import 'package:schedcare/providers/firebase_services_provider.dart';
+import 'package:schedcare/utilities/constants.dart';
 import 'package:videosdk/videosdk.dart';
 
 // ChatScreen
-class ChatView extends StatefulWidget {
+class ChatView extends ConsumerStatefulWidget {
   final Room meeting;
-  const ChatView({
-    Key? key,
-    required this.meeting,
-  }) : super(key: key);
+  final String consultationRequestId;
+  final String role;
+
+  const ChatView(
+      {super.key,
+      required this.meeting,
+      required this.role,
+      required this.consultationRequestId});
 
   @override
-  State<ChatView> createState() => _ChatViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return _ChatViewState();
+  }
 }
 
-class _ChatViewState extends State<ChatView> {
+class _ChatViewState extends ConsumerState<ChatView> {
   // MessageTextController
   final msgTextController = TextEditingController();
 
@@ -41,6 +51,8 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   Widget build(BuildContext context) {
+    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
+
     return Scaffold(
       backgroundColor: ColorConstants.secondaryColor,
       appBar: AppBar(
@@ -125,15 +137,31 @@ class _ChatViewState extends State<ChatView> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: msgTextController.text.trim().isEmpty
-                          ? null
-                          : () => widget.meeting.pubSub
+                      onTap: () async {
+                        if (msgTextController.text.trim().isNotEmpty) {
+                          widget.meeting.pubSub
                               .publish(
                                 "CHAT",
                                 msgTextController.text,
                                 const PubSubPublishOptions(persist: true),
                               )
-                              .then((value) => msgTextController.clear()),
+                              .then(
+                                (value) => msgTextController.clear(),
+                              );
+                          firebaseServicesNotifier.getFirebaseFirestoreService
+                              .updateDocument({
+                            ModelFields.messages: FieldValue.arrayUnion([
+                              {
+                                ModelFields.message:
+                                    msgTextController.text.trim(),
+                                ModelFields.sender: widget.role,
+                                ModelFields.messageTimeStamp: DateTime.now(),
+                              }
+                            ])
+                          }, FirestoreConstants.consultationRequestsCollection,
+                                  widget.consultationRequestId);
+                        }
+                      },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 8),
@@ -142,7 +170,7 @@ class _ChatViewState extends State<ChatView> {
                         decoration: BoxDecoration(
                             color: msgTextController.text.trim().isEmpty
                                 ? null
-                                : ColorConstants.purple,
+                                : Colors.blue,
                             borderRadius: BorderRadius.circular(8)),
                         child: const Icon(
                           Icons.send,

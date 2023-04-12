@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +14,7 @@ import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
+import 'package:schedcare/utilities/widgets.dart';
 
 class JoinScreen extends ConsumerStatefulWidget {
   final ConsultationRequest consultationRequest;
@@ -31,6 +33,9 @@ class JoinScreen extends ConsumerStatefulWidget {
 }
 
 class _JoinScreenState extends ConsumerState<JoinScreen> {
+  final CollectionReference<Map<String, dynamic>> usersCollectionReference =
+      FirebaseFirestore.instance.collection(FirestoreConstants.usersCollection);
+
   // Control Status
   bool isMicOn = false;
   bool isCameraOn = false;
@@ -40,8 +45,6 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
 
   // Camera Controller
   CameraController? cameraController;
-
-  String displayName = "";
 
   @override
   void initState() {
@@ -333,74 +336,82 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(36.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              // if (isJoinMeetingSelected != null &&
-                              //     isCreateMeetingSelected != null)
-                              // JoiningDetails(
-                              //   consultationRequest:
-                              //       widget.consultationRequest,
-                              //   isCreateMeeting: isCreateMeetingSelected!,
-                              //   meetingId: widget.customMeetingId,
-                              //   onClickMeetingJoin: (String meetingId,
-                              //           String callType,
-                              //           String displayName) =>
-                              //       _onClickMeetingJoin(
-                              //           firebaseServicesNotifier,
-                              //           meetingId,
-                              //           callType,
-                              //           displayName),
-                              // ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: ColorConstants.black750),
-                                child: TextField(
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  onChanged: ((value) => displayName = value),
-                                  decoration: const InputDecoration(
-                                      hintText: "Enter display name",
-                                      hintStyle: TextStyle(
-                                        color: ColorConstants.textGray,
-                                      ),
-                                      border: InputBorder.none),
-                                ),
-                              ),
-                              const VerticalSpacer(16),
-                              MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                color: ColorConstants.purple,
-                                child: Text(
-                                    widget.role == AppConstants.patient
-                                        ? "Join Meeting"
-                                        : 'Create Meeting',
-                                    style: const TextStyle(fontSize: 16)),
-                                onPressed: () {
-                                  if (displayName.trim().isEmpty) {
-                                    showToast('Please enter name');
-                                    return;
-                                  }
+                        FutureBuilder(
+                          future: usersCollectionReference
+                              .doc(firebaseServicesNotifier.getCurrentUser!.uid)
+                              .get(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<
+                                      DocumentSnapshot<Map<String, dynamic>>>
+                                  snapshot) {
+                            if (snapshot.hasData) {
+                              DocumentSnapshot data = snapshot.data!;
+                              String displayName = widget.role ==
+                                      AppConstants.patient
+                                  ? '${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
+                                      .trim()
+                                  : '${data.get(ModelFields.prefix)} ${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
+                                      .trim();
+                              return Padding(
+                                padding: const EdgeInsets.all(36.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    // Container(
+                                    //   decoration: BoxDecoration(
+                                    //       borderRadius:
+                                    //           BorderRadius.circular(12),
+                                    //       color: ColorConstants.black750),
+                                    //   child: TextField(
+                                    //     textAlign: TextAlign.center,
+                                    //     style: const TextStyle(
+                                    //       fontWeight: FontWeight.w500,
+                                    //     ),
+                                    //     onChanged: ((value) =>
+                                    //         displayName = value),
+                                    //     decoration: const InputDecoration(
+                                    //         hintText: "Enter display name",
+                                    //         hintStyle: TextStyle(
+                                    //           color: ColorConstants.textGray,
+                                    //         ),
+                                    //         border: InputBorder.none),
+                                    //   ),
+                                    // ),
+                                    const VerticalSpacer(16),
+                                    MaterialButton(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
+                                      color: ColorConstants.purple,
+                                      child: Text(
+                                          widget.role == AppConstants.patient
+                                              ? "Join Meeting"
+                                              : 'Create Meeting',
+                                          style: const TextStyle(fontSize: 16)),
+                                      onPressed: () {
+                                        if (displayName.trim().isEmpty) {
+                                          showToast('Please enter name');
+                                          return;
+                                        }
 
-                                  _onClickMeetingJoin(
-                                      firebaseServicesNotifier,
-                                      widget.meetingId,
-                                      "ONE_TO_ONE",
-                                      displayName.trim());
-                                },
-                              ),
-                            ],
-                          ),
-                        )
+                                        _onClickMeetingJoin(
+                                            firebaseServicesNotifier,
+                                            widget.meetingId,
+                                            "ONE_TO_ONE",
+                                            displayName.trim());
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return loading(color: ColorConstants.black400);
+                          },
+                        ),
                       ],
                     ),
                   ),

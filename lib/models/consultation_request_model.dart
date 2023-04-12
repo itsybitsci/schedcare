@@ -16,6 +16,7 @@ class ConsultationRequest {
   final DateTime consultationDateTime;
   final DateTime modifiedAt;
   final DateTime createdAt;
+  final List messages;
   String? meetingId;
 
   ConsultationRequest(
@@ -30,6 +31,7 @@ class ConsultationRequest {
       required this.consultationDateTime,
       required this.modifiedAt,
       required this.createdAt,
+      required this.messages,
       this.meetingId});
 
   factory ConsultationRequest.fromSnapshot(DocumentSnapshot snapshot) {
@@ -49,6 +51,10 @@ class ConsultationRequest {
           snapshot.get(ModelFields.consultationDateTime).toDate(),
       modifiedAt: snapshot.get(ModelFields.modifiedAt).toDate(),
       createdAt: snapshot.get(ModelFields.createdAt).toDate(),
+      messages: snapshot
+          .get(ModelFields.messages)
+          .map((message) => Message.fromJson(message))
+          .toList(),
       meetingId: snapshot.get(ModelFields.meetingId) ?? '',
     );
   }
@@ -146,5 +152,24 @@ class MeetingDataSource extends CalendarDataSource {
   @override
   Color getColor(int index) {
     return appointments![index].background;
+  }
+}
+
+class Message {
+  final String message;
+  final String sender;
+  final DateTime messageTimeStamp;
+
+  Message(
+      {required this.message,
+      required this.sender,
+      required this.messageTimeStamp});
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      message: json[ModelFields.message],
+      sender: json[ModelFields.sender],
+      messageTimeStamp: json[ModelFields.messageTimeStamp].toDate(),
+    );
   }
 }
