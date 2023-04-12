@@ -6,6 +6,7 @@ import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/plugins/videosdk_plugin/screens/join_screen.dart';
 import 'package:schedcare/screens/common/approval_screen.dart';
 import 'package:schedcare/screens/common/auth_wrapper.dart';
+import 'package:schedcare/screens/common/conversation_history_screen.dart';
 import 'package:schedcare/screens/common/login_screen.dart';
 import 'package:schedcare/screens/common/reset_password_screen.dart';
 import 'package:schedcare/screens/common/verify_email_screen.dart';
@@ -149,6 +150,20 @@ class RouterNotifier extends ChangeNotifier {
               consultationRequest: meetingPayload.consultationRequest,
               role: meetingPayload.role,
               meetingId: meetingPayload.meetingId,
+            );
+          },
+        ),
+        GoRoute(
+          name: RouteNames.conversationHistory,
+          path: RoutePaths.conversationHistory,
+          builder: (context, state) {
+            ConversationHistoryPayload conversationHistoryPayload =
+                state.extra! as ConversationHistoryPayload;
+
+            return ConversationHistoryScreen(
+              consultationRequestId:
+                  conversationHistoryPayload.consultationRequestId,
+              role: conversationHistoryPayload.role,
             );
           },
         ),

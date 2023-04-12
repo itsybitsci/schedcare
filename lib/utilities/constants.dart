@@ -131,6 +131,7 @@ class RouteNames {
       'doctor_view_consultation_request';
 
   static const String joinScreen = 'join_screen';
+  static const String conversationHistory = 'conversation_history';
 }
 
 //Route Paths
@@ -157,6 +158,7 @@ class RoutePaths {
       '/doctor_view_consultation_request';
 
   static const String joinScreen = '/join_screen';
+  static const String conversationHistory = '/conversation_history';
 }
 
 class ModelFields {
@@ -202,4 +204,5 @@ class ModelFields {
   static const String messages = 'messages';
   static const String message = 'message';
   static const String messageTimeStamp = 'messageTimeStamp';
+  static const String senderName = 'senderName';
 }

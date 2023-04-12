@@ -9,6 +9,7 @@ import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/consultation_request_provider.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
+import 'package:schedcare/screens/common/conversation_history_screen.dart';
 import 'package:schedcare/utilities/constants.dart';
 
 class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
@@ -76,260 +77,281 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
               SizedBox(
                 height: 20.h,
               ),
-              if (DateTime.now()
-                  .isBefore(consultationRequest.consultationDateTime))
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text(
-                                  'Are you sure you want to reject this consultation request?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => context.pop(),
-                                  child: const Text('No'),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    await firebaseServicesNotifier
-                                        .rejectConsultationRequest(
-                                            {
-                                          ModelFields.status:
-                                              AppConstants.rejected,
-                                          ModelFields.modifiedAt: DateTime.now()
-                                        },
-                                            FirestoreConstants
-                                                .consultationRequestsCollection,
-                                            consultationRequest.id).then(
-                                      (success) {
-                                        if (success) {
-                                          context.go(RoutePaths.authWrapper);
-
-                                          firebaseServicesNotifier
-                                              .getFirebaseFirestoreService
-                                              .getDocument(
-                                                  FirestoreConstants
-                                                      .usersCollection,
-                                                  firebaseServicesNotifier
-                                                      .getCurrentUser!.uid)
-                                              .then(
-                                            (userSnapshot) {
-                                              DocumentReference
-                                                  appNotificationRef =
-                                                  FirebaseFirestore.instance
-                                                      .collection(FirestoreConstants
-                                                          .notificationsCollection)
-                                                      .doc();
-                                              String appNotificationId =
-                                                  appNotificationRef.id;
-                                              String notificationTitle =
-                                                  'Consultation Request Rejected';
-                                              String notificationBody =
-                                                  'Consultation request rejected by  ${'${userSnapshot.get(ModelFields.prefix)} ${userSnapshot.get(ModelFields.firstName)} ${userSnapshot.get(ModelFields.lastName)} ${userSnapshot.get(ModelFields.suffix)}'.trim()}';
-
-                                              Map<String, dynamic>
-                                                  appNotification = {
-                                                ModelFields.id:
-                                                    appNotificationId,
-                                                ModelFields.patientId:
-                                                    patient.id,
-                                                ModelFields.doctorId:
-                                                    firebaseServicesNotifier
-                                                        .getCurrentUser!.uid,
-                                                ModelFields.title:
-                                                    notificationTitle,
-                                                ModelFields.body:
-                                                    notificationBody,
-                                                ModelFields.sentAt:
-                                                    DateTime.now(),
-                                                ModelFields.sender:
-                                                    AppConstants.doctor,
-                                                ModelFields.isRead: false,
-                                              };
-
-                                              firebaseServicesNotifier
-                                                  .getFirebaseFirestoreService
-                                                  .setDocument(
-                                                      appNotification,
-                                                      FirestoreConstants
-                                                          .notificationsCollection,
-                                                      appNotificationId);
+              DateTime.now().isBefore(consultationRequest.consultationDateTime)
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                      'Are you sure you want to reject this consultation request?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => context.pop(),
+                                      child: const Text('No'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        await firebaseServicesNotifier
+                                            .rejectConsultationRequest(
+                                                {
+                                              ModelFields.status:
+                                                  AppConstants.rejected,
+                                              ModelFields.modifiedAt:
+                                                  DateTime.now()
+                                            },
+                                                FirestoreConstants
+                                                    .consultationRequestsCollection,
+                                                consultationRequest.id).then(
+                                          (success) {
+                                            if (success) {
+                                              context
+                                                  .go(RoutePaths.authWrapper);
 
                                               firebaseServicesNotifier
                                                   .getFirebaseFirestoreService
                                                   .getDocument(
                                                       FirestoreConstants
-                                                          .userTokensCollection,
-                                                      patient.id)
+                                                          .usersCollection,
+                                                      firebaseServicesNotifier
+                                                          .getCurrentUser!.uid)
                                                   .then(
-                                                (DocumentSnapshot<
-                                                        Map<String, dynamic>>
-                                                    userTokenSnapshot) {
-                                                  List tokens =
-                                                      userTokenSnapshot.get(
-                                                          ModelFields
-                                                              .deviceTokens);
+                                                (userSnapshot) {
+                                                  DocumentReference
+                                                      appNotificationRef =
+                                                      FirebaseFirestore.instance
+                                                          .collection(
+                                                              FirestoreConstants
+                                                                  .notificationsCollection)
+                                                          .doc();
+                                                  String appNotificationId =
+                                                      appNotificationRef.id;
+                                                  String notificationTitle =
+                                                      'Consultation Request Rejected';
+                                                  String notificationBody =
+                                                      'Consultation request rejected by  ${'${userSnapshot.get(ModelFields.prefix)} ${userSnapshot.get(ModelFields.firstName)} ${userSnapshot.get(ModelFields.lastName)} ${userSnapshot.get(ModelFields.suffix)}'.trim()}';
 
-                                                  for (String token in tokens) {
-                                                    firebaseServicesNotifier
-                                                        .getFirebaseCloudMessagingService
-                                                        .sendPushNotification(
-                                                            notificationTitle,
-                                                            notificationBody,
-                                                            token);
-                                                  }
+                                                  Map<String, dynamic>
+                                                      appNotification = {
+                                                    ModelFields.id:
+                                                        appNotificationId,
+                                                    ModelFields.patientId:
+                                                        patient.id,
+                                                    ModelFields.doctorId:
+                                                        firebaseServicesNotifier
+                                                            .getCurrentUser!
+                                                            .uid,
+                                                    ModelFields.title:
+                                                        notificationTitle,
+                                                    ModelFields.body:
+                                                        notificationBody,
+                                                    ModelFields.sentAt:
+                                                        DateTime.now(),
+                                                    ModelFields.sender:
+                                                        AppConstants.doctor,
+                                                    ModelFields.isRead: false,
+                                                  };
+
+                                                  firebaseServicesNotifier
+                                                      .getFirebaseFirestoreService
+                                                      .setDocument(
+                                                          appNotification,
+                                                          FirestoreConstants
+                                                              .notificationsCollection,
+                                                          appNotificationId);
+
+                                                  firebaseServicesNotifier
+                                                      .getFirebaseFirestoreService
+                                                      .getDocument(
+                                                          FirestoreConstants
+                                                              .userTokensCollection,
+                                                          patient.id)
+                                                      .then(
+                                                    (DocumentSnapshot<
+                                                            Map<String,
+                                                                dynamic>>
+                                                        userTokenSnapshot) {
+                                                      List tokens =
+                                                          userTokenSnapshot.get(
+                                                              ModelFields
+                                                                  .deviceTokens);
+
+                                                      for (String token
+                                                          in tokens) {
+                                                        firebaseServicesNotifier
+                                                            .getFirebaseCloudMessagingService
+                                                            .sendPushNotification(
+                                                                notificationTitle,
+                                                                notificationBody,
+                                                                token);
+                                                      }
+                                                    },
+                                                  );
                                                 },
                                               );
-                                            },
-                                          );
-                                        }
+                                            }
+                                          },
+                                        );
                                       },
-                                    );
-                                  },
-                                  child: const Text('Yes'),
-                                ),
-                              ],
+                                      child: const Text('Yes'),
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.red),
+                          ),
+                          child: const Text('Reject'),
+                        ),
+                        SizedBox(
+                          width: 15.w,
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                      'Are you sure you want to approve this consultation request?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => context.pop(),
+                                      child: const Text('No'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        await firebaseServicesNotifier
+                                            .approveConsultationRequest(
+                                                {
+                                              ModelFields.status:
+                                                  AppConstants.approved,
+                                              ModelFields.modifiedAt:
+                                                  DateTime.now()
+                                            },
+                                                FirestoreConstants
+                                                    .consultationRequestsCollection,
+                                                consultationRequest.id).then(
+                                          (success) async {
+                                            if (success) {
+                                              context
+                                                  .go(RoutePaths.authWrapper);
+
+                                              firebaseServicesNotifier
+                                                  .getFirebaseFirestoreService
+                                                  .getDocument(
+                                                      FirestoreConstants
+                                                          .usersCollection,
+                                                      firebaseServicesNotifier
+                                                          .getCurrentUser!.uid)
+                                                  .then(
+                                                (doctorSnapshot) {
+                                                  DocumentReference
+                                                      appNotificationRef =
+                                                      FirebaseFirestore.instance
+                                                          .collection(
+                                                              FirestoreConstants
+                                                                  .notificationsCollection)
+                                                          .doc();
+                                                  String appNotificationId =
+                                                      appNotificationRef.id;
+                                                  String notificationTitle =
+                                                      'Consultation Request Approved';
+                                                  String notificationBody =
+                                                      'Consultation request approved by  ${'${doctorSnapshot.get(ModelFields.prefix)} ${doctorSnapshot.get(ModelFields.firstName)} ${doctorSnapshot.get(ModelFields.lastName)} ${doctorSnapshot.get(ModelFields.suffix)}'.trim()}';
+
+                                                  Map<String, dynamic>
+                                                      appNotification = {
+                                                    ModelFields.id:
+                                                        appNotificationId,
+                                                    ModelFields.patientId:
+                                                        patient.id,
+                                                    ModelFields.doctorId:
+                                                        firebaseServicesNotifier
+                                                            .getCurrentUser!
+                                                            .uid,
+                                                    ModelFields.title:
+                                                        notificationTitle,
+                                                    ModelFields.body:
+                                                        notificationBody,
+                                                    ModelFields.sentAt:
+                                                        DateTime.now(),
+                                                    ModelFields.sender:
+                                                        AppConstants.doctor,
+                                                    ModelFields.isRead: false,
+                                                  };
+
+                                                  firebaseServicesNotifier
+                                                      .getFirebaseFirestoreService
+                                                      .setDocument(
+                                                          appNotification,
+                                                          FirestoreConstants
+                                                              .notificationsCollection,
+                                                          appNotificationId);
+
+                                                  firebaseServicesNotifier
+                                                      .getFirebaseFirestoreService
+                                                      .getDocument(
+                                                          FirestoreConstants
+                                                              .userTokensCollection,
+                                                          patient.id)
+                                                      .then(
+                                                    (DocumentSnapshot<
+                                                            Map<String,
+                                                                dynamic>>
+                                                        userTokenSnapshot) {
+                                                      List tokens =
+                                                          userTokenSnapshot.get(
+                                                              ModelFields
+                                                                  .deviceTokens);
+
+                                                      for (String token
+                                                          in tokens) {
+                                                        firebaseServicesNotifier
+                                                            .getFirebaseCloudMessagingService
+                                                            .sendPushNotification(
+                                                                notificationTitle,
+                                                                notificationBody,
+                                                                token);
+                                                      }
+                                                    },
+                                                  );
+                                                },
+                                              );
+                                            }
+                                          },
+                                        );
+                                      },
+                                      child: const Text('Yes'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.green)),
+                          child: const Text('Approve'),
+                        ),
+                      ],
+                    )
+                  : ElevatedButton(
+                      onPressed: () => context.push(
+                        RoutePaths.conversationHistory,
+                        extra: ConversationHistoryPayload(
+                            consultationRequestId: consultationRequest.id,
+                            role: AppConstants.doctor),
                       ),
-                      child: const Text('Reject'),
+                      child: const Text('View Conversation History'),
                     ),
-                    SizedBox(
-                      width: 15.w,
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text(
-                                  'Are you sure you want to approve this consultation request?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => context.pop(),
-                                  child: const Text('No'),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    await firebaseServicesNotifier
-                                        .approveConsultationRequest(
-                                            {
-                                          ModelFields.status:
-                                              AppConstants.approved,
-                                          ModelFields.modifiedAt: DateTime.now()
-                                        },
-                                            FirestoreConstants
-                                                .consultationRequestsCollection,
-                                            consultationRequest.id).then(
-                                      (success) async {
-                                        if (success) {
-                                          context.go(RoutePaths.authWrapper);
-
-                                          firebaseServicesNotifier
-                                              .getFirebaseFirestoreService
-                                              .getDocument(
-                                                  FirestoreConstants
-                                                      .usersCollection,
-                                                  firebaseServicesNotifier
-                                                      .getCurrentUser!.uid)
-                                              .then(
-                                            (doctorSnapshot) {
-                                              DocumentReference
-                                                  appNotificationRef =
-                                                  FirebaseFirestore.instance
-                                                      .collection(FirestoreConstants
-                                                          .notificationsCollection)
-                                                      .doc();
-                                              String appNotificationId =
-                                                  appNotificationRef.id;
-                                              String notificationTitle =
-                                                  'Consultation Request Approved';
-                                              String notificationBody =
-                                                  'Consultation request approved by  ${'${doctorSnapshot.get(ModelFields.prefix)} ${doctorSnapshot.get(ModelFields.firstName)} ${doctorSnapshot.get(ModelFields.lastName)} ${doctorSnapshot.get(ModelFields.suffix)}'.trim()}';
-
-                                              Map<String, dynamic>
-                                                  appNotification = {
-                                                ModelFields.id:
-                                                    appNotificationId,
-                                                ModelFields.patientId:
-                                                    patient.id,
-                                                ModelFields.doctorId:
-                                                    firebaseServicesNotifier
-                                                        .getCurrentUser!.uid,
-                                                ModelFields.title:
-                                                    notificationTitle,
-                                                ModelFields.body:
-                                                    notificationBody,
-                                                ModelFields.sentAt:
-                                                    DateTime.now(),
-                                                ModelFields.sender:
-                                                    AppConstants.doctor,
-                                                ModelFields.isRead: false,
-                                              };
-
-                                              firebaseServicesNotifier
-                                                  .getFirebaseFirestoreService
-                                                  .setDocument(
-                                                      appNotification,
-                                                      FirestoreConstants
-                                                          .notificationsCollection,
-                                                      appNotificationId);
-
-                                              firebaseServicesNotifier
-                                                  .getFirebaseFirestoreService
-                                                  .getDocument(
-                                                      FirestoreConstants
-                                                          .userTokensCollection,
-                                                      patient.id)
-                                                  .then(
-                                                (DocumentSnapshot<
-                                                        Map<String, dynamic>>
-                                                    userTokenSnapshot) {
-                                                  List tokens =
-                                                      userTokenSnapshot.get(
-                                                          ModelFields
-                                                              .deviceTokens);
-
-                                                  for (String token in tokens) {
-                                                    firebaseServicesNotifier
-                                                        .getFirebaseCloudMessagingService
-                                                        .sendPushNotification(
-                                                            notificationTitle,
-                                                            notificationBody,
-                                                            token);
-                                                  }
-                                                },
-                                              );
-                                            },
-                                          );
-                                        }
-                                      },
-                                    );
-                                  },
-                                  child: const Text('Yes'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.green)),
-                      child: const Text('Approve'),
-                    ),
-                  ],
-                ),
             ],
           ),
         ),

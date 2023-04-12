@@ -221,6 +221,7 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
                                 consultationRequestId:
                                     widget.consultationRequest.id,
                                 role: widget.role,
+                                displayName: widget.displayName,
                               ),
                             ).whenComplete(() => {
                                   setState(() {

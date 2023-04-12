@@ -157,18 +157,21 @@ class MeetingDataSource extends CalendarDataSource {
 
 class Message {
   final String message;
-  final String sender;
+  final String senderRole;
+  final String senderName;
   final DateTime messageTimeStamp;
 
   Message(
       {required this.message,
-      required this.sender,
+      required this.senderRole,
+      required this.senderName,
       required this.messageTimeStamp});
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
       message: json[ModelFields.message],
-      sender: json[ModelFields.sender],
+      senderRole: json[ModelFields.sender],
+      senderName: json[ModelFields.senderName],
       messageTimeStamp: json[ModelFields.messageTimeStamp].toDate(),
     );
   }

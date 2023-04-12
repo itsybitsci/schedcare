@@ -12,11 +12,13 @@ class ChatView extends ConsumerStatefulWidget {
   final Room meeting;
   final String consultationRequestId;
   final String role;
+  final String displayName;
 
   const ChatView(
       {super.key,
       required this.meeting,
       required this.role,
+      required this.displayName,
       required this.consultationRequestId});
 
   @override
@@ -155,6 +157,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
                                 ModelFields.message:
                                     msgTextController.text.trim(),
                                 ModelFields.sender: widget.role,
+                                ModelFields.senderName: widget.displayName,
                                 ModelFields.messageTimeStamp: DateTime.now(),
                               }
                             ])
