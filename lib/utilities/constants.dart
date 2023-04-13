@@ -194,6 +194,8 @@ class ModelFields {
   static const String consultationType = 'consultationType';
   static const String consultationDateTime = 'consultationDateTime';
   static const String meetingId = 'meetingId';
+  static const String patientAttachmentUrl = 'patientAttachmentUrl';
+  static const String doctorAttachmentUrl = 'doctorAttachmentUrl';
   static const String id = 'id';
   static const String deviceTokens = 'deviceTokens';
   static const String title = 'title';

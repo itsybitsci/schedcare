@@ -2,24 +2,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
 class FirebaseAuthenticationService {
-  final firebaseAuthenticationInstance = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuthenticationInstance = FirebaseAuth.instance;
 
-  User? get currentUser => firebaseAuthenticationInstance.currentUser;
+  User? get currentUser => _firebaseAuthenticationInstance.currentUser;
 
   Future<UserCredential?> logInWithEmailAndPassword(
       String email, String password) async {
-    return await firebaseAuthenticationInstance.signInWithEmailAndPassword(
+    return await _firebaseAuthenticationInstance.signInWithEmailAndPassword(
         email: email, password: password);
   }
 
   Future<UserCredential?> createUserWithEmailAndPassword(
       String email, String password) async {
-    return await firebaseAuthenticationInstance.createUserWithEmailAndPassword(
+    return await _firebaseAuthenticationInstance.createUserWithEmailAndPassword(
         email: email, password: password);
   }
 
   Future<void> signOut() async {
-    await firebaseAuthenticationInstance.signOut();
+    await _firebaseAuthenticationInstance.signOut();
   }
 
   Future<void> sendEmailVerification(User user) async {
@@ -32,11 +32,11 @@ class FirebaseAuthenticationService {
   }
 
   Future<void> sendPasswordResetEmail(String email) async {
-    await firebaseAuthenticationInstance.sendPasswordResetEmail(email: email);
+    await _firebaseAuthenticationInstance.sendPasswordResetEmail(email: email);
   }
 
   Future<void> updatePassword(String newPassword) async {
-    await firebaseAuthenticationInstance.currentUser!
+    await _firebaseAuthenticationInstance.currentUser!
         .updatePassword(newPassword);
   }
 }

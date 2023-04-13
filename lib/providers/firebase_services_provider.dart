@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/services/firebase_authentication_service.dart';
 import 'package:schedcare/services/firebase_cloud_messaging_service.dart';
 import 'package:schedcare/services/firebase_firestore_service.dart';
+import 'package:schedcare/services/firebase_storage_service.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
@@ -13,8 +16,10 @@ class FirebaseServicesProvider extends ChangeNotifier {
       FirebaseAuthenticationService();
   final FirebaseFirestoreService _firebaseFirestoreService =
       FirebaseFirestoreService();
-  final FirebaseCloudMessagingService _firebaseCloudMessagingService =
-      FirebaseCloudMessagingService();
+  final FirebaseMessagingService _firebaseMessagingService =
+      FirebaseMessagingService();
+  final FirebaseStorageService _firebaseStorageService =
+      FirebaseStorageService();
   bool _isLoading = false;
   String? _role;
   String? _deviceToken;
@@ -33,8 +38,11 @@ class FirebaseServicesProvider extends ChangeNotifier {
   FirebaseFirestoreService get getFirebaseFirestoreService =>
       _firebaseFirestoreService;
 
-  FirebaseCloudMessagingService get getFirebaseCloudMessagingService =>
-      _firebaseCloudMessagingService;
+  FirebaseMessagingService get getFirebaseCloudMessagingService =>
+      _firebaseMessagingService;
+
+  FirebaseStorageService get getFirebaseStorageService =>
+      _firebaseStorageService;
 
   setLoading(bool loader) {
     _isLoading = loader;
@@ -230,7 +238,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
 
   Future<bool> getAndSaveDeviceToken() async {
     try {
-      _deviceToken = await _firebaseCloudMessagingService.getDeviceToken();
+      _deviceToken = await _firebaseMessagingService.getDeviceToken();
       if (_deviceToken != null) {
         DocumentSnapshot<Map<String, dynamic>> data =
             await _firebaseFirestoreService.getDocument(
@@ -297,6 +305,29 @@ class FirebaseServicesProvider extends ChangeNotifier {
     try {
       await _firebaseFirestoreService.updateDocument({
         ModelFields.meetingId: meetingId,
+        ModelFields.modifiedAt: DateTime.now(),
+      }, FirestoreConstants.consultationRequestsCollection,
+          consultationRequestId);
+      setLoading(false);
+      notifyListeners();
+      return true;
+    } on FirebaseException catch (e) {
+      showToast(e.code);
+      setLoading(false);
+      throw Exception(e.code);
+    }
+  }
+
+  Future<bool> uploadFile(File file, String consultationRequestId, String role,
+      String fileName) async {
+    setLoading(true);
+    try {
+      String url = await _firebaseStorageService.uploadFile(
+          file, consultationRequestId, role, fileName);
+      await _firebaseFirestoreService.updateDocument({
+        role == AppConstants.patient
+            ? ModelFields.patientAttachmentUrl
+            : ModelFields.doctorAttachmentUrl: url,
         ModelFields.modifiedAt: DateTime.now(),
       }, FirestoreConstants.consultationRequestsCollection,
           consultationRequestId);

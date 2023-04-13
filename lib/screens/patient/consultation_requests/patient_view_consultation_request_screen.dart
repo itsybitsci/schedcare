@@ -71,7 +71,10 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                               ),
                               TextButton(
                                 onPressed: () async {
-                                  context.go(RoutePaths.authWrapper);
+                                  Navigator.popUntil(
+                                      context,
+                                      ModalRoute.withName(
+                                          RouteNames.authWrapper));
                                 },
                                 child: const Text('Yes'),
                               ),
@@ -257,8 +260,11 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                               ),
                                               TextButton(
                                                 onPressed: () async {
-                                                  context.go(
-                                                      RoutePaths.authWrapper);
+                                                  Navigator.popUntil(
+                                                      context,
+                                                      ModalRoute.withName(
+                                                          RouteNames
+                                                              .authWrapper));
                                                   await firebaseServicesNotifier
                                                       .deleteDocument(
                                                           FirestoreConstants

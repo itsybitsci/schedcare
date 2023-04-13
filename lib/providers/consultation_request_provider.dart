@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +13,7 @@ class ConsultationRequestProvider extends ChangeNotifier {
   final TextEditingController _timeController = TextEditingController();
   DateTime? _chosenDate;
   TimeOfDay? _chosenTime;
+  PlatformFile? _pickedFile;
 
   String _consultationTypeDropdownValue = AppConstants.consultationTypes.first;
 
@@ -22,6 +24,8 @@ class ConsultationRequestProvider extends ChangeNotifier {
       _consultationRequestBodyController.text.trim();
 
   String get consultationType => _consultationTypeDropdownValue;
+
+  PlatformFile? get pickedFile => _pickedFile;
 
   set setConsultationRequestBody(String consultationRequestBody) {
     _consultationRequestBodyController.text = consultationRequestBody;

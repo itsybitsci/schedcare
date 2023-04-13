@@ -153,6 +153,15 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                                               role: AppConstants.patient,
                                             ),
                                           );
+                                        } else {
+                                          if (consultationRequest.status !=
+                                              AppConstants.approved) {
+                                            showToast(
+                                                Prompts.meetingUnavailable);
+                                          } else {
+                                            showToast(Prompts
+                                                .waitForDoctorToStartMeeting);
+                                          }
                                         }
                                       },
                                     ),

@@ -21,6 +21,10 @@ class Prompts {
       'Meeting cannot be started for pending consultation requests.';
   static const String unableToStartLapsedMeeting =
       'Meeting cannot be started for lapsed consultation requests.';
+  static const String waitForDoctorToStartMeeting =
+      'Please wait for the doctor to start the meeting.';
+  static const String meetingUnavailable =
+      'Meetings are not available for not approved consultation requests.';
   static const String yes = 'Yes';
   static const String no = 'No';
 }

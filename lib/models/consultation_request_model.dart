@@ -18,21 +18,26 @@ class ConsultationRequest {
   final DateTime createdAt;
   final List messages;
   String? meetingId;
+  String? patientAttachmentUrl;
+  String? doctorAttachmentUrl;
 
-  ConsultationRequest(
-      {required this.id,
-      required this.patientId,
-      required this.doctorId,
-      required this.consultationRequestPatientTitle,
-      required this.consultationRequestDoctorTitle,
-      required this.consultationRequestBody,
-      required this.status,
-      required this.consultationType,
-      required this.consultationDateTime,
-      required this.modifiedAt,
-      required this.createdAt,
-      required this.messages,
-      this.meetingId});
+  ConsultationRequest({
+    required this.id,
+    required this.patientId,
+    required this.doctorId,
+    required this.consultationRequestPatientTitle,
+    required this.consultationRequestDoctorTitle,
+    required this.consultationRequestBody,
+    required this.status,
+    required this.consultationType,
+    required this.consultationDateTime,
+    required this.modifiedAt,
+    required this.createdAt,
+    required this.messages,
+    this.meetingId,
+    this.patientAttachmentUrl,
+    this.doctorAttachmentUrl,
+  });
 
   factory ConsultationRequest.fromSnapshot(DocumentSnapshot snapshot) {
     return ConsultationRequest(
@@ -56,6 +61,9 @@ class ConsultationRequest {
           .map((message) => Message.fromJson(message))
           .toList(),
       meetingId: snapshot.get(ModelFields.meetingId) ?? '',
+      patientAttachmentUrl:
+          snapshot.get(ModelFields.patientAttachmentUrl) ?? '',
+      doctorAttachmentUrl: snapshot.get(ModelFields.doctorAttachmentUrl) ?? '',
     );
   }
 
@@ -74,7 +82,9 @@ class ConsultationRequest {
       ModelFields.consultationDateTime: consultationDateTime,
       ModelFields.modifiedAt: modifiedAt,
       ModelFields.createdAt: createdAt,
-      ModelFields.meetingId: meetingId ?? ''
+      ModelFields.meetingId: meetingId ?? '',
+      ModelFields.patientAttachmentUrl: patientAttachmentUrl ?? '',
+      ModelFields.doctorAttachmentUrl: doctorAttachmentUrl ?? '',
     };
   }
 

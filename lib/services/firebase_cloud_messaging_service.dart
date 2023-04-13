@@ -6,12 +6,13 @@ import 'package:http/http.dart' as http;
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
-class FirebaseCloudMessagingService {
-  final _firebaseCloudMessagingInstance = FirebaseMessaging.instance;
+class FirebaseMessagingService {
+  final FirebaseMessaging _firebaseMessagingInstance =
+      FirebaseMessaging.instance;
 
   Future<String?> getDeviceToken() async {
     try {
-      return await _firebaseCloudMessagingInstance.getToken();
+      return await _firebaseMessagingInstance.getToken();
     } on FirebaseException catch (e) {
       showToast(e.code);
       throw Exception(e.code);

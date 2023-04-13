@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseFirestoreService {
-  final _firebaseFirestoreInstance = FirebaseFirestore.instance;
+  final FirebaseFirestore _firebaseFirestoreInstance =
+      FirebaseFirestore.instance;
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getDocument(
       String collection, String id) async {
