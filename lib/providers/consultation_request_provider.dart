@@ -63,7 +63,13 @@ class ConsultationRequestProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Widget buildFilePicker(FirebaseServicesProvider firebaseServicesNotifier) {
+  void unselectFIle() {
+    _pickedFile = null;
+    notifyListeners();
+  }
+
+  Widget buildFilePicker(FirebaseServicesProvider firebaseServicesNotifier,
+      {bool showX = true}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -73,13 +79,11 @@ class ConsultationRequestProvider extends ChangeNotifier {
           child: Text(
               _pickedFile == null ? 'Select Attachment' : _pickedFile!.name),
         ),
-        if (_pickedFile != null)
+        if (_pickedFile != null && showX)
           IconButton(
-            onPressed: () {
-              if (firebaseServicesNotifier.getLoading) return;
-              _pickedFile = null;
-              notifyListeners();
-            },
+            onPressed: !firebaseServicesNotifier.getLoading
+                ? () => unselectFIle()
+                : null,
             icon: const Icon(Icons.close),
           ),
       ],
