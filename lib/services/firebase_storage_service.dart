@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:schedcare/utilities/constants.dart';
 
 class FirebaseStorageService {
   final FirebaseStorage _firebaseStorageInstance = FirebaseStorage.instance;
@@ -12,6 +13,7 @@ class FirebaseStorageService {
       String role, String fileName) async {
     final Reference ref = _firebaseStorageInstance
         .ref()
+        .child(FirebaseConstants.consultationRequestsCollection)
         .child(consultationRequestId)
         .child('$role/$fileName');
 

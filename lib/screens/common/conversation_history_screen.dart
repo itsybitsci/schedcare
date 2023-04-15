@@ -12,7 +12,7 @@ class ConversationHistoryScreen extends HookConsumerWidget {
       {super.key, required this.consultationRequestId, required this.role});
   final CollectionReference<Map<String, dynamic>>
       consultationRequestsCollectionReference = FirebaseFirestore.instance
-          .collection(FirestoreConstants.consultationRequestsCollection);
+          .collection(FirebaseConstants.consultationRequestsCollection);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

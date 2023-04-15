@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
+import 'package:schedcare/utilities/helpers.dart';
+import 'package:schedcare/utilities/prompts.dart';
 
 class ConsultationRequestProvider extends ChangeNotifier {
   final TextEditingController _consultationRequestBodyController =
@@ -50,6 +54,11 @@ class ConsultationRequestProvider extends ChangeNotifier {
   void pickFile() async {
     final result = await FilePicker.platform.pickFiles();
     if (result == null) return;
+    if (File(result.files.first.path!).lengthSync() / (1024 * 1024) >
+        AppConstants.maximumFileUploadSize) {
+      showToast(Prompts.maximumFileSize);
+      return;
+    }
     _pickedFile = result.files.first;
     notifyListeners();
   }

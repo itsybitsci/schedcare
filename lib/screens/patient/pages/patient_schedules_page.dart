@@ -12,7 +12,7 @@ class PatientSchedulesPage extends HookConsumerWidget {
   PatientSchedulesPage({Key? key}) : super(key: key);
   final CollectionReference<Map<String, dynamic>>
       consultationRequestsCollectionReference = FirebaseFirestore.instance
-          .collection(FirestoreConstants.consultationRequestsCollection);
+          .collection(FirebaseConstants.consultationRequestsCollection);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

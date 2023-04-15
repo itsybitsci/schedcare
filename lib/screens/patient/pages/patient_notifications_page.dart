@@ -14,9 +14,9 @@ class PatientNotificationsPage extends HookConsumerWidget {
   PatientNotificationsPage({Key? key}) : super(key: key);
   final CollectionReference<Map<String, dynamic>>
       appNotificationsCollectionReference = FirebaseFirestore.instance
-          .collection(FirestoreConstants.notificationsCollection);
+          .collection(FirebaseConstants.notificationsCollection);
   final CollectionReference<Map<String, dynamic>> usersCollectionReference =
-      FirebaseFirestore.instance.collection(FirestoreConstants.usersCollection);
+      FirebaseFirestore.instance.collection(FirebaseConstants.usersCollection);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -62,7 +62,7 @@ class PatientNotificationsPage extends HookConsumerWidget {
                         firebaseServicesNotifier.getFirebaseFirestoreService
                             .updateDocument(
                                 {ModelFields.isRead: true},
-                                FirestoreConstants.notificationsCollection,
+                                FirebaseConstants.notificationsCollection,
                                 appNotification.id);
                       },
                       title: Center(

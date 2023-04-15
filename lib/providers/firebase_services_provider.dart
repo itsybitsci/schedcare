@@ -57,7 +57,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
       User user = userCredential!.user!;
 
       DocumentSnapshot? snapshot = await _firebaseFirestoreService.getDocument(
-          FirestoreConstants.usersCollection, user.uid);
+          FirebaseConstants.usersCollection, user.uid);
 
       _role = snapshot.get(ModelFields.role).toString().toLowerCase() ==
               AppConstants.patient.toLowerCase()
@@ -66,7 +66,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
 
       await _firebaseFirestoreService.updateDocument({
         ModelFields.lastLogin: user.metadata.lastSignInTime,
-      }, FirestoreConstants.usersCollection, user.uid);
+      }, FirebaseConstants.usersCollection, user.uid);
 
       setLoading(false);
       notifyListeners();
@@ -96,7 +96,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
       );
 
       await _firebaseFirestoreService.setDocument(
-          data, FirestoreConstants.usersCollection, user.uid);
+          data, FirebaseConstants.usersCollection, user.uid);
 
       setLoading(false);
       notifyListeners();
@@ -113,7 +113,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
     try {
       await _firebaseFirestoreService.updateDocument({
         ModelFields.deviceTokens: FieldValue.arrayRemove([_deviceToken])
-      }, FirestoreConstants.userTokensCollection, getCurrentUser!.uid).then(
+      }, FirebaseConstants.userTokensCollection, getCurrentUser!.uid).then(
           (_) async {
         await _firebaseAuthenticationService.signOut();
         showToast('Successfully logged out');
@@ -241,20 +241,20 @@ class FirebaseServicesProvider extends ChangeNotifier {
       if (_deviceToken != null) {
         DocumentSnapshot<Map<String, dynamic>> data =
             await _firebaseFirestoreService.getDocument(
-                FirestoreConstants.userTokensCollection, getCurrentUser!.uid);
+                FirebaseConstants.userTokensCollection, getCurrentUser!.uid);
 
         if (data.exists) {
           await _firebaseFirestoreService.updateDocument({
             ModelFields.deviceTokens: FieldValue.arrayUnion([_deviceToken]),
             ModelFields.modifiedAt: DateTime.now(),
-          }, FirestoreConstants.userTokensCollection,
+          }, FirebaseConstants.userTokensCollection,
               _firebaseAuthenticationService.currentUser!.uid);
         } else {
           await _firebaseFirestoreService.setDocument({
             ModelFields.deviceTokens: FieldValue.arrayUnion([_deviceToken]),
             ModelFields.modifiedAt: DateTime.now(),
             ModelFields.createdAt: DateTime.now(),
-          }, FirestoreConstants.userTokensCollection,
+          }, FirebaseConstants.userTokensCollection,
               _firebaseAuthenticationService.currentUser!.uid);
         }
       }
@@ -305,7 +305,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
       await _firebaseFirestoreService.updateDocument({
         ModelFields.meetingId: meetingId,
         ModelFields.modifiedAt: DateTime.now(),
-      }, FirestoreConstants.consultationRequestsCollection,
+      }, FirebaseConstants.consultationRequestsCollection,
           consultationRequestId);
       setLoading(false);
       notifyListeners();
@@ -328,7 +328,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
             ? ModelFields.patientAttachmentUrl
             : ModelFields.doctorAttachmentUrl: url,
         ModelFields.modifiedAt: DateTime.now(),
-      }, FirestoreConstants.consultationRequestsCollection,
+      }, FirebaseConstants.consultationRequestsCollection,
           consultationRequestId);
       setLoading(false);
       notifyListeners();
@@ -350,7 +350,7 @@ final userSnapshotProvider = FutureProvider.family
     .autoDispose<DocumentSnapshot<Map<String, dynamic>>, String>(
   (ref, uid) async {
     return await FirebaseFirestore.instance
-        .collection(FirestoreConstants.usersCollection)
+        .collection(FirebaseConstants.usersCollection)
         .doc(uid)
         .get();
   },
@@ -360,7 +360,7 @@ final userSnapshotsProvider = StreamProvider.family
     .autoDispose<DocumentSnapshot<Map<String, dynamic>>, String>(
   (ref, uid) {
     return FirebaseFirestore.instance
-        .collection(FirestoreConstants.usersCollection)
+        .collection(FirebaseConstants.usersCollection)
         .doc(uid)
         .snapshots();
   },

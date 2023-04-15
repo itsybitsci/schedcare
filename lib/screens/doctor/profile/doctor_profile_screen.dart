@@ -17,7 +17,7 @@ class DoctorProfileScreen extends HookConsumerWidget {
   final GlobalKey<FormState> formKeyUpdateDoctorEmail = GlobalKey<FormState>();
   final Stream<DocumentSnapshot<Map<String, dynamic>>> userSnapshots =
       FirebaseFirestore.instance
-          .collection(FirestoreConstants.usersCollection)
+          .collection(FirebaseConstants.usersCollection)
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .snapshots();
 
@@ -177,7 +177,7 @@ class DoctorProfileScreen extends HookConsumerWidget {
                                                       ModelFields.modifiedAt:
                                                           DateTime.now()
                                                     },
-                                                        FirestoreConstants
+                                                        FirebaseConstants
                                                             .usersCollection,
                                                         firebaseServicesNotifier
                                                             .getCurrentUser!

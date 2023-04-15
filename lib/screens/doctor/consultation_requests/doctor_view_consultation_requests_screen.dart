@@ -104,7 +104,7 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                                               ModelFields.modifiedAt:
                                                   DateTime.now()
                                             },
-                                                FirestoreConstants
+                                                FirebaseConstants
                                                     .consultationRequestsCollection,
                                                 consultationRequest.id).then(
                                           (success) {
@@ -115,7 +115,7 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                                               firebaseServicesNotifier
                                                   .getFirebaseFirestoreService
                                                   .getDocument(
-                                                      FirestoreConstants
+                                                      FirebaseConstants
                                                           .usersCollection,
                                                       firebaseServicesNotifier
                                                           .getCurrentUser!.uid)
@@ -125,7 +125,7 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                                                       appNotificationRef =
                                                       FirebaseFirestore.instance
                                                           .collection(
-                                                              FirestoreConstants
+                                                              FirebaseConstants
                                                                   .notificationsCollection)
                                                           .doc();
                                                   String appNotificationId =
@@ -160,14 +160,14 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                                                       .getFirebaseFirestoreService
                                                       .setDocument(
                                                           appNotification,
-                                                          FirestoreConstants
+                                                          FirebaseConstants
                                                               .notificationsCollection,
                                                           appNotificationId);
 
                                                   firebaseServicesNotifier
                                                       .getFirebaseFirestoreService
                                                       .getDocument(
-                                                          FirestoreConstants
+                                                          FirebaseConstants
                                                               .userTokensCollection,
                                                           patient.id)
                                                       .then(
@@ -236,7 +236,7 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                                               ModelFields.modifiedAt:
                                                   DateTime.now()
                                             },
-                                                FirestoreConstants
+                                                FirebaseConstants
                                                     .consultationRequestsCollection,
                                                 consultationRequest.id).then(
                                           (success) async {
@@ -247,7 +247,7 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                                               firebaseServicesNotifier
                                                   .getFirebaseFirestoreService
                                                   .getDocument(
-                                                      FirestoreConstants
+                                                      FirebaseConstants
                                                           .usersCollection,
                                                       firebaseServicesNotifier
                                                           .getCurrentUser!.uid)
@@ -257,7 +257,7 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                                                       appNotificationRef =
                                                       FirebaseFirestore.instance
                                                           .collection(
-                                                              FirestoreConstants
+                                                              FirebaseConstants
                                                                   .notificationsCollection)
                                                           .doc();
                                                   String appNotificationId =
@@ -292,14 +292,14 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                                                       .getFirebaseFirestoreService
                                                       .setDocument(
                                                           appNotification,
-                                                          FirestoreConstants
+                                                          FirebaseConstants
                                                               .notificationsCollection,
                                                           appNotificationId);
 
                                                   firebaseServicesNotifier
                                                       .getFirebaseFirestoreService
                                                       .getDocument(
-                                                          FirestoreConstants
+                                                          FirebaseConstants
                                                               .userTokensCollection,
                                                           patient.id)
                                                       .then(

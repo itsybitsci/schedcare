@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -13,6 +15,7 @@ import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PatientViewConsultationRequestScreen extends HookConsumerWidget {
   final ConsultationRequest consultationRequest;
@@ -23,7 +26,7 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
       GlobalKey<FormState>();
   final CollectionReference<Map<String, dynamic>>
       consultationRequestsCollectionReference = FirebaseFirestore.instance
-          .collection(FirestoreConstants.consultationRequestsCollection);
+          .collection(FirebaseConstants.consultationRequestsCollection);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -141,6 +144,31 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                     SizedBox(
                       height: 10.h,
                     ),
+                    if (consultationRequest.patientAttachmentUrl != null &&
+                        !isEditing.value)
+                      TextButton(
+                        child: Text(getFileNameFromUrl(
+                            consultationRequest.patientAttachmentUrl!)),
+                        onPressed: () async {
+                          if (await canLaunchUrl(Uri.parse(
+                              consultationRequest.patientAttachmentUrl!))) {
+                            await launchUrl(
+                                Uri.parse(
+                                    consultationRequest.patientAttachmentUrl!),
+                                mode: LaunchMode.externalApplication);
+                          } else {
+                            showToast(Prompts.couldNotDownloadFile);
+                          }
+                        },
+                      ),
+                    if (isEditing.value)
+                      consultationRequestNotifier
+                          .buildFilePicker(firebaseServicesNotifier),
+                    if (consultationRequest.patientAttachmentUrl != null &&
+                        !isEditing.value)
+                      SizedBox(
+                        height: 10.h,
+                      ),
                     consultationRequest.status != AppConstants.pending
                         ? ElevatedButton(
                             onPressed: () => context.push(
@@ -176,20 +204,22 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                                         .currentState
                                                         ?.save();
 
-                                                    List<DateTime>
-                                                        consultationRequestStartTimes =
-                                                        snapshot.data!.docs
-                                                            .where((snapshot) =>
-                                                                snapshot.get(
-                                                                    ModelFields
-                                                                        .status) !=
-                                                                AppConstants
-                                                                    .rejected)
-                                                            .map((snapshot) => snapshot
-                                                                .get(ModelFields
-                                                                    .consultationDateTime)
-                                                                .toDate() as DateTime)
-                                                            .toList();
+                                                    List<DateTime> consultationRequestStartTimes = snapshot
+                                                        .data!.docs
+                                                        .where((snapshot) =>
+                                                            snapshot.get(ModelFields
+                                                                .status) !=
+                                                            AppConstants
+                                                                .rejected)
+                                                        .where((snapshot) =>
+                                                            snapshot.get(ModelFields.id) !=
+                                                            consultationRequest
+                                                                .id)
+                                                        .map((snapshot) => snapshot
+                                                            .get(ModelFields
+                                                                .consultationDateTime)
+                                                            .toDate() as DateTime)
+                                                        .toList();
 
                                                     if (isOverlapping(
                                                         consultationRequestStartTimes,
@@ -220,17 +250,33 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                                     };
                                                     await firebaseServicesNotifier
                                                         .updateConsultationRequest(
-                                                          data,
-                                                          FirestoreConstants
-                                                              .consultationRequestsCollection,
-                                                          consultationRequest
-                                                              .id,
-                                                        )
-                                                        .then((success) => success
-                                                            ? context.go(
-                                                                RoutePaths
-                                                                    .authWrapper)
-                                                            : null);
+                                                      data,
+                                                      FirebaseConstants
+                                                          .consultationRequestsCollection,
+                                                      consultationRequest.id,
+                                                    )
+                                                        .then((success) async {
+                                                      if (success) {
+                                                        if (consultationRequestNotifier
+                                                                .pickedFile !=
+                                                            null) {
+                                                          await firebaseServicesNotifier
+                                                              .getFirebaseStorageService
+                                                              .deleteFile(
+                                                                  consultationRequest
+                                                                      .patientAttachmentUrl!);
+                                                          await uploadAttachment(
+                                                              firebaseServicesNotifier,
+                                                              consultationRequestNotifier,
+                                                              consultationRequest
+                                                                  .id);
+                                                        }
+                                                        if (context.mounted) {
+                                                          context.go(RoutePaths
+                                                              .authWrapper);
+                                                        }
+                                                      }
+                                                    });
                                                   } else {
                                                     context.pop();
                                                   }
@@ -267,7 +313,7 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                                               .authWrapper));
                                                   await firebaseServicesNotifier
                                                       .deleteDocument(
-                                                          FirestoreConstants
+                                                          FirebaseConstants
                                                               .consultationRequestsCollection,
                                                           consultationRequest
                                                               .id);
@@ -286,6 +332,11 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                     ),
                                     child: const Text('Cancel Request'),
                                   ),
+                    if (firebaseServicesNotifier
+                            .getFirebaseStorageService.uploadTask !=
+                        null)
+                      consultationRequestNotifier.buildUploadProgressIndicator(
+                          firebaseServicesNotifier),
                   ],
                 ),
               ),
@@ -295,5 +346,16 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
         },
       ),
     );
+  }
+
+  Future uploadAttachment(
+      FirebaseServicesProvider firebaseServicesNotifier,
+      ConsultationRequestProvider consultationRequestNotifier,
+      String consultationRequestId) async {
+    await firebaseServicesNotifier.uploadFile(
+        File(consultationRequestNotifier.pickedFile!.path!),
+        consultationRequestId,
+        AppConstants.patient,
+        consultationRequestNotifier.pickedFile!.name);
   }
 }

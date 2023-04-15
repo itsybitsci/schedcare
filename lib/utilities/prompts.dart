@@ -1,4 +1,8 @@
+import 'package:schedcare/utilities/constants.dart';
+
 class Prompts {
+  static const String yes = 'Yes';
+  static const String no = 'No';
   static const String noAvailableDoctors = 'No available doctor at the moment.';
   static const String noSentConsultationRequests =
       'No sent consultation requests. Kindly check back later.';
@@ -25,6 +29,8 @@ class Prompts {
       'Please wait for the doctor to start the meeting.';
   static const String meetingUnavailable =
       'Meetings are not available for not approved consultation requests.';
-  static const String yes = 'Yes';
-  static const String no = 'No';
+  static const String maximumFileSize =
+      "Maximum file size is ${AppConstants.maximumFileUploadSize}MB.";
+  static const String couldNotDownloadFile =
+      'Could not download file. Kindly check your internet connection.';
 }

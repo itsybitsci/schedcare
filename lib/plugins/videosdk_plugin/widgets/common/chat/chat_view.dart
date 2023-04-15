@@ -161,7 +161,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
                                 ModelFields.messageTimeStamp: DateTime.now(),
                               }
                             ])
-                          }, FirestoreConstants.consultationRequestsCollection,
+                          }, FirebaseConstants.consultationRequestsCollection,
                                   widget.consultationRequestId);
                         }
                       },

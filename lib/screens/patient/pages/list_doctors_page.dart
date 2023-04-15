@@ -11,7 +11,7 @@ import 'package:schedcare/utilities/widgets.dart';
 class ListDoctorsPage extends HookConsumerWidget {
   ListDoctorsPage({super.key});
   final Query<Doctor> doctorsQuery = FirebaseFirestore.instance
-      .collection(FirestoreConstants.usersCollection)
+      .collection(FirebaseConstants.usersCollection)
       .where(ModelFields.role, isEqualTo: AppConstants.doctor)
       .where(ModelFields.isApproved, isEqualTo: true)
       .withConverter(

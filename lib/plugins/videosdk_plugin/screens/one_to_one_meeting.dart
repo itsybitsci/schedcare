@@ -138,13 +138,10 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
                           onCallEndButtonPressed: () async {
                             await firebaseServiceNotifier
                                 .getFirebaseFirestoreService
-                                .updateDocument(
-                                    {
-                                  ModelFields.meetingId: null,
-                                  ModelFields.modifiedAt: DateTime.now()
-                                },
-                                    FirestoreConstants
-                                        .consultationRequestsCollection,
+                                .updateDocument({
+                              ModelFields.meetingId: null,
+                              ModelFields.modifiedAt: DateTime.now()
+                            }, FirebaseConstants.consultationRequestsCollection,
                                     widget.consultationRequest.id).then(
                               (_) => meeting.end(),
                             );

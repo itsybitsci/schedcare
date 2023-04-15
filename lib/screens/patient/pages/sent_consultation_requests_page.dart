@@ -18,9 +18,9 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
   SentConsultationRequestsPage({Key? key}) : super(key: key);
   final CollectionReference<Map<String, dynamic>>
       consultationRequestsCollectionReference = FirebaseFirestore.instance
-          .collection(FirestoreConstants.consultationRequestsCollection);
+          .collection(FirebaseConstants.consultationRequestsCollection);
   final CollectionReference<Map<String, dynamic>> usersCollectionReference =
-      FirebaseFirestore.instance.collection(FirestoreConstants.usersCollection);
+      FirebaseFirestore.instance.collection(FirebaseConstants.usersCollection);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

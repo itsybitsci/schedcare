@@ -14,7 +14,7 @@ class DoctorHomeScreen extends HookConsumerWidget {
   DoctorHomeScreen({Key? key}) : super(key: key);
   final CollectionReference<Map<String, dynamic>>
       appNotificationsCollectionReference = FirebaseFirestore.instance
-          .collection(FirestoreConstants.notificationsCollection);
+          .collection(FirebaseConstants.notificationsCollection);
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 

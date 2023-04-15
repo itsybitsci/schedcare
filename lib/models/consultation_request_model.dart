@@ -60,10 +60,9 @@ class ConsultationRequest {
           .get(ModelFields.messages)
           .map((message) => Message.fromJson(message))
           .toList(),
-      meetingId: snapshot.get(ModelFields.meetingId) ?? '',
-      patientAttachmentUrl:
-          snapshot.get(ModelFields.patientAttachmentUrl) ?? '',
-      doctorAttachmentUrl: snapshot.get(ModelFields.doctorAttachmentUrl) ?? '',
+      meetingId: snapshot.get(ModelFields.meetingId),
+      patientAttachmentUrl: snapshot.get(ModelFields.patientAttachmentUrl),
+      doctorAttachmentUrl: snapshot.get(ModelFields.doctorAttachmentUrl),
     );
   }
 
@@ -82,9 +81,9 @@ class ConsultationRequest {
       ModelFields.consultationDateTime: consultationDateTime,
       ModelFields.modifiedAt: modifiedAt,
       ModelFields.createdAt: createdAt,
-      ModelFields.meetingId: meetingId ?? '',
-      ModelFields.patientAttachmentUrl: patientAttachmentUrl ?? '',
-      ModelFields.doctorAttachmentUrl: doctorAttachmentUrl ?? '',
+      ModelFields.meetingId: meetingId,
+      ModelFields.patientAttachmentUrl: patientAttachmentUrl,
+      ModelFields.doctorAttachmentUrl: doctorAttachmentUrl,
     };
   }
 

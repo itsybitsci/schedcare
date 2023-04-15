@@ -34,7 +34,7 @@ class JoinScreen extends ConsumerStatefulWidget {
 
 class _JoinScreenState extends ConsumerState<JoinScreen> {
   final CollectionReference<Map<String, dynamic>> usersCollectionReference =
-      FirebaseFirestore.instance.collection(FirestoreConstants.usersCollection);
+      FirebaseFirestore.instance.collection(FirebaseConstants.usersCollection);
 
   // Control Status
   bool isMicOn = false;

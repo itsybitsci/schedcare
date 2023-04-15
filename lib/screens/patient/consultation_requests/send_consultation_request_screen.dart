@@ -20,7 +20,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
       GlobalKey<FormState>();
   final CollectionReference<Map<String, dynamic>>
       consultationRequestsCollectionReference = FirebaseFirestore.instance
-          .collection(FirestoreConstants.consultationRequestsCollection);
+          .collection(FirebaseConstants.consultationRequestsCollection);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -139,7 +139,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                           DocumentReference
                                               consultationRequestRef =
                                               FirebaseFirestore.instance
-                                                  .collection(FirestoreConstants
+                                                  .collection(FirebaseConstants
                                                       .consultationRequestsCollection)
                                                   .doc();
                                           String consultationRequestId =
@@ -185,7 +185,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                           await firebaseServicesNotifier
                                               .sendConsultationRequest(
                                                   consultationRequest,
-                                                  FirestoreConstants
+                                                  FirebaseConstants
                                                       .consultationRequestsCollection,
                                                   consultationRequestId)
                                               .then(
@@ -258,12 +258,12 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
   Future sendNotification(
       FirebaseServicesProvider firebaseServicesNotifier) async {
     await firebaseServicesNotifier.getFirebaseFirestoreService
-        .getDocument(FirestoreConstants.usersCollection,
+        .getDocument(FirebaseConstants.usersCollection,
             firebaseServicesNotifier.getCurrentUser!.uid)
         .then(
       (userSnapshot) async {
         DocumentReference appNotificationRef = FirebaseFirestore.instance
-            .collection(FirestoreConstants.notificationsCollection)
+            .collection(FirebaseConstants.notificationsCollection)
             .doc();
         String appNotificationId = appNotificationRef.id;
         String notificationTitle = 'New Consultation Request';
@@ -283,11 +283,11 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
 
         await firebaseServicesNotifier.getFirebaseFirestoreService.setDocument(
             appNotification,
-            FirestoreConstants.notificationsCollection,
+            FirebaseConstants.notificationsCollection,
             appNotificationId);
 
         await firebaseServicesNotifier.getFirebaseFirestoreService
-            .getDocument(FirestoreConstants.userTokensCollection, doctor.id)
+            .getDocument(FirebaseConstants.userTokensCollection, doctor.id)
             .then(
           (DocumentSnapshot<Map<String, dynamic>> userTokenSnapshot) {
             List tokens = userTokenSnapshot.get(ModelFields.deviceTokens);

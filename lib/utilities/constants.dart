@@ -7,7 +7,7 @@ import 'package:schedcare/screens/patient/pages/patient_notifications_page.dart'
 import 'package:schedcare/screens/patient/pages/patient_schedules_page.dart';
 import 'package:schedcare/screens/patient/pages/sent_consultation_requests_page.dart';
 
-class FirestoreConstants {
+class FirebaseConstants {
   static const String usersCollection = 'users';
   static const String consultationRequestsCollection = 'consultation_requests';
   static const String userTokensCollection = 'user_tokens';
@@ -63,6 +63,7 @@ class AppConstants {
   static const String lapsed = 'Lapsed';
 
   static const int defaultMeetingDuration = 1;
+  static const int maximumFileUploadSize = 5;
 
   static const List<String> sexes = <String>[male, female];
 

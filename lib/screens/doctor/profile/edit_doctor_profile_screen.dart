@@ -21,7 +21,7 @@ class EditDoctorProfileScreen extends HookConsumerWidget {
       Future<void> fetchData() async {
         DocumentSnapshot<Map<String, dynamic>> data = await FirebaseFirestore
             .instance
-            .collection(FirestoreConstants.usersCollection)
+            .collection(FirebaseConstants.usersCollection)
             .doc(firebaseServicesNotifier.getCurrentUser!.uid)
             .get();
         genericFieldsNotifier.setPrefix = data.get(ModelFields.prefix);
@@ -84,7 +84,7 @@ class EditDoctorProfileScreen extends HookConsumerWidget {
                           await firebaseServicesNotifier
                               .updateUserProfile(
                                   data,
-                                  FirestoreConstants.usersCollection,
+                                  FirebaseConstants.usersCollection,
                                   firebaseServicesNotifier.getCurrentUser!.uid)
                               .then(
                                 (success) => success ? context.pop() : null,
