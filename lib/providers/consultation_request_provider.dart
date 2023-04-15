@@ -47,18 +47,20 @@ class ConsultationRequestProvider extends ChangeNotifier {
     _consultationTypeDropdownValue = consultationType;
   }
 
+  void pickFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+    _pickedFile = result.files.first;
+    notifyListeners();
+  }
+
   Widget buildFilePicker(FirebaseServicesProvider firebaseServicesNotifier) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: () async {
-            if (firebaseServicesNotifier.getLoading) return;
-            final result = await FilePicker.platform.pickFiles();
-            if (result == null) return;
-            _pickedFile = result.files.first;
-            notifyListeners();
-          },
+          onPressed:
+              !firebaseServicesNotifier.getLoading ? () => pickFile() : null,
           child: Text(
               _pickedFile == null ? 'Select Attachment' : _pickedFile!.name),
         ),

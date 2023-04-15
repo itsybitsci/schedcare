@@ -80,27 +80,34 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                               SizedBox(
                                 height: 10.h,
                               ),
-                              consultationRequestNotifier.buildBody(),
+                              consultationRequestNotifier.buildBody(
+                                  enabled:
+                                      !firebaseServicesNotifier.getLoading),
                               SizedBox(
                                 height: 20.h,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  consultationRequestNotifier
-                                      .buildDatePicker(context),
+                                  consultationRequestNotifier.buildDatePicker(
+                                      context,
+                                      enabled:
+                                          !firebaseServicesNotifier.getLoading),
                                   SizedBox(
                                     width: 15.w,
                                   ),
-                                  consultationRequestNotifier
-                                      .buildTimePicker(context),
+                                  consultationRequestNotifier.buildTimePicker(
+                                      context,
+                                      enabled:
+                                          !firebaseServicesNotifier.getLoading),
                                 ],
                               ),
                               SizedBox(
                                 height: 10.h,
                               ),
-                              consultationRequestNotifier
-                                  .buildConsultationType(),
+                              consultationRequestNotifier.buildConsultationType(
+                                  enabled:
+                                      !firebaseServicesNotifier.getLoading),
                               SizedBox(
                                 height: 10.h,
                               ),
@@ -183,98 +190,17 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                                   consultationRequestId)
                                               .then(
                                             (success) async {
-                                              await firebaseServicesNotifier
-                                                  .uploadFile(
-                                                      File(
-                                                          consultationRequestNotifier
-                                                              .pickedFile!
-                                                              .path!),
-                                                      consultationRequestId,
-                                                      AppConstants.patient,
-                                                      consultationRequestNotifier
-                                                          .pickedFile!.name);
+                                              if (consultationRequestNotifier
+                                                      .pickedFile !=
+                                                  null) {
+                                                await uploadAttachment(
+                                                    firebaseServicesNotifier,
+                                                    consultationRequestNotifier,
+                                                    consultationRequestId);
+                                              }
 
-                                              await firebaseServicesNotifier
-                                                  .getFirebaseFirestoreService
-                                                  .getDocument(
-                                                      FirestoreConstants
-                                                          .usersCollection,
-                                                      firebaseServicesNotifier
-                                                          .getCurrentUser!.uid)
-                                                  .then(
-                                                (userSnapshot) async {
-                                                  DocumentReference
-                                                      appNotificationRef =
-                                                      FirebaseFirestore.instance
-                                                          .collection(
-                                                              FirestoreConstants
-                                                                  .notificationsCollection)
-                                                          .doc();
-                                                  String appNotificationId =
-                                                      appNotificationRef.id;
-                                                  String notificationTitle =
-                                                      'New Consultation Request';
-                                                  String notificationBody =
-                                                      'New consultation request received from ${userSnapshot.get(ModelFields.firstName)} ${userSnapshot.get(ModelFields.lastName)}';
-
-                                                  Map<String, dynamic>
-                                                      appNotification = {
-                                                    ModelFields.id:
-                                                        appNotificationId,
-                                                    ModelFields.patientId:
-                                                        firebaseServicesNotifier
-                                                            .getCurrentUser!
-                                                            .uid,
-                                                    ModelFields.doctorId:
-                                                        doctor.id,
-                                                    ModelFields.title:
-                                                        notificationTitle,
-                                                    ModelFields.body:
-                                                        notificationBody,
-                                                    ModelFields.sentAt:
-                                                        DateTime.now(),
-                                                    ModelFields.sender:
-                                                        AppConstants.patient,
-                                                    ModelFields.isRead: false,
-                                                  };
-
-                                                  await firebaseServicesNotifier
-                                                      .getFirebaseFirestoreService
-                                                      .setDocument(
-                                                          appNotification,
-                                                          FirestoreConstants
-                                                              .notificationsCollection,
-                                                          appNotificationId);
-
-                                                  await firebaseServicesNotifier
-                                                      .getFirebaseFirestoreService
-                                                      .getDocument(
-                                                          FirestoreConstants
-                                                              .userTokensCollection,
-                                                          doctor.id)
-                                                      .then(
-                                                    (DocumentSnapshot<
-                                                            Map<String,
-                                                                dynamic>>
-                                                        userTokenSnapshot) {
-                                                      List tokens =
-                                                          userTokenSnapshot.get(
-                                                              ModelFields
-                                                                  .deviceTokens);
-
-                                                      for (String token
-                                                          in tokens) {
-                                                        firebaseServicesNotifier
-                                                            .getFirebaseCloudMessagingService
-                                                            .sendPushNotification(
-                                                                notificationTitle,
-                                                                notificationBody,
-                                                                token);
-                                                      }
-                                                    },
-                                                  );
-                                                },
-                                              );
+                                              await sendNotification(
+                                                  firebaseServicesNotifier);
 
                                               showToast(
                                                   'Successfully sent consultation request');
@@ -315,6 +241,65 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
           },
         ),
       ),
+    );
+  }
+
+  Future uploadAttachment(
+      FirebaseServicesProvider firebaseServicesNotifier,
+      ConsultationRequestProvider consultationRequestNotifier,
+      String consultationRequestId) async {
+    await firebaseServicesNotifier.uploadFile(
+        File(consultationRequestNotifier.pickedFile!.path!),
+        consultationRequestId,
+        AppConstants.patient,
+        consultationRequestNotifier.pickedFile!.name);
+  }
+
+  Future sendNotification(
+      FirebaseServicesProvider firebaseServicesNotifier) async {
+    await firebaseServicesNotifier.getFirebaseFirestoreService
+        .getDocument(FirestoreConstants.usersCollection,
+            firebaseServicesNotifier.getCurrentUser!.uid)
+        .then(
+      (userSnapshot) async {
+        DocumentReference appNotificationRef = FirebaseFirestore.instance
+            .collection(FirestoreConstants.notificationsCollection)
+            .doc();
+        String appNotificationId = appNotificationRef.id;
+        String notificationTitle = 'New Consultation Request';
+        String notificationBody =
+            'New consultation request received from ${userSnapshot.get(ModelFields.firstName)} ${userSnapshot.get(ModelFields.lastName)}';
+
+        Map<String, dynamic> appNotification = {
+          ModelFields.id: appNotificationId,
+          ModelFields.patientId: firebaseServicesNotifier.getCurrentUser!.uid,
+          ModelFields.doctorId: doctor.id,
+          ModelFields.title: notificationTitle,
+          ModelFields.body: notificationBody,
+          ModelFields.sentAt: DateTime.now(),
+          ModelFields.sender: AppConstants.patient,
+          ModelFields.isRead: false,
+        };
+
+        await firebaseServicesNotifier.getFirebaseFirestoreService.setDocument(
+            appNotification,
+            FirestoreConstants.notificationsCollection,
+            appNotificationId);
+
+        await firebaseServicesNotifier.getFirebaseFirestoreService
+            .getDocument(FirestoreConstants.userTokensCollection, doctor.id)
+            .then(
+          (DocumentSnapshot<Map<String, dynamic>> userTokenSnapshot) {
+            List tokens = userTokenSnapshot.get(ModelFields.deviceTokens);
+
+            for (String token in tokens) {
+              firebaseServicesNotifier.getFirebaseCloudMessagingService
+                  .sendPushNotification(
+                      notificationTitle, notificationBody, token);
+            }
+          },
+        );
+      },
     );
   }
 }
