@@ -340,11 +340,14 @@ class FirebaseServicesProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> resetDoctorAttachmentUrl(String consultationRequestId) async {
+  Future<bool> resetAttachmentUrl(
+      String consultationRequestId, String role) async {
     setLoading(true);
     try {
       await _firebaseFirestoreService.updateDocument({
-        ModelFields.doctorAttachmentUrl: null,
+        role == AppConstants.patient
+            ? ModelFields.patientAttachmentUrl
+            : ModelFields.doctorAttachmentUrl: null,
         ModelFields.modifiedAt: DateTime.now(),
       }, FirebaseConstants.consultationRequestsCollection,
           consultationRequestId);
