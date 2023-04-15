@@ -110,14 +110,14 @@ class _CallStatsState extends State<CallStats> {
     }
     double jitter = stats['jitter'] ?? 0;
     double rtt = stats['rtt'] ?? 0;
-    double? score = stats.isNotEmpty ? 100 : null;
-    if (score != null) {
-      score -= packetLossPercent * 50 > 50 ? 50 : packetLossPercent * 50;
-      score -= ((jitter / 30) * 25 > 25 ? 25 : (jitter / 30) * 25);
-      score -= ((rtt / 300) * 25 > 25 ? 25 : (rtt / 300) * 25);
+    double? statScore = stats.isNotEmpty ? 100 : null;
+    if (statScore != null) {
+      statScore -= packetLossPercent * 50 > 50 ? 50 : packetLossPercent * 50;
+      statScore -= ((jitter / 30) * 25 > 25 ? 25 : (jitter / 30) * 25);
+      statScore -= ((rtt / 300) * 25 > 25 ? 25 : (rtt / 300) * 25);
     }
     setState(() {
-      score = score != null ? (score! / 10).toDouble() : null;
+      score = statScore != null ? statScore ~/ 10 : null;
     });
   }
 

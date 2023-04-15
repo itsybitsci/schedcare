@@ -220,28 +220,28 @@ class _CallStatsBottomSheetState extends State<CallStatsBottomSheet> {
   }
 
   void updateStats() {
-    var audioStats = widget.participant.getAudioStats();
-    var videoStats = widget.participant.getVideoStats();
-    dynamic vStats;
-    videoStats?.forEach((stat) {
-      if (vStats == null) {
-        vStats = stat;
+    var audioStatScore = widget.participant.getAudioStats();
+    var videoStatScore = widget.participant.getVideoStats();
+    dynamic vStatsValue;
+    videoStatScore?.forEach((stat) {
+      if (vStatsValue == null) {
+        vStatsValue = stat;
       } else {
         if (stat['size']['width'] != "null" &&
             stat['size']['width'] != null &&
             stat['size']['framerate'] != null) {
-          if (stat['size']['width'] > vStats['size']['width']) {
-            vStats = stat;
+          if (stat['size']['width'] > vStatsValue['size']['width']) {
+            vStatsValue = stat;
           }
         }
       }
     });
     var stats = {};
-    if (audioStats != null) {
-      if (audioStats.isNotEmpty) stats = audioStats[0];
+    if (audioStatScore != null) {
+      if (audioStatScore.isNotEmpty) stats = audioStatScore[0];
     }
-    if (vStats != null) {
-      stats = vStats;
+    if (vStatsValue != null) {
+      stats = vStatsValue;
     }
 
     double packetLossPercent =
@@ -251,17 +251,17 @@ class _CallStatsBottomSheetState extends State<CallStatsBottomSheet> {
     }
     double jitter = stats['jitter'] ?? 0;
     double rtt = stats['rtt'] ?? 0;
-    double? score = stats.isEmpty ? 100 : null;
-    if (score != null) {
-      score -= packetLossPercent * 50 > 50 ? 50 : packetLossPercent * 50;
-      score -= ((jitter / 30) * 25 > 25 ? 25 : (jitter / 30) * 25);
-      score -= ((rtt / 300) * 25 > 25 ? 25 : (rtt / 300) * 25);
+    double? statScore = stats.isNotEmpty ? 100 : null;
+    if (statScore != null) {
+      statScore -= packetLossPercent * 50 > 50 ? 50 : packetLossPercent * 50;
+      statScore -= ((jitter / 30) * 25 > 25 ? 25 : (jitter / 30) * 25);
+      statScore -= ((rtt / 300) * 25 > 25 ? 25 : (rtt / 300) * 25);
     }
 
     setState(() {
-      score = score != null ? (score! / 10).toDouble() : null;
-      audioStats = audioStats?[0];
-      videoStats = vStats;
+      score = statScore != null ? statScore ~/ 10 : null;
+      audioStats = audioStatScore?[0];
+      videoStats = vStatsValue;
     });
   }
 

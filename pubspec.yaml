@@ -65,6 +65,7 @@ dependencies:
   cloud_functions: ^4.1.0
   file_picker: ^5.2.9
   url_launcher: ^6.1.10
+  email_validator: ^2.1.17
 
 flutter_icons:
   android: true

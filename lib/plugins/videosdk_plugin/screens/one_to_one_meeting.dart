@@ -101,7 +101,7 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
 
     return WillPopScope(
-      onWillPop: _onWillPopScope,
+      onWillPop: () async => false,
       child: _joined
           ? SafeArea(
               child: Scaffold(
@@ -398,11 +398,6 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
         }
       }
     });
-  }
-
-  Future<bool> _onWillPopScope() async {
-    meeting.end();
-    return true;
   }
 
   @override
