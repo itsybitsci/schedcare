@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -268,7 +269,10 @@ class GenericFieldsProvider extends ChangeNotifier {
             labelText: 'Email Address',
             hintText: 'Enter email address'),
         validator: (value) {
-          return value!.isEmpty ? 'Required' : null;
+          if (value!.isEmpty) return 'Required';
+          return EmailValidator.validate(value.trim())
+              ? null
+              : 'Invalid format';
         },
       );
 

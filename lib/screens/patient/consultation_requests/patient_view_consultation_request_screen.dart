@@ -106,7 +106,7 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 30.h,
+                      height: 10.h,
                     ),
                     Text(
                         '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
@@ -114,7 +114,7 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                     Text('Sex: ${doctor.sex}'),
                     Text('Specialization: ${doctor.specialization}'),
                     SizedBox(
-                      height: 30.h,
+                      height: 10.h,
                     ),
                     consultationRequestNotifier.buildBody(
                         enabled: isEditing.value),
@@ -139,7 +139,7 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                     consultationRequestNotifier.buildConsultationType(
                         enabled: isEditing.value),
                     SizedBox(
-                      height: 20.h,
+                      height: 10.h,
                     ),
                     consultationRequest.status != AppConstants.pending
                         ? ElevatedButton(

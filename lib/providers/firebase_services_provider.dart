@@ -210,7 +210,6 @@ class FirebaseServicesProvider extends ChangeNotifier {
     setLoading(true);
     try {
       await _firebaseFirestoreService.setDocument(data, collection, id);
-      showToast('Successfully sent consultation request');
       setLoading(false);
       notifyListeners();
       return true;

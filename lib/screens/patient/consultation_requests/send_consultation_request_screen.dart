@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,138 +37,164 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
         title: const Text('Send Consultation Request'),
       ),
       resizeToAvoidBottomInset: false,
-      body: StreamBuilder(
-        stream: consultationRequestsStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.hasData) {
-            final userSnapshotNotifier = ref.watch(userSnapshotProvider(
-                firebaseServicesNotifier.getCurrentUser!.uid));
+      body: WillPopScope(
+        onWillPop: () async {
+          return !firebaseServicesNotifier.getLoading;
+        },
+        child: StreamBuilder(
+          stream: consultationRequestsStream,
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            if (snapshot.hasData) {
+              final userSnapshotNotifier = ref.watch(userSnapshotProvider(
+                  firebaseServicesNotifier.getCurrentUser!.uid));
 
-            return userSnapshotNotifier.when(
-                data: (DocumentSnapshot<Map<String, dynamic>> data) {
-                  List<DateTime> consultationRequestStartTimes = snapshot
-                      .data!.docs
-                      .where((snapshot) =>
-                          snapshot.get(ModelFields.status) !=
-                          AppConstants.rejected)
-                      .map((snapshot) => snapshot
-                          .get(ModelFields.consultationDateTime)
-                          .toDate() as DateTime)
-                      .toList();
+              return userSnapshotNotifier.when(
+                  data: (DocumentSnapshot<Map<String, dynamic>> data) {
+                    List<DateTime> consultationRequestStartTimes = snapshot
+                        .data!.docs
+                        .where((snapshot) =>
+                            snapshot.get(ModelFields.status) !=
+                            AppConstants.rejected)
+                        .map((snapshot) => snapshot
+                            .get(ModelFields.consultationDateTime)
+                            .toDate() as DateTime)
+                        .toList();
 
-                  return Form(
-                    key: formKeySendConsultationRequest,
-                    child: SingleChildScrollView(
-                      child: Center(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 30.h,
-                            ),
-                            doctor.middleName.isEmpty
-                                ? Text('${doctor.firstName} ${doctor.lastName}')
-                                : Text(
-                                    '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
-                            Text('Sex: ${doctor.sex}'),
-                            Text('Specialization: ${doctor.specialization}'),
-                            SizedBox(
-                              height: 30.h,
-                            ),
-                            consultationRequestNotifier.buildBody(),
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                consultationRequestNotifier
-                                    .buildDatePicker(context),
-                                SizedBox(
-                                  width: 15.w,
-                                ),
-                                consultationRequestNotifier
-                                    .buildTimePicker(context),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            consultationRequestNotifier.buildConsultationType(),
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            firebaseServicesNotifier.getLoading
-                                ? loading(color: Colors.blue)
-                                : ElevatedButton(
-                                    onPressed: () async {
-                                      if (formKeySendConsultationRequest
-                                          .currentState!
-                                          .validate()) {
-                                        formKeySendConsultationRequest
-                                            .currentState
-                                            ?.save();
+                    return Form(
+                      key: formKeySendConsultationRequest,
+                      child: SingleChildScrollView(
+                        child: Center(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              doctor.middleName.isEmpty
+                                  ? Text(
+                                      '${doctor.firstName} ${doctor.lastName}')
+                                  : Text(
+                                      '${doctor.firstName} ${doctor.middleName} ${doctor.lastName}'),
+                              Text('Sex: ${doctor.sex}'),
+                              Text('Specialization: ${doctor.specialization}'),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              consultationRequestNotifier.buildBody(),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  consultationRequestNotifier
+                                      .buildDatePicker(context),
+                                  SizedBox(
+                                    width: 15.w,
+                                  ),
+                                  consultationRequestNotifier
+                                      .buildTimePicker(context),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              consultationRequestNotifier
+                                  .buildConsultationType(),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              consultationRequestNotifier
+                                  .buildFilePicker(firebaseServicesNotifier),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              firebaseServicesNotifier.getLoading
+                                  ? loading(color: Colors.blue)
+                                  : ElevatedButton(
+                                      onPressed: () async {
+                                        if (formKeySendConsultationRequest
+                                            .currentState!
+                                            .validate()) {
+                                          formKeySendConsultationRequest
+                                              .currentState
+                                              ?.save();
 
-                                        if (isOverlapping(
-                                            consultationRequestStartTimes,
-                                            consultationRequestNotifier
-                                                .dateTime)) {
-                                          showToast(
-                                              Prompts.overlappingSchedule);
-                                          return;
-                                        }
-
-                                        DocumentReference
-                                            consultationRequestRef =
-                                            FirebaseFirestore.instance
-                                                .collection(FirestoreConstants
-                                                    .consultationRequestsCollection)
-                                                .doc();
-                                        String consultationRequestId =
-                                            consultationRequestRef.id;
-                                        Map<String, dynamic>
-                                            consultationRequest = {
-                                          ModelFields.id: consultationRequestId,
-                                          ModelFields.patientId:
-                                              firebaseServicesNotifier
-                                                  .getCurrentUser!.uid,
-                                          ModelFields.doctorId: doctor.id,
-                                          ModelFields
-                                                  .consultationRequestPatientTitle:
-                                              'Consultation with ${'${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'.trim()}',
-                                          ModelFields
-                                                  .consultationRequestDoctorTitle:
-                                              'Consultation with ${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
-                                                  .trim(),
-                                          ModelFields.consultationRequestBody:
+                                          if (isOverlapping(
+                                              consultationRequestStartTimes,
                                               consultationRequestNotifier
-                                                  .consultationRequestBody,
-                                          ModelFields.status:
-                                              AppConstants.pending,
-                                          ModelFields.consultationType:
-                                              consultationRequestNotifier
-                                                  .consultationType,
-                                          ModelFields.consultationDateTime:
-                                              consultationRequestNotifier
-                                                  .dateTime,
-                                          ModelFields.modifiedAt:
-                                              DateTime.now(),
-                                          ModelFields.createdAt: DateTime.now(),
-                                          ModelFields.meetingId: null,
-                                          ModelFields.messages: [],
-                                        };
-                                        await firebaseServicesNotifier
-                                            .sendConsultationRequest(
-                                                consultationRequest,
-                                                FirestoreConstants
-                                                    .consultationRequestsCollection,
-                                                consultationRequestId)
-                                            .then(
-                                          (success) {
-                                            if (success) {
-                                              context.pop();
+                                                  .dateTime)) {
+                                            showToast(
+                                                Prompts.overlappingSchedule);
+                                            return;
+                                          }
 
-                                              firebaseServicesNotifier
+                                          DocumentReference
+                                              consultationRequestRef =
+                                              FirebaseFirestore.instance
+                                                  .collection(FirestoreConstants
+                                                      .consultationRequestsCollection)
+                                                  .doc();
+                                          String consultationRequestId =
+                                              consultationRequestRef.id;
+                                          Map<String, dynamic>
+                                              consultationRequest = {
+                                            ModelFields.id:
+                                                consultationRequestId,
+                                            ModelFields.patientId:
+                                                firebaseServicesNotifier
+                                                    .getCurrentUser!.uid,
+                                            ModelFields.doctorId: doctor.id,
+                                            ModelFields
+                                                    .consultationRequestPatientTitle:
+                                                'Consultation with ${'${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'.trim()}',
+                                            ModelFields
+                                                    .consultationRequestDoctorTitle:
+                                                'Consultation with ${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
+                                                    .trim(),
+                                            ModelFields.consultationRequestBody:
+                                                consultationRequestNotifier
+                                                    .consultationRequestBody,
+                                            ModelFields.status:
+                                                AppConstants.pending,
+                                            ModelFields.consultationType:
+                                                consultationRequestNotifier
+                                                    .consultationType,
+                                            ModelFields.consultationDateTime:
+                                                consultationRequestNotifier
+                                                    .dateTime,
+                                            ModelFields.modifiedAt:
+                                                DateTime.now(),
+                                            ModelFields.createdAt:
+                                                DateTime.now(),
+                                            ModelFields.meetingId: null,
+                                            ModelFields.messages: [],
+                                            ModelFields.patientAttachmentUrl:
+                                                null,
+                                            ModelFields.doctorAttachmentUrl:
+                                                null,
+                                          };
+
+                                          await firebaseServicesNotifier
+                                              .sendConsultationRequest(
+                                                  consultationRequest,
+                                                  FirestoreConstants
+                                                      .consultationRequestsCollection,
+                                                  consultationRequestId)
+                                              .then(
+                                            (success) async {
+                                              await firebaseServicesNotifier
+                                                  .uploadFile(
+                                                      File(
+                                                          consultationRequestNotifier
+                                                              .pickedFile!
+                                                              .path!),
+                                                      consultationRequestId,
+                                                      AppConstants.patient,
+                                                      consultationRequestNotifier
+                                                          .pickedFile!.name);
+
+                                              await firebaseServicesNotifier
                                                   .getFirebaseFirestoreService
                                                   .getDocument(
                                                       FirestoreConstants
@@ -174,7 +202,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                                       firebaseServicesNotifier
                                                           .getCurrentUser!.uid)
                                                   .then(
-                                                (userSnapshot) {
+                                                (userSnapshot) async {
                                                   DocumentReference
                                                       appNotificationRef =
                                                       FirebaseFirestore.instance
@@ -210,7 +238,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                                     ModelFields.isRead: false,
                                                   };
 
-                                                  firebaseServicesNotifier
+                                                  await firebaseServicesNotifier
                                                       .getFirebaseFirestoreService
                                                       .setDocument(
                                                           appNotification,
@@ -218,7 +246,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                                               .notificationsCollection,
                                                           appNotificationId);
 
-                                                  firebaseServicesNotifier
+                                                  await firebaseServicesNotifier
                                                       .getFirebaseFirestoreService
                                                       .getDocument(
                                                           FirestoreConstants
@@ -247,32 +275,45 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                                   );
                                                 },
                                               );
-                                            }
-                                          },
-                                        );
-                                      }
-                                    },
-                                    child: const Text('Send Request'),
-                                  ),
-                          ],
+
+                                              showToast(
+                                                  'Successfully sent consultation request');
+
+                                              if (context.mounted) {
+                                                context.pop();
+                                              }
+                                            },
+                                          );
+                                        }
+                                      },
+                                      child: const Text('Send Request'),
+                                    ),
+                              if (firebaseServicesNotifier
+                                      .getFirebaseStorageService.uploadTask !=
+                                  null)
+                                consultationRequestNotifier
+                                    .buildUploadProgressIndicator(
+                                        firebaseServicesNotifier),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-                error: (Object error, StackTrace stackTrace) =>
-                    loading(color: Colors.blue),
-                loading: () => loading(color: Colors.blue));
-          }
+                    );
+                  },
+                  error: (Object error, StackTrace stackTrace) =>
+                      loading(color: Colors.blue),
+                  loading: () => loading(color: Colors.blue));
+            }
 
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text(Prompts.errorDueToWeakInternet),
-            );
-          }
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text(Prompts.errorDueToWeakInternet),
+              );
+            }
 
-          return loading(color: Colors.blue);
-        },
+            return loading(color: Colors.blue);
+          },
+        ),
       ),
     );
   }

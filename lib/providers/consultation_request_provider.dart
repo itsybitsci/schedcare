@@ -1,8 +1,10 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
 
 class ConsultationRequestProvider extends ChangeNotifier {
@@ -43,6 +45,70 @@ class ConsultationRequestProvider extends ChangeNotifier {
 
   set setConsultationTypeDropdownValue(String consultationType) {
     _consultationTypeDropdownValue = consultationType;
+  }
+
+  Widget buildFilePicker(FirebaseServicesProvider firebaseServicesNotifier) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            if (firebaseServicesNotifier.getLoading) return;
+            final result = await FilePicker.platform.pickFiles();
+            if (result == null) return;
+            _pickedFile = result.files.first;
+            notifyListeners();
+          },
+          child: Text(
+              _pickedFile == null ? 'Select Attachment' : _pickedFile!.name),
+        ),
+        if (_pickedFile != null)
+          IconButton(
+            onPressed: () {
+              if (firebaseServicesNotifier.getLoading) return;
+              _pickedFile = null;
+              notifyListeners();
+            },
+            icon: const Icon(Icons.close),
+          ),
+      ],
+    );
+  }
+
+  Widget buildUploadProgressIndicator(
+      FirebaseServicesProvider firebaseServicesNotifier) {
+    return StreamBuilder(
+      stream: firebaseServicesNotifier
+          .getFirebaseStorageService.uploadTask!.snapshotEvents,
+      builder: (BuildContext context, AsyncSnapshot<TaskSnapshot> snapshot) {
+        if (snapshot.hasData) {
+          final TaskSnapshot taskSnapshot = snapshot.data!;
+          final double progress =
+              taskSnapshot.bytesTransferred / taskSnapshot.totalBytes;
+          return SizedBox(
+            height: 30.h,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: Colors.grey,
+                  color: Colors.green,
+                ),
+                Center(
+                  child: Text(
+                    '${(progress * 100).roundToDouble()}%',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
   }
 
   Widget buildBody({enabled = true}) => ConstrainedBox(
