@@ -28,7 +28,6 @@ class PatientHomeScreen extends HookConsumerWidget {
             .where(ModelFields.sender, isEqualTo: AppConstants.doctor)
             .where(ModelFields.isRead, isEqualTo: false)
             .snapshots();
-    final pageController = usePageController();
     final index = useState(0);
 
     useEffect(() {
