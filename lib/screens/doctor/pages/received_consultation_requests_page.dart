@@ -114,63 +114,72 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                                                 ? Colors.green
                                                 : Colors.orange),
                               ),
-                              trailing: IconButton(
-                                icon: consultationRequest.consultationType ==
-                                        AppConstants.teleconsultation
-                                    ? Icon(
-                                        Icons.video_call,
-                                        color: consultationRequest.status ==
-                                                    AppConstants.approved &&
-                                                isWithinSchedule(
-                                                    consultationRequest
-                                                        .consultationDateTime)
-                                            ? Colors.red
-                                            : Colors.black54,
-                                      )
-                                    : Icon(
-                                        Icons.person_pin,
-                                        color: consultationRequest.status ==
-                                                    AppConstants.approved &&
-                                                isWithinSchedule(
-                                                    consultationRequest
-                                                        .consultationDateTime)
-                                            ? Colors.red
-                                            : Colors.black54,
-                                      ),
-                                onPressed: () {
-                                  if (consultationRequest.status ==
-                                          AppConstants.approved &&
-                                      isWithinSchedule(consultationRequest
-                                          .consultationDateTime)) {
-                                    context.push(
-                                      RoutePaths.joinScreen,
-                                      extra: MeetingPayload(
-                                          consultationRequest:
-                                              consultationRequest,
-                                          role: AppConstants.doctor),
-                                    );
-                                  } else {
-                                    isLapsed
-                                        ? showToast(
-                                            Prompts.unableToStartLapsedMeeting)
-                                        : consultationRequest.status ==
-                                                AppConstants.rejected
-                                            ? showToast(Prompts
-                                                .unableToStartRejectedMeeting)
-                                            : consultationRequest.status ==
-                                                    AppConstants.pending
-                                                ? showToast(Prompts
-                                                    .unableToStartPendingMeeting)
-                                                : DateTime.now().isAfter(
-                                                        consultationRequest
-                                                            .consultationDateTime)
-                                                    ? showToast(Prompts
-                                                        .unableToStartMeetingInThePast)
-                                                    : showToast(Prompts
-                                                        .unableToStartApprovedMeeting);
-                                  }
-                                },
-                              ),
+                              trailing: consultationRequest.consultationType ==
+                                      AppConstants.teleconsultation
+                                  ? IconButton(
+                                      icon: consultationRequest
+                                                  .consultationType ==
+                                              AppConstants.teleconsultation
+                                          ? Icon(
+                                              Icons.video_call,
+                                              color: consultationRequest
+                                                              .status ==
+                                                          AppConstants
+                                                              .approved &&
+                                                      isWithinSchedule(
+                                                          consultationRequest
+                                                              .consultationDateTime)
+                                                  ? Colors.red
+                                                  : Colors.black54,
+                                            )
+                                          : Icon(
+                                              Icons.person_pin,
+                                              color: consultationRequest
+                                                              .status ==
+                                                          AppConstants
+                                                              .approved &&
+                                                      isWithinSchedule(
+                                                          consultationRequest
+                                                              .consultationDateTime)
+                                                  ? Colors.red
+                                                  : Colors.black54,
+                                            ),
+                                      onPressed: () {
+                                        if (consultationRequest.status ==
+                                                AppConstants.approved &&
+                                            isWithinSchedule(consultationRequest
+                                                .consultationDateTime)) {
+                                          context.push(
+                                            RoutePaths.joinScreen,
+                                            extra: MeetingPayload(
+                                                consultationRequest:
+                                                    consultationRequest,
+                                                role: AppConstants.doctor),
+                                          );
+                                        } else {
+                                          isLapsed
+                                              ? showToast(Prompts
+                                                  .unableToStartLapsedMeeting)
+                                              : consultationRequest.status ==
+                                                      AppConstants.rejected
+                                                  ? showToast(Prompts
+                                                      .unableToStartRejectedMeeting)
+                                                  : consultationRequest
+                                                              .status ==
+                                                          AppConstants.pending
+                                                      ? showToast(Prompts
+                                                          .unableToStartPendingMeeting)
+                                                      : DateTime.now().isAfter(
+                                                              consultationRequest
+                                                                  .consultationDateTime)
+                                                          ? showToast(Prompts
+                                                              .unableToStartMeetingInThePast)
+                                                          : showToast(Prompts
+                                                              .unableToStartApprovedMeeting);
+                                        }
+                                      },
+                                    )
+                                  : null,
                               subtitle: Center(
                                 child: Text(
                                   "${DateFormat('MMMM d, y  (hh:mm a - ').format(consultationRequest.consultationDateTime)} ${DateFormat(' hh:mm a) ').format(consultationRequest.consultationDateTime.add(

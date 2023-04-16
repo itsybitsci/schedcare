@@ -126,45 +126,51 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                                                       ? Colors.green
                                                       : Colors.orange),
                                     ),
-                                    trailing: IconButton(
-                                      icon: consultationRequest
-                                                  .consultationType ==
-                                              AppConstants.teleconsultation
-                                          ? Icon(
-                                              Icons.video_call,
-                                              color: meetingId != null
-                                                  ? Colors.red
-                                                  : Colors.black54,
-                                            )
-                                          : Icon(
-                                              Icons.person_pin,
-                                              color: meetingId != null
-                                                  ? Colors.red
-                                                  : Colors.black54,
-                                            ),
-                                      onPressed: () {
-                                        if (meetingId != null) {
-                                          context.push(
-                                            RoutePaths.joinScreen,
-                                            extra: MeetingPayload(
-                                              meetingId: meetingId,
-                                              consultationRequest:
-                                                  consultationRequest,
-                                              role: AppConstants.patient,
-                                            ),
-                                          );
-                                        } else {
-                                          if (consultationRequest.status !=
-                                              AppConstants.approved) {
-                                            showToast(
-                                                Prompts.meetingUnavailable);
-                                          } else {
-                                            showToast(Prompts
-                                                .waitForDoctorToStartMeeting);
-                                          }
-                                        }
-                                      },
-                                    ),
+                                    trailing: consultationRequest
+                                                .consultationType ==
+                                            AppConstants.teleconsultation
+                                        ? IconButton(
+                                            icon: consultationRequest
+                                                        .consultationType ==
+                                                    AppConstants
+                                                        .teleconsultation
+                                                ? Icon(
+                                                    Icons.video_call,
+                                                    color: meetingId != null
+                                                        ? Colors.red
+                                                        : Colors.black54,
+                                                  )
+                                                : Icon(
+                                                    Icons.person_pin,
+                                                    color: meetingId != null
+                                                        ? Colors.red
+                                                        : Colors.black54,
+                                                  ),
+                                            onPressed: () {
+                                              if (meetingId != null) {
+                                                context.push(
+                                                  RoutePaths.joinScreen,
+                                                  extra: MeetingPayload(
+                                                    meetingId: meetingId,
+                                                    consultationRequest:
+                                                        consultationRequest,
+                                                    role: AppConstants.patient,
+                                                  ),
+                                                );
+                                              } else {
+                                                if (consultationRequest
+                                                        .status !=
+                                                    AppConstants.approved) {
+                                                  showToast(Prompts
+                                                      .meetingUnavailable);
+                                                } else {
+                                                  showToast(Prompts
+                                                      .waitForDoctorToStartMeeting);
+                                                }
+                                              }
+                                            },
+                                          )
+                                        : null,
                                     subtitle: Center(
                                       child: Text(
                                         "${DateFormat('MMMM d, y  (hh:mm a - ').format(consultationRequest.consultationDateTime)} ${DateFormat(' hh:mm a) ').format(consultationRequest.consultationDateTime.add(
