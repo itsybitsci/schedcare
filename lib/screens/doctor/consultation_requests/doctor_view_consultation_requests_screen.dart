@@ -140,6 +140,7 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                     ],
                   ),
                 if (consultationRequest.doctorAttachmentUrl == null &&
+                    consultationRequest.status == AppConstants.approved &&
                     DateTime.now()
                         .isAfter(consultationRequest.consultationDateTime))
                   Row(
@@ -166,7 +167,9 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                           icon: const Icon(Icons.upload)),
                     ],
                   ),
-                if (consultationRequest.status != AppConstants.approved)
+                if (consultationRequest.status == AppConstants.pending &&
+                    DateTime.now()
+                        .isBefore(consultationRequest.consultationDateTime))
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

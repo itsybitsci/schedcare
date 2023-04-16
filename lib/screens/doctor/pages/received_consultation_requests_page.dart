@@ -82,18 +82,12 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                             Patient patient =
                                 Patient.fromSnapshot(patientSnapshot.data!);
                             return ListTile(
-                              onTap: () => (consultationRequest.status !=
-                                          AppConstants.rejected) &&
-                                      !isLapsed
-                                  ? context.push(
-                                      RoutePaths.doctorViewConsultationRequest,
-                                      extra:
-                                          DoctorViewConsultationRequestObject(
-                                              patient: patient,
-                                              consultationRequest:
-                                                  consultationRequest),
-                                    )
-                                  : null,
+                              onTap: () => context.push(
+                                RoutePaths.doctorViewConsultationRequest,
+                                extra: DoctorViewConsultationRequestObject(
+                                    patient: patient,
+                                    consultationRequest: consultationRequest),
+                              ),
                               title: Center(
                                 child: Text(consultationRequest
                                     .consultationRequestDoctorTitle),

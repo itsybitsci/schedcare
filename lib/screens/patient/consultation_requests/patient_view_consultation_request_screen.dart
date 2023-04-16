@@ -55,7 +55,8 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Consultation Request'),
         actions: [
-          if (consultationRequest.status == AppConstants.pending)
+          if (consultationRequest.status == AppConstants.pending &&
+              DateTime.now().isBefore(consultationRequest.consultationDateTime))
             isEditing.value
                 ? IconButton(
                     icon: const Icon(Icons.close),
@@ -149,8 +150,7 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                       SizedBox(
                         height: 10.h,
                       ),
-                      if (consultationRequest.patientAttachmentUrl != null &&
-                          !isEditing.value)
+                      if (consultationRequest.patientAttachmentUrl != null)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -171,19 +171,21 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                 }
                               },
                             ),
-                            IconButton(
-                              onPressed: !firebaseServicesNotifier.getLoading
-                                  ? () async => await firebaseServicesNotifier
-                                      .resetAttachmentUrl(
-                                          consultationRequest.id,
-                                          AppConstants.patient)
-                                      .then((value) => context.pop())
-                                  : null,
-                              icon: const Icon(Icons.close),
-                            ),
+                            if (isEditing.value)
+                              IconButton(
+                                onPressed: !firebaseServicesNotifier.getLoading
+                                    ? () async => await firebaseServicesNotifier
+                                        .resetAttachmentUrl(
+                                            consultationRequest.id,
+                                            AppConstants.patient)
+                                        .then((value) => context.pop())
+                                    : null,
+                                icon: const Icon(Icons.close),
+                              ),
                           ],
                         ),
-                      if (isEditing.value)
+                      if (isEditing.value &&
+                          consultationRequest.patientAttachmentUrl == null)
                         consultationRequestNotifier
                             .buildFilePicker(firebaseServicesNotifier),
                       if (consultationRequest.doctorAttachmentUrl != null &&
@@ -222,7 +224,9 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                           ),
                           child: const Text('View Conversation History'),
                         ),
-                      if (consultationRequest.status != AppConstants.approved)
+                      if (consultationRequest.status == AppConstants.pending &&
+                          DateTime.now().isBefore(
+                              consultationRequest.consultationDateTime))
                         firebaseServicesNotifier.getLoading
                             ? loading(color: Colors.blue)
                             : isEditing.value
@@ -334,48 +338,13 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                     },
                                     child: const Text('Edit Request'),
                                   )
-                                : ElevatedButton(
-                                    onPressed: () async {
-                                      return showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: const Text(
-                                                'Confirm Cancellation of Consultation Request'),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => context.pop(),
-                                                child:
-                                                    const Text('Keep Request'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () async {
-                                                  Navigator.popUntil(
-                                                      context,
-                                                      ModalRoute.withName(
-                                                          RouteNames
-                                                              .authWrapper));
-                                                  await firebaseServicesNotifier
-                                                      .deleteDocument(
-                                                          FirebaseConstants
-                                                              .consultationRequestsCollection,
-                                                          consultationRequest
-                                                              .id);
-                                                },
-                                                child: const Text(
-                                                    'Delete Request'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(Colors.red),
-                                    ),
-                                    child: const Text('Cancel Request'),
-                                  ),
+                                : buildCancelRequestButton(
+                                    context, firebaseServicesNotifier),
+                      if (consultationRequest.status == AppConstants.approved &&
+                          DateTime.now().isBefore(
+                              consultationRequest.consultationDateTime))
+                        buildCancelRequestButton(
+                            context, firebaseServicesNotifier),
                       if (firebaseServicesNotifier
                               .getFirebaseStorageService.uploadTask !=
                           null)
@@ -393,6 +362,42 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
       ),
     );
   }
+
+  Widget buildCancelRequestButton(BuildContext context,
+          FirebaseServicesProvider firebaseServicesNotifier) =>
+      ElevatedButton(
+        onPressed: () async {
+          return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title:
+                    const Text('Confirm Cancellation of Consultation Request'),
+                actions: [
+                  TextButton(
+                    onPressed: () => context.pop(),
+                    child: const Text('Keep Request'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      Navigator.popUntil(
+                          context, ModalRoute.withName(RouteNames.authWrapper));
+                      await firebaseServicesNotifier.deleteDocument(
+                          FirebaseConstants.consultationRequestsCollection,
+                          consultationRequest.id);
+                    },
+                    child: const Text('Delete Request'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.red),
+        ),
+        child: const Text('Cancel Request'),
+      );
 
   Future uploadAttachment(
       FirebaseServicesProvider firebaseServicesNotifier,
