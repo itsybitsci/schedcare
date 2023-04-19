@@ -64,6 +64,7 @@ class AppConstants {
 
   static const int defaultMeetingDuration = 1;
   static const int maximumFileUploadSize = 5;
+  static const double defaultPadding = 16.0;
 
   static const List<String> sexes = <String>[male, female];
 

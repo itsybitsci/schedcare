@@ -66,8 +66,16 @@ class SchedcareApp extends HookConsumerWidget {
         return MaterialApp.router(
           title: AppConstants.appTitle,
           theme: ThemeData(
-            primarySwatch: ColorConstants.primaryColor,
             primaryColor: ColorConstants.primaryColor,
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: ColorConstants.primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
           ),
           themeMode: ThemeMode.light,
           routeInformationParser: routeNotifier.routeInformationParser,
