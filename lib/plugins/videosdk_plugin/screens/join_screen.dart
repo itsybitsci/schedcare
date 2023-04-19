@@ -9,7 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/plugins/videosdk_plugin/screens/one_to_one_meeting.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/api.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
@@ -185,11 +185,11 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
     return Theme(
       data: ThemeData.dark().copyWith(
         appBarTheme: const AppBarTheme().copyWith(
-          color: ColorConstants.secondaryColor,
+          color: VideoSdkColorConstants.secondaryColor,
         ),
-        primaryColor: ColorConstants.primaryColor,
+        primaryColor: VideoSdkColorConstants.primaryColor,
         colorScheme: ColorScheme.fromSwatch(
-            backgroundColor: ColorConstants.secondaryColor),
+            backgroundColor: VideoSdkColorConstants.secondaryColor),
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -258,7 +258,8 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                                             : Container(
                                                 decoration: BoxDecoration(
                                                     color:
-                                                        ColorConstants.black800,
+                                                        VideoSdkColorConstants
+                                                            .black800,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             12)),
@@ -288,7 +289,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                                             foregroundColor: Colors.black,
                                             backgroundColor: isMicOn
                                                 ? Colors.white
-                                                : ColorConstants.red,
+                                                : VideoSdkColorConstants.red,
                                             shape: const CircleBorder(),
                                             padding: const EdgeInsets.all(12),
                                           ),
@@ -297,7 +298,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                                                   ? Icons.mic
                                                   : Icons.mic_off,
                                               color: isMicOn
-                                                  ? ColorConstants.grey
+                                                  ? VideoSdkColorConstants.grey
                                                   : Colors.white),
                                         ),
                                         ElevatedButton(
@@ -316,7 +317,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                                             shape: const CircleBorder(),
                                             backgroundColor: isCameraOn
                                                 ? Colors.white
-                                                : ColorConstants.red,
+                                                : VideoSdkColorConstants.red,
                                             padding: const EdgeInsets.all(12),
                                           ),
                                           child: Icon(
@@ -324,7 +325,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                                                 ? Icons.videocam
                                                 : Icons.videocam_off,
                                             color: isCameraOn
-                                                ? ColorConstants.grey
+                                                ? VideoSdkColorConstants.grey
                                                 : Colors.white,
                                           ),
                                         ),
@@ -386,7 +387,7 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                                               BorderRadius.circular(12)),
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 16),
-                                      color: ColorConstants.purple,
+                                      color: VideoSdkColorConstants.purple,
                                       child: Text(
                                           widget.role == AppConstants.patient
                                               ? "Join Meeting"
@@ -409,7 +410,8 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
                                 ),
                               );
                             }
-                            return loading(color: ColorConstants.black400);
+                            return loading(
+                                color: VideoSdkColorConstants.black400);
                           },
                         ),
                       ],

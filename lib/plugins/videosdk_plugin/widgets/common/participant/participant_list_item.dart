@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:videosdk/videosdk.dart';
 
 class ParticipantListItem extends StatefulWidget {
@@ -39,7 +39,7 @@ class _ParticipantListItemState extends State<ParticipantListItem> {
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
       decoration: BoxDecoration(
-          color: ColorConstants.black600,
+          color: VideoSdkColorConstants.black600,
           borderRadius: BorderRadius.circular(10)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,9 +48,9 @@ class _ParticipantListItemState extends State<ParticipantListItem> {
             margin: const EdgeInsets.only(right: 10),
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: ColorConstants.black500,
+              color: VideoSdkColorConstants.black500,
               borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: ColorConstants.black500),
+              border: Border.all(color: VideoSdkColorConstants.black500),
             ),
             child: const Icon(Icons.person),
           ),
@@ -68,12 +68,12 @@ class _ParticipantListItemState extends State<ParticipantListItem> {
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
               color: audioStream != null
-                  ? ColorConstants.black600
-                  : ColorConstants.red,
+                  ? VideoSdkColorConstants.black600
+                  : VideoSdkColorConstants.red,
               border: Border.all(
                   color: audioStream != null
-                      ? ColorConstants.black500
-                      : ColorConstants.red),
+                      ? VideoSdkColorConstants.black500
+                      : VideoSdkColorConstants.red),
               borderRadius: BorderRadius.circular(30),
             ),
             child: Icon(audioStream != null ? Icons.mic : Icons.mic_off),
@@ -83,12 +83,12 @@ class _ParticipantListItemState extends State<ParticipantListItem> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: videoStream != null
-                  ? ColorConstants.black600
-                  : ColorConstants.red,
+                  ? VideoSdkColorConstants.black600
+                  : VideoSdkColorConstants.red,
               border: Border.all(
                   color: videoStream != null
-                      ? ColorConstants.black500
-                      : ColorConstants.red),
+                      ? VideoSdkColorConstants.black500
+                      : VideoSdkColorConstants.red),
               borderRadius: BorderRadius.circular(30),
             ),
             child: SvgPicture.asset(videoStream != null

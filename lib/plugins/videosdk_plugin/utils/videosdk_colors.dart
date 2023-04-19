@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ColorConstants {
+class VideoSdkColorConstants {
   static const Color primaryColor = Color.fromRGBO(5, 10, 14, 1);
   static const Color secondaryColor = Color.fromRGBO(43, 48, 52, 1);
   static const Color hoverColor = Color.fromRGBO(51, 50, 68, 1);

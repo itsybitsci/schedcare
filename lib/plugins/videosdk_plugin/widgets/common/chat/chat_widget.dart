@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/utilities/helpers.dart';
 import 'package:videosdk/videosdk.dart';
 
@@ -27,7 +27,7 @@ class ChatWidget extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: ColorConstants.black600,
+            color: VideoSdkColorConstants.black600,
           ),
           child: IntrinsicWidth(
             child: Column(
@@ -37,7 +37,7 @@ class ChatWidget extends StatelessWidget {
                   isLocalParticipant ? "You" : message.senderName,
                   textAlign: TextAlign.left,
                   style: const TextStyle(
-                    color: ColorConstants.black400,
+                    color: VideoSdkColorConstants.black400,
                     fontWeight: FontWeight.w500,
                     fontSize: 12,
                   ),
@@ -57,7 +57,7 @@ class ChatWidget extends StatelessWidget {
                     DateFormat('hh:mm a').format(message.timestamp.toLocal()),
                     textAlign: TextAlign.end,
                     style: const TextStyle(
-                        color: ColorConstants.black400,
+                        color: VideoSdkColorConstants.black400,
                         fontSize: 10,
                         fontWeight: FontWeight.w500),
                   ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/one_to_one/participant_view.dart';
 import 'package:videosdk/videosdk.dart';
 
@@ -67,10 +67,10 @@ class _OneToOneMeetingContainerState extends State<OneToOneMeetingContainer> {
           Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: ColorConstants.black800,
+                color: VideoSdkColorConstants.black800,
               ),
               child: ParticipantView(
-                avatarBackground: ColorConstants.black700,
+                avatarBackground: VideoSdkColorConstants.black700,
                 stream: largeViewStream,
                 isMicOn: remoteParticipant != null
                     ? remoteAudioStream != null
@@ -111,11 +111,11 @@ class _OneToOneMeetingContainerState extends State<OneToOneMeetingContainer> {
                       width: 100,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: ColorConstants.black600,
+                        color: VideoSdkColorConstants.black600,
                       ),
                       child: ParticipantView(
                         avatarTextSize: 30,
-                        avatarBackground: ColorConstants.black500,
+                        avatarBackground: VideoSdkColorConstants.black500,
                         stream: smallViewStream,
                         isMicOn: (localAudioStream != null &&
                                 remoteShareStream == null) ||

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/participant/participant_list_item.dart';
 import 'package:videosdk/videosdk.dart';
 
@@ -26,7 +26,7 @@ class _ParticipantListState extends State<ParticipantList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorConstants.secondaryColor,
+      backgroundColor: VideoSdkColorConstants.secondaryColor,
       appBar: AppBar(
         flexibleSpace: Align(
           alignment: Alignment.centerLeft,
@@ -50,7 +50,7 @@ class _ParticipantListState extends State<ParticipantList> {
           ),
         ),
         automaticallyImplyLeading: false,
-        backgroundColor: ColorConstants.secondaryColor,
+        backgroundColor: VideoSdkColorConstants.secondaryColor,
         elevation: 0,
       ),
       body: SafeArea(

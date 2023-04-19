@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:videosdk/videosdk.dart';
 
 class CallStatsBottomSheet extends StatefulWidget {
@@ -41,7 +41,7 @@ class _CallStatsBottomSheetState extends State<CallStatsBottomSheet> {
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
-            color: ColorConstants.black700,
+            color: VideoSdkColorConstants.black700,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(children: [
@@ -49,12 +49,12 @@ class _CallStatsBottomSheetState extends State<CallStatsBottomSheet> {
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: score == null
-                    ? ColorConstants.black700
+                    ? VideoSdkColorConstants.black700
                     : score! > 7
-                        ? ColorConstants.green
+                        ? VideoSdkColorConstants.green
                         : score! > 4
-                            ? ColorConstants.yellow
-                            : ColorConstants.red,
+                            ? VideoSdkColorConstants.yellow
+                            : VideoSdkColorConstants.red,
                 borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(8.0),
                     bottomRight: Radius.circular(0.0),

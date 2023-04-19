@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
 import 'package:schedcare/utilities/constants.dart';
 
@@ -13,7 +13,7 @@ class WaitingToJoin extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: ColorConstants.primaryColor,
+        backgroundColor: VideoSdkColorConstants.primaryColor,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,

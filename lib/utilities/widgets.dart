@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/utilities/helpers.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -73,7 +73,7 @@ Widget conversationHistoryChatWidget(String currentUserRole, String senderRole,
                   currentUserRole == senderRole ? "You" : senderName,
                   textAlign: TextAlign.left,
                   style: const TextStyle(
-                    color: ColorConstants.black200,
+                    color: VideoSdkColorConstants.black200,
                     fontWeight: FontWeight.w500,
                     fontSize: 12,
                   ),

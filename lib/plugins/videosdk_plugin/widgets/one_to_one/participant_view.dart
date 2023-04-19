@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/stats/call_stats.dart';
 import 'package:videosdk/videosdk.dart';
@@ -65,7 +65,7 @@ class ParticipantView extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: ColorConstants.black200,
+                                color: VideoSdkColorConstants.black200,
                               ),
                             ),
                             const VerticalSpacer(20),
@@ -74,13 +74,13 @@ class ParticipantView extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(12)),
                               padding: const EdgeInsets.symmetric(
                                   vertical: 12, horizontal: 30),
-                              color: ColorConstants.purple,
+                              color: VideoSdkColorConstants.purple,
                               onPressed: onStopScreenSharePressed,
                               child: const Text(
                                 "Stop Presenting",
                                 style: TextStyle(
                                     fontSize: 16,
-                                    color: ColorConstants.black200),
+                                    color: VideoSdkColorConstants.black200),
                               ),
                             )
                           ])),
@@ -91,13 +91,13 @@ class ParticipantView extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: ColorConstants.black700,
+                color: VideoSdkColorConstants.black700,
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Icon(
                 Icons.mic_off,
                 size: avatarTextSize / 2,
-                color: ColorConstants.black200,
+                color: VideoSdkColorConstants.black200,
               ),
             ),
           ),
@@ -109,13 +109,13 @@ class ParticipantView extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: ColorConstants.black700,
+                color: VideoSdkColorConstants.black700,
               ),
               child: Text(
                 isScreenShare
                     ? "${participant.displayName} is presenting"
                     : participant.displayName,
-                style: const TextStyle(color: ColorConstants.black200),
+                style: const TextStyle(color: VideoSdkColorConstants.black200),
               ),
             ),
           ),

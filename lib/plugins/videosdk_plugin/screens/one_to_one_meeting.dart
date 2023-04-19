@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/app_bar/meeting_app_bar.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/chat/chat_view.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/joining/participant_limit_reached.dart';
@@ -103,7 +103,7 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
       child: _joined
           ? SafeArea(
               child: Scaffold(
-                  backgroundColor: ColorConstants.primaryColor,
+                  backgroundColor: VideoSdkColorConstants.primaryColor,
                   body: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -174,7 +174,7 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
                             final screenSize = MediaQuery.of(context).size;
                             await showMenu(
                               context: context,
-                              color: ColorConstants.black700,
+                              color: VideoSdkColorConstants.black700,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                               position: RelativeRect.fromLTRB(
@@ -189,7 +189,8 @@ class _OneToOneMeetingScreenState extends ConsumerState<OneToOneMeetingScreen> {
                                     child: Text(
                                       e.label,
                                       style: const TextStyle(
-                                          color: ColorConstants.black200),
+                                          color:
+                                              VideoSdkColorConstants.black200),
                                     ));
                               }).toList(),
                               elevation: 8.0,

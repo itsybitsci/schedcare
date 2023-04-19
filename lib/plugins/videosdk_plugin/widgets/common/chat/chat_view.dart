@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/chat/chat_widget.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
@@ -56,7 +56,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
     final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
 
     return Scaffold(
-      backgroundColor: ColorConstants.secondaryColor,
+      backgroundColor: VideoSdkColorConstants.secondaryColor,
       appBar: AppBar(
         flexibleSpace: Align(
           alignment: Alignment.centerLeft,
@@ -70,14 +70,14 @@ class _ChatViewState extends ConsumerState<ChatView> {
                     style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 18,
-                        color: ColorConstants.black200),
+                        color: VideoSdkColorConstants.black200),
                   ),
                 ),
               ),
               IconButton(
                 icon: const Icon(
                   Icons.close,
-                  color: ColorConstants.black200,
+                  color: VideoSdkColorConstants.black200,
                 ),
                 onPressed: () => Navigator.pop(context),
               ),
@@ -85,7 +85,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
           ),
         ),
         automaticallyImplyLeading: false,
-        backgroundColor: ColorConstants.secondaryColor,
+        backgroundColor: VideoSdkColorConstants.secondaryColor,
         elevation: 0,
       ),
       body: SafeArea(
@@ -116,7 +116,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
                 padding: const EdgeInsets.fromLTRB(16, 4, 4, 4),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: ColorConstants.black600),
+                    color: VideoSdkColorConstants.black600),
                 child: Row(
                   children: [
                     Expanded(
@@ -124,7 +124,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: ColorConstants.black200,
+                          color: VideoSdkColorConstants.black200,
                         ),
                         controller: msgTextController,
                         onChanged: (value) => setState(() {
@@ -134,7 +134,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
                             hintText: "Write your message",
                             border: InputBorder.none,
                             hintStyle: TextStyle(
-                              color: ColorConstants.black400,
+                              color: VideoSdkColorConstants.black400,
                             )),
                       ),
                     ),
@@ -177,7 +177,7 @@ class _ChatViewState extends ConsumerState<ChatView> {
                             borderRadius: BorderRadius.circular(8)),
                         child: const Icon(
                           Icons.send,
-                          color: ColorConstants.black200,
+                          color: VideoSdkColorConstants.black200,
                         ),
                       ),
                     )

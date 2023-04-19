@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
 import 'package:videosdk/videosdk.dart';
 
@@ -11,7 +11,7 @@ class ParticipantLimitReached extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorConstants.primaryColor,
+      backgroundColor: VideoSdkColorConstants.primaryColor,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -47,7 +47,7 @@ class ParticipantLimitReached extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               padding: const EdgeInsets.symmetric(vertical: 12),
-              color: ColorConstants.purple,
+              color: VideoSdkColorConstants.purple,
               child: const Text("Ok", style: TextStyle(fontSize: 16)),
             )
           ],

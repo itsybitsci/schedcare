@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/api.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/app_bar/recording_indicator.dart';
 import 'package:schedcare/utilities/helpers.dart';
@@ -73,7 +73,7 @@ class MeetingAppBarState extends State<MeetingAppBar> {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: ColorConstants.black200,
+                            color: VideoSdkColorConstants.black200,
                           ),
                         ),
                         GestureDetector(
@@ -82,7 +82,7 @@ class MeetingAppBarState extends State<MeetingAppBar> {
                             child: Icon(
                               Icons.copy,
                               size: 16,
-                              color: ColorConstants.black200,
+                              color: VideoSdkColorConstants.black200,
                             ),
                           ),
                           onTap: () {
@@ -101,7 +101,7 @@ class MeetingAppBarState extends State<MeetingAppBar> {
                       style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: ColorConstants.black200),
+                          color: VideoSdkColorConstants.black200),
                     )
                   ],
                 ),

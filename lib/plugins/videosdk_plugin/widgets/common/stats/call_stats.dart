@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/widgets/common/stats/call_stats_bottom_sheet.dart';
 import 'package:videosdk/videosdk.dart';
 
@@ -62,10 +62,10 @@ class _CallStatsState extends State<CallStats> {
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: score! > 7
-                      ? ColorConstants.green
+                      ? VideoSdkColorConstants.green
                       : score! > 4
-                          ? ColorConstants.yellow
-                          : ColorConstants.red,
+                          ? VideoSdkColorConstants.yellow
+                          : VideoSdkColorConstants.red,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Icon(

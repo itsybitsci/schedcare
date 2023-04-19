@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/colors.dart';
+import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:touch_ripple_effect/touch_ripple_effect.dart';
@@ -47,12 +47,12 @@ class MeetingActionBar extends StatelessWidget {
           PopupMenuButton(
             position: PopupMenuPosition.under,
             padding: const EdgeInsets.all(0),
-            color: ColorConstants.black700,
+            color: VideoSdkColorConstants.black700,
             icon: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: ColorConstants.red),
-                color: ColorConstants.red,
+                border: Border.all(color: VideoSdkColorConstants.red),
+                color: VideoSdkColorConstants.red,
               ),
               padding: const EdgeInsets.all(8),
               child: const Icon(
@@ -91,15 +91,18 @@ class MeetingActionBar extends StatelessWidget {
           // Mic Control
           TouchRippleEffect(
             borderRadius: BorderRadius.circular(12),
-            rippleColor:
-                isMicEnabled ? ColorConstants.primaryColor : Colors.white,
+            rippleColor: isMicEnabled
+                ? VideoSdkColorConstants.primaryColor
+                : Colors.white,
             onTap: onMicButtonPressed,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: ColorConstants.secondaryColor),
-                color:
-                    isMicEnabled ? ColorConstants.primaryColor : Colors.white,
+                border:
+                    Border.all(color: VideoSdkColorConstants.secondaryColor),
+                color: isMicEnabled
+                    ? VideoSdkColorConstants.primaryColor
+                    : Colors.white,
               ),
               padding: const EdgeInsets.all(8),
               child: Row(
@@ -109,7 +112,7 @@ class MeetingActionBar extends StatelessWidget {
                     size: 30,
                     color: isMicEnabled
                         ? Colors.white
-                        : ColorConstants.primaryColor,
+                        : VideoSdkColorConstants.primaryColor,
                   ),
                   GestureDetector(
                     onTapDown: (details) => {onSwitchMicButtonPressed(details)},
@@ -119,7 +122,7 @@ class MeetingActionBar extends StatelessWidget {
                         Icons.arrow_drop_down,
                         color: isMicEnabled
                             ? Colors.white
-                            : ColorConstants.primaryColor,
+                            : VideoSdkColorConstants.primaryColor,
                       ),
                     ),
                   ),
@@ -131,14 +134,16 @@ class MeetingActionBar extends StatelessWidget {
           // Camera Control
           TouchRippleEffect(
             borderRadius: BorderRadius.circular(12),
-            rippleColor: ColorConstants.primaryColor,
+            rippleColor: VideoSdkColorConstants.primaryColor,
             onTap: onCameraButtonPressed,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: ColorConstants.secondaryColor),
-                color:
-                    isCamEnabled ? ColorConstants.primaryColor : Colors.white,
+                border:
+                    Border.all(color: VideoSdkColorConstants.secondaryColor),
+                color: isCamEnabled
+                    ? VideoSdkColorConstants.primaryColor
+                    : Colors.white,
               ),
               padding: const EdgeInsets.all(10),
               child: SvgPicture.asset(
@@ -148,7 +153,9 @@ class MeetingActionBar extends StatelessWidget {
                 width: 26,
                 height: 26,
                 colorFilter: ColorFilter.mode(
-                    isCamEnabled ? Colors.white : ColorConstants.primaryColor,
+                    isCamEnabled
+                        ? Colors.white
+                        : VideoSdkColorConstants.primaryColor,
                     BlendMode.srcIn),
               ),
             ),
@@ -156,13 +163,14 @@ class MeetingActionBar extends StatelessWidget {
 
           TouchRippleEffect(
             borderRadius: BorderRadius.circular(12),
-            rippleColor: ColorConstants.primaryColor,
+            rippleColor: VideoSdkColorConstants.primaryColor,
             onTap: onChatButtonPressed,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: ColorConstants.secondaryColor),
-                color: ColorConstants.primaryColor,
+                border:
+                    Border.all(color: VideoSdkColorConstants.secondaryColor),
+                color: VideoSdkColorConstants.primaryColor,
               ),
               padding: const EdgeInsets.all(10),
               child: SvgPicture.asset(
@@ -179,11 +187,12 @@ class MeetingActionBar extends StatelessWidget {
           PopupMenuButton(
             position: PopupMenuPosition.under,
             padding: const EdgeInsets.all(0),
-            color: ColorConstants.black700,
+            color: VideoSdkColorConstants.black700,
             icon: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: ColorConstants.secondaryColor),
+                border:
+                    Border.all(color: VideoSdkColorConstants.secondaryColor),
                 // color: red,
               ),
               padding: const EdgeInsets.all(8),
@@ -257,7 +266,7 @@ class MeetingActionBar extends StatelessWidget {
                 style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    color: ColorConstants.black400),
+                    color: VideoSdkColorConstants.black400),
               )
           ],
         )
