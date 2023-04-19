@@ -66,6 +66,7 @@ dependencies:
   file_picker: ^5.2.9
   url_launcher: ^6.1.10
   email_validator: ^2.1.17
+  remove_emoji: ^0.0.8
 
 flutter_icons:
   android: true
@@ -129,3 +130,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: YesevaOne
+      fonts:
+        - asset: fonts/YesevaOne-Regular.ttf
+
+    - family: CrimsonPro
+      fonts:
+        - asset: fonts/CrimsonPro-Light.ttf
