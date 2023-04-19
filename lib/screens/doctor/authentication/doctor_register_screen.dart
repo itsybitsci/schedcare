@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:remove_emoji/remove_emoji.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/providers/generic_fields_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
@@ -66,7 +67,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
 
                           await firebaseServicesNotifier
                               .createUserWithEmailAndPassword(
-                                  genericFieldsNotifier.email,
+                                  genericFieldsNotifier.email.removEmoji,
                                   genericFieldsNotifier.password,
                                   data);
 

@@ -209,3 +209,13 @@ class ModelFields {
   static const String messageTimeStamp = 'messageTimeStamp';
   static const String senderName = 'senderName';
 }
+
+class FontConstants {
+  static const String yesevaOne = 'YesevaOne';
+  static const String crimsonPro = 'CrimsonPro';
+}
+
+class ColorConstants {
+  static const MaterialColor primaryColor = Colors.blue;
+  static const MaterialColor primaryLight = Colors.lightBlue;
+}

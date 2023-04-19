@@ -66,8 +66,10 @@ class SchedcareApp extends HookConsumerWidget {
         return MaterialApp.router(
           title: AppConstants.appTitle,
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: ColorConstants.primaryColor,
+            primaryColor: ColorConstants.primaryColor,
           ),
+          themeMode: ThemeMode.light,
           routeInformationParser: routeNotifier.routeInformationParser,
           routeInformationProvider: routeNotifier.routeInformationProvider,
           routerDelegate: routeNotifier.routerDelegate,
