@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -34,7 +35,11 @@ class LoginScreen extends HookConsumerWidget {
                 SizedBox(
                   height: 10.h,
                 ),
-                const LoginScreenTopImage(),
+                ConstrainedBox(
+                  constraints:
+                      BoxConstraints(maxWidth: 300.w, maxHeight: 300.h),
+                  child: Image.asset("assets/images/splash.png"),
+                ),
                 SizedBox(
                   height: 10.h,
                 ),
@@ -56,7 +61,10 @@ class LoginScreen extends HookConsumerWidget {
                       ),
                     ),
                     validator: (value) {
-                      return value!.isEmpty ? 'Required' : null;
+                      if (value!.isEmpty) return 'Required';
+                      return EmailValidator.validate(value.trim())
+                          ? null
+                          : 'Invalid format';
                     },
                   ),
                 ),

@@ -280,10 +280,17 @@ class GenericFieldsProvider extends ChangeNotifier {
   Widget buildEmail() => TextFormField(
         keyboardType: TextInputType.emailAddress,
         controller: _emailController,
-        decoration: const InputDecoration(
-            suffixIcon: Icon(Icons.email),
-            labelText: 'Email Address',
-            hintText: 'Enter email address'),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.grey[200],
+          suffixIcon: const Icon(Icons.email),
+          labelText: 'Email Address',
+          hintText: 'Enter email address',
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
         validator: (value) {
           if (value!.isEmpty) return 'Required';
           return EmailValidator.validate(value.trim())
