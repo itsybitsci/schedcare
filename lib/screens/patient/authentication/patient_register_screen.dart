@@ -23,11 +23,11 @@ class PatientRegisterScreen extends HookConsumerWidget {
     final scrollController = useScrollController();
 
     return Scaffold(
-      body: Background(
-        child: Form(
-          key: formKeyRegisterPatient,
-          child: Scrollbar(
-            controller: scrollController,
+      body: Scrollbar(
+        controller: scrollController,
+        child: Background(
+          child: Form(
+            key: formKeyRegisterPatient,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -170,7 +170,7 @@ class PatientRegisterScreen extends HookConsumerWidget {
                               if (context.mounted) context.pop();
                             }
                           },
-                          child: Text('REGISTER',
+                          child: Text('REGISTER AS A PATIENT',
                               style: TextStyle(fontSize: 15.sp)),
                         ),
                   SizedBox(height: 10.h),

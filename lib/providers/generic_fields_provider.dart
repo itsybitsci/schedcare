@@ -413,10 +413,17 @@ class GenericFieldsProvider extends ChangeNotifier {
   Widget buildSpecialization() => TextFormField(
         keyboardType: TextInputType.name,
         controller: _specializationController,
-        decoration: const InputDecoration(
-            suffixIcon: Icon(Icons.work),
-            labelText: 'Specialization',
-            hintText: 'Enter specialization.'),
+        decoration: InputDecoration(
+          suffixIcon: const Icon(Icons.work),
+          labelText: 'Specialization',
+          hintText: 'Enter specialization.',
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
+        ),
         validator: (value) {
           return value!.isEmpty ? 'Required' : null;
         },
