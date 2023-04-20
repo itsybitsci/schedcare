@@ -48,8 +48,9 @@ class ResetPasswordScreen extends HookConsumerWidget {
                   height: 200.h,
                 ),
                 ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 300.w),
-                    child: genericFieldsNotifier.buildEmail()),
+                  constraints: BoxConstraints(maxWidth: 300.w),
+                  child: genericFieldsNotifier.buildEmail(),
+                ),
                 SizedBox(
                   height: 10.h,
                 ),
@@ -72,7 +73,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
                   },
                 ),
                 SizedBox(
-                  height: 200.h,
+                  height: 250.h,
                 ),
                 const Text('Already know your password?'),
                 RichText(

@@ -29,7 +29,7 @@ class LoginScreen extends HookConsumerWidget {
       body: Background(
         child: Form(
           key: formKeyLogin,
-          child: Center(
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(

@@ -42,7 +42,6 @@ dependencies:
   hooks_riverpod: ^2.2.0
   flutter_launcher_icons: ^0.12.0
   intl: ^0.17.0
-  font_awesome_flutter: ^10.4.0
   firebase_analytics: ^10.1.4
   firebase_performance: ^0.9.0+14
   firebase_app_check: ^0.1.1+12

@@ -1,7 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/utilities/constants.dart';
@@ -143,20 +142,32 @@ class GenericFieldsProvider extends ChangeNotifier {
   Widget buildPrefix() => TextFormField(
         keyboardType: TextInputType.name,
         controller: _prefixController,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           labelText: 'Prefix (Optional)',
           hintText: 'Enter prefix',
-          suffixIcon: Icon(Icons.person),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
+          suffixIcon: const Icon(Icons.person),
         ),
       );
 
   Widget buildFirstName() => TextFormField(
         keyboardType: TextInputType.name,
         controller: _firstNameController,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           labelText: 'First Name',
           hintText: 'Enter first name',
-          suffixIcon: Icon(Icons.person),
+          suffixIcon: const Icon(Icons.person),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         inputFormatters: [
           FilteringTextInputFormatter.allow(
@@ -171,10 +182,16 @@ class GenericFieldsProvider extends ChangeNotifier {
   Widget buildMiddleName() => TextFormField(
         keyboardType: TextInputType.name,
         controller: _middleNameController,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           labelText: 'Middle Name (Optional)',
           hintText: 'Enter middle name',
-          suffixIcon: Icon(Icons.person),
+          suffixIcon: const Icon(Icons.person),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         inputFormatters: [
           FilteringTextInputFormatter.allow(
@@ -186,10 +203,16 @@ class GenericFieldsProvider extends ChangeNotifier {
   Widget buildLastName() => TextFormField(
         keyboardType: TextInputType.name,
         controller: _lastNameController,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           labelText: 'Last Name',
           hintText: 'Enter last name',
-          suffixIcon: Icon(Icons.person),
+          suffixIcon: const Icon(Icons.person),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         inputFormatters: [
           FilteringTextInputFormatter.allow(
@@ -204,20 +227,32 @@ class GenericFieldsProvider extends ChangeNotifier {
   Widget buildSuffix() => TextFormField(
         keyboardType: TextInputType.name,
         controller: _suffixController,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           labelText: 'Suffix (Optional)',
           hintText: 'Enter suffix',
-          suffixIcon: Icon(Icons.person),
+          suffixIcon: const Icon(Icons.person),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
       );
 
   Widget buildAge() => TextFormField(
         keyboardType: TextInputType.number,
         controller: _ageController,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           labelText: 'Age',
           hintText: 'Enter age',
-          suffixIcon: Icon(Icons.calendar_month),
+          suffixIcon: const Icon(Icons.calendar_month),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         validator: (value) {
           return value!.isEmpty ? 'Required' : null;
@@ -226,11 +261,19 @@ class GenericFieldsProvider extends ChangeNotifier {
 
   Widget buildSexesDropdown({bool editProfile = false}) =>
       DropdownButtonFormField<String>(
+        borderRadius: BorderRadius.circular(20),
+        dropdownColor: Colors.grey[200],
         value: editProfile ? _sexesDropdownValue : null,
         hint: const Text('Select sex'),
         alignment: AlignmentDirectional.center,
-        decoration: const InputDecoration(
-          suffixIcon: Icon(Icons.person),
+        decoration: InputDecoration(
+          suffixIcon: const Icon(Icons.person),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         isExpanded: true,
         onChanged: (String? value) {
@@ -254,10 +297,16 @@ class GenericFieldsProvider extends ChangeNotifier {
         readOnly: true,
         enableInteractiveSelection: false,
         controller: _birthdateController,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           labelText: 'Birthdate',
           hintText: 'Enter birthdate',
-          suffixIcon: Icon(Icons.calendar_month),
+          suffixIcon: const Icon(Icons.calendar_month),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         onTap: () async {
           DateTime? pickedDate = await showDatePicker(
@@ -302,10 +351,17 @@ class GenericFieldsProvider extends ChangeNotifier {
   Widget buildPhoneNumber() => TextFormField(
         keyboardType: TextInputType.phone,
         controller: _phoneNumberController,
-        decoration: const InputDecoration(
-            suffixIcon: Icon(Icons.phone),
-            labelText: 'Phone Number',
-            hintText: '(+63)'),
+        decoration: InputDecoration(
+          suffixIcon: const Icon(Icons.sim_card),
+          labelText: 'Phone Number',
+          hintText: '(+63)',
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
+        ),
         validator: (value) {
           if (value!.isEmpty) return 'Required';
           return !value.contains(RegExp('^(09|\\+639)\\d{9}\$'))
@@ -317,10 +373,17 @@ class GenericFieldsProvider extends ChangeNotifier {
   Widget buildAddress() => TextFormField(
         keyboardType: TextInputType.streetAddress,
         controller: _addressController,
-        decoration: const InputDecoration(
-            suffixIcon: Icon(Icons.house),
-            labelText: 'Address',
-            hintText: 'Enter current address'),
+        decoration: InputDecoration(
+          suffixIcon: const Icon(Icons.house),
+          labelText: 'Address',
+          hintText: 'Enter current address',
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
+        ),
         validator: (value) {
           return value!.isEmpty ? 'Required' : null;
         },
@@ -329,10 +392,17 @@ class GenericFieldsProvider extends ChangeNotifier {
   Widget buildUhsIdNumber() => TextFormField(
         keyboardType: TextInputType.number,
         controller: _uhsIdNumberController,
-        decoration: const InputDecoration(
-            suffixIcon: FaIcon(FontAwesomeIcons.idCard),
-            labelText: 'UHS ID Number (Optional)',
-            hintText: 'Enter UHS ID No.'),
+        decoration: InputDecoration(
+          suffixIcon: const Icon(Icons.credit_card),
+          labelText: 'UHS ID Number (Optional)',
+          hintText: 'Enter UHS ID No.',
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
+        ),
         inputFormatters: [
           FilteringTextInputFormatter.allow(
             RegExp('[0-9]'),
@@ -344,7 +414,7 @@ class GenericFieldsProvider extends ChangeNotifier {
         keyboardType: TextInputType.name,
         controller: _specializationController,
         decoration: const InputDecoration(
-            suffixIcon: FaIcon(FontAwesomeIcons.idCard),
+            suffixIcon: Icon(Icons.work),
             labelText: 'Specialization',
             hintText: 'Enter specialization.'),
         validator: (value) {
@@ -354,12 +424,20 @@ class GenericFieldsProvider extends ChangeNotifier {
 
   Widget buildVaccinationStatus({bool editProfile = false}) =>
       DropdownButtonFormField<String>(
+        borderRadius: BorderRadius.circular(20),
+        dropdownColor: Colors.grey[200],
         value: editProfile ? _vaccinationStatusDropdownValue : null,
         hint: const Text('Select vaccination status'),
         alignment: AlignmentDirectional.center,
         isExpanded: true,
-        decoration: const InputDecoration(
-          suffixIcon: FaIcon(FontAwesomeIcons.syringe),
+        decoration: InputDecoration(
+          suffixIcon: const Icon(Icons.health_and_safety),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         onChanged: (String? value) {
           _vaccinationStatusDropdownValue = value!;
@@ -380,11 +458,19 @@ class GenericFieldsProvider extends ChangeNotifier {
 
   Widget buildClassification({bool editProfile = false}) =>
       DropdownButtonFormField<String>(
+        borderRadius: BorderRadius.circular(20),
+        dropdownColor: Colors.grey[200],
         value: editProfile ? _classificationsDropdownValue : null,
-        hint: const Text('Select classification'),
+        hint: const Text('Select classification (Optional)'),
         alignment: AlignmentDirectional.center,
-        decoration: const InputDecoration(
-          suffixIcon: FaIcon(FontAwesomeIcons.school),
+        decoration: InputDecoration(
+          suffixIcon: const Icon(Icons.account_box),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         isExpanded: true,
         onChanged: (String? value) {
@@ -403,11 +489,19 @@ class GenericFieldsProvider extends ChangeNotifier {
 
   Widget buildCivilStatus({bool editProfile = false}) =>
       DropdownButtonFormField<String>(
+        borderRadius: BorderRadius.circular(20),
+        dropdownColor: Colors.grey[200],
         value: editProfile ? _civilStatusDropdownValue : null,
         hint: const Text('Select civil status'),
         alignment: AlignmentDirectional.center,
-        decoration: const InputDecoration(
-          suffixIcon: FaIcon(FontAwesomeIcons.ring),
+        decoration: InputDecoration(
+          suffixIcon: const Icon(Icons.safety_divider),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         isExpanded: true,
         onChanged: (String? value) {
@@ -444,6 +538,12 @@ class GenericFieldsProvider extends ChangeNotifier {
               }
             },
           ),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         obscureText: !_passwordVisible,
         validator: (value) {
@@ -483,6 +583,12 @@ class GenericFieldsProvider extends ChangeNotifier {
               }
             },
           ),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.blue, width: 3),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          filled: true,
+          fillColor: Colors.grey[200],
         ),
         obscureText: !_repeatPasswordVisible,
         validator: (value) {
