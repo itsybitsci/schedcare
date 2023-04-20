@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -157,6 +158,11 @@ class GenericFieldsProvider extends ChangeNotifier {
           hintText: 'Enter first name',
           suffixIcon: Icon(Icons.person),
         ),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(
+            RegExp('[a-zA-Z ]'),
+          )
+        ],
         validator: (value) {
           return value!.isEmpty ? 'Required' : null;
         },
@@ -170,6 +176,11 @@ class GenericFieldsProvider extends ChangeNotifier {
           hintText: 'Enter middle name',
           suffixIcon: Icon(Icons.person),
         ),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(
+            RegExp('[a-zA-Z ]'),
+          )
+        ],
       );
 
   Widget buildLastName() => TextFormField(
@@ -180,6 +191,11 @@ class GenericFieldsProvider extends ChangeNotifier {
           hintText: 'Enter last name',
           suffixIcon: Icon(Icons.person),
         ),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(
+            RegExp('[a-zA-Z ]'),
+          )
+        ],
         validator: (value) {
           return value!.isEmpty ? 'Required' : null;
         },
@@ -310,6 +326,11 @@ class GenericFieldsProvider extends ChangeNotifier {
             suffixIcon: FaIcon(FontAwesomeIcons.idCard),
             labelText: 'UHS ID Number (Optional)',
             hintText: 'Enter UHS ID No.'),
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(
+            RegExp('[0-9]'),
+          )
+        ],
       );
 
   Widget buildSpecialization() => TextFormField(
