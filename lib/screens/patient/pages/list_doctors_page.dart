@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/user_models.dart';
@@ -21,59 +22,109 @@ class ListDoctorsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FirestoreQueryBuilder<Doctor>(
-      query: doctorsQuery,
-      pageSize: 10,
-      builder: (context, snapshot, _) {
-        if (snapshot.hasError) {
-          return const Text(Prompts.errorDueToWeakInternet);
-        }
+    return Center(
+      child: Container(
+        height: 520.h,
+        width: 340.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.r),
+          color: ColorConstants.primaryLight,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 320.w,
+              height: 40.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.r),
+                color: Colors.white,
+              ),
+              child: Center(
+                child: Text(
+                  'List of Doctors',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
+                ),
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Flexible(
+              child: Container(
+                width: 320.w,
+                height: 450.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.r),
+                  color: Colors.white,
+                ),
+                child: FirestoreQueryBuilder<Doctor>(
+                  query: doctorsQuery,
+                  builder: (context, snapshot, _) {
+                    if (snapshot.hasError) {
+                      return const Text(Prompts.errorDueToWeakInternet);
+                    }
 
-        if (snapshot.hasData) {
-          return snapshot.docs.isEmpty
-              ? const Center(
-                  child: Text(Prompts.noAvailableDoctors),
-                )
-              : RefreshIndicator(
-                  onRefresh: () async {
-                    snapshot.fetchMore();
+                    if (snapshot.hasData) {
+                      return snapshot.docs.isEmpty
+                          ? const Center(
+                              child: Text(
+                                Prompts.noAvailableDoctors,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: snapshot.docs.length,
+                              itemBuilder: (context, index) {
+                                if (snapshot.hasMore &&
+                                    index + 1 == snapshot.docs.length) {
+                                  snapshot.fetchMore();
+                                }
+
+                                final Doctor doctor =
+                                    snapshot.docs[index].data();
+
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 5.h, horizontal: 10.w),
+                                  child: Material(
+                                    type: MaterialType.transparency,
+                                    child: ListTile(
+                                      tileColor: Colors.grey[200],
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.grey[300]!),
+                                        borderRadius:
+                                            BorderRadius.circular(10.r),
+                                      ),
+                                      onTap: () {
+                                        context.push(
+                                            RoutePaths.sendConsultationRequest,
+                                            extra: doctor);
+                                      },
+                                      title: Center(
+                                        child: Text(
+                                            '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
+                                                .trim()),
+                                      ),
+                                      subtitle: Center(
+                                        child: Text(
+                                            'Specialization: ${doctor.specialization}'),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                    }
+
+                    return loading(color: Colors.blue);
                   },
-                  child: ListView.builder(
-                    itemCount: snapshot.docs.length,
-                    itemBuilder: (context, index) {
-                      if (snapshot.hasMore &&
-                          index + 1 == snapshot.docs.length) {
-                        snapshot.fetchMore();
-                      }
-
-                      final Doctor doctor = snapshot.docs[index].data();
-
-                      return ListTile(
-                        onTap: () {
-                          context.push(RoutePaths.sendConsultationRequest,
-                              extra: doctor);
-                        },
-                        title: Center(
-                          child: doctor.middleName.isEmpty
-                              ? Text(
-                                  '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
-                                      .trim())
-                              : Text(
-                                  '${doctor.prefix} ${doctor.firstName} ${doctor.middleName} ${doctor.lastName} ${doctor.suffix}'
-                                      .trim(),
-                                ),
-                        ),
-                        subtitle: Center(
-                          child: Text(doctor.role),
-                        ),
-                      );
-                    },
-                  ),
-                );
-        }
-
-        return loading(color: Colors.blue);
-      },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
