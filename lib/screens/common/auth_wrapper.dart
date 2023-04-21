@@ -7,8 +7,8 @@ import 'package:schedcare/screens/common/login_screen.dart';
 import 'package:schedcare/screens/common/verify_email_screen.dart';
 import 'package:schedcare/screens/doctor/home/doctor_home_screen.dart';
 import 'package:schedcare/screens/patient/home/patient_home_screen.dart';
+import 'package:schedcare/utilities/components.dart';
 import 'package:schedcare/utilities/constants.dart';
-import 'package:schedcare/utilities/widgets.dart';
 
 class AuthWrapper extends HookConsumerWidget {
   AuthWrapper({super.key});
@@ -44,11 +44,11 @@ class AuthWrapper extends HookConsumerWidget {
                   AppConstants.doctor.toLowerCase()) {
                 return DoctorHomeScreen();
               }
-              return materialLoading();
+              return const LoadingScreen();
             },
             error: (Object error, StackTrace stackTrace) =>
-                materialLoading(toastMessage: 'An error occurred.'),
-            loading: () => materialLoading(),
+                const LoadingScreen(),
+            loading: () => const LoadingScreen(),
           );
         }
         return LoginScreen();

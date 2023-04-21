@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class Background extends StatelessWidget {
   final Widget child;
@@ -36,6 +37,31 @@ class Background extends StatelessWidget {
             ),
             SafeArea(child: child),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class LoadingScreen extends StatelessWidget {
+  const LoadingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Background(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset("assets/video_sdk/joining_lottie.json",
+                    width: 100),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -108,7 +108,7 @@ class LoginScreen extends HookConsumerWidget {
                 SizedBox(
                   height: 10.h,
                 ),
-                firebaseServicesNotifier.getLoading
+                firebaseServicesNotifier.getLoggingIn
                     ? loading(color: Colors.blue)
                     : ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 300.w),

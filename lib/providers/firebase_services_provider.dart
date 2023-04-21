@@ -21,10 +21,13 @@ class FirebaseServicesProvider extends ChangeNotifier {
   final FirebaseStorageService _firebaseStorageService =
       FirebaseStorageService();
   bool _isLoading = false;
+  bool _isLoggingin = false;
   String? _role;
   String? _deviceToken;
 
   bool get getLoading => _isLoading;
+
+  bool get getLoggingIn => _isLoggingin;
 
   User? get getLogin => _firebaseAuthenticationService.currentUser;
 
@@ -49,8 +52,14 @@ class FirebaseServicesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setLoggingIn(bool loader) {
+    _isLoggingin = loader;
+    notifyListeners();
+  }
+
   Future<bool> logInWithEmailAndPassword(String email, String password) async {
     setLoading(true);
+    setLoggingIn(true);
     try {
       UserCredential? userCredential = await _firebaseAuthenticationService
           .logInWithEmailAndPassword(email, password);
@@ -69,10 +78,12 @@ class FirebaseServicesProvider extends ChangeNotifier {
       }, FirebaseConstants.usersCollection, user.uid);
 
       setLoading(false);
+      setLoggingIn(false);
       notifyListeners();
       return true;
     } on FirebaseException catch (e) {
       setLoading(false);
+      setLoggingIn(false);
       showToast(Exception(e).toString());
       throw Exception(e).toString();
     }
@@ -110,6 +121,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
 
   Future<void> signOut() async {
     setLoading(true);
+    setLoggingIn(true);
     try {
       await _firebaseFirestoreService.updateDocument({
         ModelFields.deviceTokens: FieldValue.arrayRemove([_deviceToken])
@@ -120,10 +132,12 @@ class FirebaseServicesProvider extends ChangeNotifier {
       });
 
       setLoading(false);
+      setLoggingIn(false);
       notifyListeners();
     } on FirebaseException catch (e) {
       showToast(e.code);
       setLoading(false);
+      setLoggingIn(false);
       throw Exception(e.code);
     }
   }
