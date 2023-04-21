@@ -66,7 +66,8 @@ class PatientNotificationsPage extends HookConsumerWidget {
                                 appNotification.id);
                       },
                       title: Center(
-                        child: Text(appNotification.body),
+                        child: Text(appNotification.body,
+                            style: TextStyle(fontSize: 12.sp)),
                       ),
                       trailing: Text(
                         DateFormat('hh:mm a').format(appNotification.sentAt),
@@ -76,7 +77,7 @@ class PatientNotificationsPage extends HookConsumerWidget {
                         child: Text(
                             DateFormat('MMMM d, y')
                                 .format(appNotification.sentAt),
-                            style: TextStyle(fontSize: 12.sp)),
+                            style: TextStyle(fontSize: 10.sp)),
                       ),
                     );
                   },

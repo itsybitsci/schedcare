@@ -101,8 +101,11 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                                                   consultationRequest),
                                     ),
                                     title: Center(
-                                      child: Text(consultationRequest
-                                          .consultationRequestPatientTitle),
+                                      child: Text(
+                                        consultationRequest
+                                            .consultationRequestPatientTitle,
+                                        style: TextStyle(fontSize: 12.sp),
+                                      ),
                                     ),
                                     leading: Text(
                                       isLapsed
@@ -173,7 +176,7 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                                               hours: AppConstants
                                                   .defaultMeetingDuration),
                                         ))}",
-                                        style: TextStyle(fontSize: 12.sp),
+                                        style: TextStyle(fontSize: 10.sp),
                                       ),
                                     ),
                                   );

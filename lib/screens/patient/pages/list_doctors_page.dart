@@ -104,11 +104,13 @@ class ListDoctorsPage extends HookConsumerWidget {
                                       title: Center(
                                         child: Text(
                                             '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
-                                                .trim()),
+                                                .trim(),
+                                            style: TextStyle(fontSize: 12.sp)),
                                       ),
                                       subtitle: Center(
                                         child: Text(
-                                            'Specialization: ${doctor.specialization}'),
+                                            'Specialization: ${doctor.specialization}',
+                                            style: TextStyle(fontSize: 10.sp)),
                                       ),
                                     ),
                                   ),
