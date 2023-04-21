@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/services/firebase_authentication_service.dart';
 import 'package:schedcare/screens/common/auth_wrapper.dart';
+import 'package:schedcare/utilities/components.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
 class VerifyEmailScreen extends ConsumerStatefulWidget {
@@ -81,47 +84,55 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
       return AuthWrapper();
     } else {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Verify Email'),
-          automaticallyImplyLeading: false,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
+        body: Background(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'A verification email has been sent to your email address.',
-                style: TextStyle(fontSize: 20),
-                textAlign: TextAlign.center,
+              SizedBox(height: 150.h),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 300.w),
+                child: Text(
+                  'A verification email has been sent to your email address.',
+                  style: TextStyle(fontSize: 20.sp),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 20.h),
               ElevatedButton.icon(
                 onPressed:
                     canResendVerificationEmail ? sendVerificationEmail : null,
                 icon: const Icon(
                   Icons.email,
-                  size: 32,
                 ),
-                label: const Text(
-                  'Resend Email',
-                  style: TextStyle(fontSize: 24),
+                label: Text(
+                  'RESEND EMAIL',
+                  style: TextStyle(fontSize: 15.sp),
                 ),
               ),
-              const SizedBox(
-                height: 8,
+              SizedBox(
+                height: 250.h,
               ),
-              TextButton(
-                onPressed: () async {
-                  timer?.cancel();
-                  await firebaseAuthenticationService.signOut();
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(fontSize: 24),
+              const Text('Already verified?'),
+              RichText(
+                text: TextSpan(
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ),
+                  children: [
+                    const TextSpan(text: 'Click '),
+                    TextSpan(
+                      text: 'here',
+                      style: const TextStyle(
+                        color: Colors.blue,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          timer?.cancel();
+                          await firebaseAuthenticationService.signOut();
+                        },
+                    ),
+                    const TextSpan(text: ' to go back to the login screen.'),
+                  ],
                 ),
               ),
             ],
