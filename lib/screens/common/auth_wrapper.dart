@@ -34,7 +34,7 @@ class AuthWrapper extends HookConsumerWidget {
 
               // Check if user is admin approved
               if (!data.get(ModelFields.isApproved)) {
-                return const ApprovalScreen();
+                return ApprovalScreen();
               }
 
               //Redirect based on role

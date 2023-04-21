@@ -31,13 +31,10 @@ class LoginScreen extends HookConsumerWidget {
           key: formKeyLogin,
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 10.h,
-                ),
                 ConstrainedBox(
-                  constraints:
-                      BoxConstraints(maxWidth: 300.w, maxHeight: 300.h),
+                  constraints: BoxConstraints(maxHeight: 250.w),
                   child: Image.asset("assets/images/splash.png"),
                 ),
                 SizedBox(

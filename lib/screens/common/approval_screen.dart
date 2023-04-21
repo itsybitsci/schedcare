@@ -1,35 +1,51 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:schedcare/providers/firebase_services_provider.dart';
+import 'package:schedcare/services/firebase_authentication_service.dart';
+import 'package:schedcare/utilities/components.dart';
 
 class ApprovalScreen extends HookConsumerWidget {
-  const ApprovalScreen({super.key});
+  ApprovalScreen({super.key});
+  final FirebaseAuthenticationService firebaseAuthenticationService =
+      FirebaseAuthenticationService();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Registration Under Review'),
-        automaticallyImplyLeading: false,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: Background(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Your application is still under review and pending for approval.',
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
+            SizedBox(height: 150.h),
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 300.w),
+              child: Text(
+                'Your application is still under review by the administrator and pending for approval.',
+                style: TextStyle(fontSize: 20.sp),
+                textAlign: TextAlign.center,
+              ),
             ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () async {
-                await firebaseServicesNotifier.signOut();
-              },
-              child: const Text('Go back to Login screen'),
+            SizedBox(height: 300.h),
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
+                children: [
+                  const TextSpan(text: 'Click '),
+                  TextSpan(
+                    text: 'here',
+                    style: const TextStyle(
+                      color: Colors.blue,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () async =>
+                          await firebaseAuthenticationService.signOut(),
+                  ),
+                  const TextSpan(text: ' to go back to the login screen.'),
+                ],
+              ),
             ),
           ],
         ),

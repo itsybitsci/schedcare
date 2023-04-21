@@ -48,7 +48,7 @@ class RouterNotifier extends ChangeNotifier {
         GoRoute(
           name: RouteNames.approval,
           path: RoutePaths.approval,
-          builder: (context, state) => const ApprovalScreen(),
+          builder: (context, state) => ApprovalScreen(),
         ),
         GoRoute(
           name: RouteNames.verifyEmail,
