@@ -38,7 +38,7 @@ class PatientNotificationsPage extends HookConsumerWidget {
 
     return Center(
       child: Container(
-        height: 520.h,
+        height: 540.h,
         width: 340.w,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
@@ -66,7 +66,7 @@ class PatientNotificationsPage extends HookConsumerWidget {
             Flexible(
               child: Container(
                 width: 320.w,
-                height: 450.h,
+                height: 470.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: Colors.white,
@@ -115,15 +115,16 @@ class PatientNotificationsPage extends HookConsumerWidget {
                                         tileColor: appNotification.isRead
                                             ? Colors.grey[200]
                                             : Colors.blue[50],
-                                        onTap: () {
-                                          firebaseServicesNotifier
-                                              .getFirebaseFirestoreService
-                                              .updateDocument(
-                                                  {ModelFields.isRead: true},
-                                                  FirebaseConstants
-                                                      .notificationsCollection,
-                                                  appNotification.id);
-                                        },
+                                        onTap: () async => appNotification
+                                                .isRead
+                                            ? null
+                                            : firebaseServicesNotifier
+                                                .getFirebaseFirestoreService
+                                                .updateDocument(
+                                                    {ModelFields.isRead: true},
+                                                    FirebaseConstants
+                                                        .notificationsCollection,
+                                                    appNotification.id),
                                         title: Center(
                                           child: Text(
                                             appNotification.body,

@@ -27,7 +27,7 @@ class ListDoctorsPage extends HookConsumerWidget {
 
     return Center(
       child: Container(
-        height: 520.h,
+        height: 540.h,
         width: 340.w,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
@@ -55,7 +55,7 @@ class ListDoctorsPage extends HookConsumerWidget {
             Flexible(
               child: Container(
                 width: 320.w,
-                height: 450.h,
+                height: 470.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: Colors.white,
