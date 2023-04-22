@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/spacer.dart';
@@ -18,7 +19,8 @@ class WaitingToJoin extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Lottie.asset("assets/video_sdk/joining_lottie.json", width: 100),
+              Lottie.asset("assets/video_sdk/joining_lottie.json",
+                  width: 100.w),
               const VerticalSpacer(20),
               Text(
                   role != AppConstants.patient

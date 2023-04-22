@@ -46,8 +46,9 @@ class ListDoctorsPage extends HookConsumerWidget {
               child: Center(
                 child: Text(
                   'List of Doctors',
+                  textAlign: TextAlign.center,
                   style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
                 ),
               ),
             ),

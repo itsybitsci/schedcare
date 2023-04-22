@@ -6,8 +6,7 @@ class Prompts {
       'No sent consultation requests. Kindly check back later.';
   static const String noReceivedConsultationRequests =
       'No received consultation requests. Kindly check back later.';
-  static const String noNotifications =
-      'No notifications at the moment. Kindly check back later.';
+  static const String noNotifications = 'No notifications at the moment.';
   static const String errorDueToWeakInternet =
       'Error encountered due to weak internet connection. Kindly refresh the page.';
   static const String overlappingSchedule =

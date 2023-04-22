@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'package:schedcare/services/firebase_authentication_service.dart';
 import 'package:schedcare/screens/common/auth_wrapper.dart';
 import 'package:schedcare/utilities/components.dart';
@@ -88,7 +89,7 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 150.h),
+              SizedBox(height: 100.h),
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 300.w),
                 child: Text(
@@ -109,9 +110,8 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
                   style: TextStyle(fontSize: 15.sp),
                 ),
               ),
-              SizedBox(
-                height: 250.h,
-              ),
+              Lottie.asset('assets/animations/verifying-profile_lottie.json',
+                  width: 250.w),
               const Text('Already verified?'),
               RichText(
                 text: TextSpan(

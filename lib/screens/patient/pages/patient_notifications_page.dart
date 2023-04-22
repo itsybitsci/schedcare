@@ -79,8 +79,14 @@ class PatientNotificationsPage extends HookConsumerWidget {
                     builder: (context, appNotificationCollectionSnapshot, _) {
                       if (appNotificationCollectionSnapshot.hasData) {
                         return appNotificationCollectionSnapshot.docs.isEmpty
-                            ? const Center(
-                                child: Text(Prompts.noNotifications),
+                            ? Center(
+                                child: Text(
+                                  Prompts.noNotifications,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15.sp),
+                                ),
                               )
                             : ListView.builder(
                                 itemCount: appNotificationCollectionSnapshot
@@ -115,10 +121,9 @@ class PatientNotificationsPage extends HookConsumerWidget {
                                         tileColor: appNotification.isRead
                                             ? Colors.grey[200]
                                             : Colors.blue[50],
-                                        onTap: () async => appNotification
-                                                .isRead
+                                        onTap: appNotification.isRead
                                             ? null
-                                            : firebaseServicesNotifier
+                                            : () async => firebaseServicesNotifier
                                                 .getFirebaseFirestoreService
                                                 .updateDocument(
                                                     {ModelFields.isRead: true},

@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'package:schedcare/services/firebase_authentication_service.dart';
 import 'package:schedcare/utilities/components.dart';
 
@@ -17,7 +18,7 @@ class ApprovalScreen extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 150.h),
+            SizedBox(height: 100.h),
             ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 300.w),
               child: Text(
@@ -26,7 +27,8 @@ class ApprovalScreen extends HookConsumerWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 300.h),
+            Lottie.asset('assets/animations/verifying-profile_lottie.json',
+                width: 300.w),
             RichText(
               text: TextSpan(
                 style: const TextStyle(
