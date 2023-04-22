@@ -12,13 +12,11 @@ import 'package:schedcare/screens/common/reset_password_screen.dart';
 import 'package:schedcare/screens/common/verify_email_screen.dart';
 import 'package:schedcare/screens/doctor/authentication/doctor_register_screen.dart';
 import 'package:schedcare/screens/doctor/consultation_requests/doctor_view_consultation_requests_screen.dart';
-import 'package:schedcare/screens/doctor/home/doctor_home_screen.dart';
 import 'package:schedcare/screens/doctor/profile/doctor_profile_screen.dart';
 import 'package:schedcare/screens/doctor/profile/edit_doctor_profile_screen.dart';
 import 'package:schedcare/screens/patient/authentication/patient_register_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/send_consultation_request_screen.dart';
 import 'package:schedcare/screens/patient/consultation_requests/patient_view_consultation_request_screen.dart';
-import 'package:schedcare/screens/patient/home/patient_home_screen.dart';
 import 'package:schedcare/screens/patient/profile/edit_patient_profile_screen.dart';
 import 'package:schedcare/screens/patient/profile/patient_profile_screen.dart';
 import 'package:schedcare/utilities/constants.dart';
@@ -66,11 +64,6 @@ class RouterNotifier extends ChangeNotifier {
           builder: (context, state) => PatientRegisterScreen(),
         ),
         GoRoute(
-          name: RouteNames.patientHome,
-          path: RoutePaths.patientHome,
-          builder: (context, state) => PatientHomeScreen(),
-        ),
-        GoRoute(
           name: RouteNames.patientProfile,
           path: RoutePaths.patientProfile,
           builder: (context, state) => PatientProfileScreen(),
@@ -109,11 +102,6 @@ class RouterNotifier extends ChangeNotifier {
           name: RouteNames.doctorRegistration,
           path: RoutePaths.doctorRegistration,
           builder: (context, state) => DoctorRegisterScreen(),
-        ),
-        GoRoute(
-          name: RouteNames.doctorHome,
-          path: RoutePaths.doctorHome,
-          builder: (context, state) => DoctorHomeScreen(),
         ),
         GoRoute(
           name: RouteNames.doctorProfile,
