@@ -390,13 +390,3 @@ final userSnapshotProvider = FutureProvider.family
         .get();
   },
 );
-
-final userSnapshotsProvider = StreamProvider.family
-    .autoDispose<DocumentSnapshot<Map<String, dynamic>>, String>(
-  (ref, uid) {
-    return FirebaseFirestore.instance
-        .collection(FirebaseConstants.usersCollection)
-        .doc(uid)
-        .snapshots();
-  },
-);
