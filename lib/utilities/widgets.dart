@@ -4,9 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/utilities/helpers.dart';
+import 'package:schedcare/utilities/prompts.dart';
 import 'package:shimmer/shimmer.dart';
 
-Widget materialLoading({String toastMessage = ''}) {
+Material materialLoading({String toastMessage = ''}) {
   if (toastMessage.isNotEmpty) {
     showToast(toastMessage);
   }
@@ -17,11 +18,11 @@ Widget materialLoading({String toastMessage = ''}) {
   );
 }
 
-Widget loading({Color color = Colors.white}) => Center(
+Center loading({Color color = Colors.white}) => Center(
       child: CircularProgressIndicator(color: color),
     );
 
-Widget shimmerListTile() => Shimmer.fromColors(
+Shimmer shimmerListTile() => Shimmer.fromColors(
       baseColor: Colors.grey,
       highlightColor: Colors.white,
       child: ListTile(
@@ -47,7 +48,7 @@ Widget shimmerListTile() => Shimmer.fromColors(
       ),
     );
 
-Widget conversationHistoryChatWidget(String currentUserRole, String senderRole,
+Align conversationHistoryChatWidget(String currentUserRole, String senderRole,
         String senderName, String message, DateTime timestamp) =>
     Align(
       alignment: currentUserRole == senderRole
@@ -101,4 +102,51 @@ Widget conversationHistoryChatWidget(String currentUserRole, String senderRole,
           ),
         ),
       ),
+    );
+
+IconButton logoutButton(
+        {required BuildContext context,
+        required VoidCallback onPressedNo,
+        required VoidCallback onPressedYes}) =>
+    IconButton(
+      icon: const Icon(Icons.logout),
+      tooltip: 'Logout',
+      onPressed: () async {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              title: const Text(
+                Prompts.confirmSigningOut,
+                textAlign: TextAlign.center,
+              ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async => onPressedNo(),
+                      child: Text(
+                        'NO',
+                        style: TextStyle(fontSize: 12.sp),
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    ElevatedButton(
+                      onPressed: () async => onPressedYes(),
+                      child: Text(
+                        'YES',
+                        style: TextStyle(fontSize: 12.sp),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      },
     );

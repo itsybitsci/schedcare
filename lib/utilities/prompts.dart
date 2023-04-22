@@ -1,8 +1,6 @@
 import 'package:schedcare/utilities/constants.dart';
 
 class Prompts {
-  static const String yes = 'Yes';
-  static const String no = 'No';
   static const String noAvailableDoctors = 'No available doctor at the moment.';
   static const String noSentConsultationRequests =
       'No sent consultation requests. Kindly check back later.';

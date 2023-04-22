@@ -8,7 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/components.dart';
 import 'package:schedcare/utilities/constants.dart';
-import 'package:schedcare/utilities/prompts.dart';
+import 'package:schedcare/utilities/widgets.dart';
 
 class PatientHomeScreen extends HookConsumerWidget {
   PatientHomeScreen({Key? key}) : super(key: key);
@@ -77,31 +77,12 @@ class PatientHomeScreen extends HookConsumerWidget {
                     context.push(RoutePaths.patientProfile);
                   },
                 ),
-                IconButton(
-                  icon: const Icon(Icons.logout),
-                  tooltip: 'Logout',
-                  onPressed: () async {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text(Prompts.confirmSigningOut),
-                          actions: [
-                            TextButton(
-                              onPressed: () => context.pop(),
-                              child: const Text(Prompts.no),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                context.pop();
-                                await firebaseServicesNotifier.signOut();
-                              },
-                              child: const Text(Prompts.yes),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                logoutButton(
+                  context: context,
+                  onPressedNo: () => context.pop(),
+                  onPressedYes: () async {
+                    context.pop();
+                    await firebaseServicesNotifier.signOut();
                   },
                 ),
               ],

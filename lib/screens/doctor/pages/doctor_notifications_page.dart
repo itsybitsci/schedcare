@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +22,7 @@ class DoctorNotificationsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firebaseServicesNotifier = ref.watch(firebaseServicesProvider);
+    final scrollController = useScrollController();
     final Query<AppNotification> appNotificationsQuery =
         appNotificationsCollectionReference
             .where(ModelFields.doctorId,
@@ -33,57 +35,128 @@ class DoctorNotificationsPage extends HookConsumerWidget {
               toFirestore: (appNotification, _) => appNotification.toMap(),
             );
 
-    return FirestoreQueryBuilder(
-      query: appNotificationsQuery,
-      builder: (context, appNotificationCollectionSnapshot, _) {
-        if (appNotificationCollectionSnapshot.hasData) {
-          return appNotificationCollectionSnapshot.docs.isEmpty
-              ? const Center(
-                  child: Text(Prompts.noNotifications),
-                )
-              : ListView.builder(
-                  itemCount: appNotificationCollectionSnapshot.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (appNotificationCollectionSnapshot.hasMore &&
-                        index + 1 ==
-                            appNotificationCollectionSnapshot.docs.length) {
-                      appNotificationCollectionSnapshot.fetchMore();
-                    }
+    return Center(
+      child: Container(
+        height: 520.h,
+        width: 340.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.r),
+          color: ColorConstants.primaryLight,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 320.w,
+              height: 40.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.r),
+                color: Colors.white,
+              ),
+              child: Center(
+                child: Text(
+                  'Notifications',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
+                ),
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Flexible(
+              child: Container(
+                width: 320.w,
+                height: 450.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.r),
+                  color: Colors.white,
+                ),
+                child: Scrollbar(
+                  radius: Radius.circular(20.r),
+                  controller: scrollController,
+                  child: FirestoreQueryBuilder(
+                    query: appNotificationsQuery,
+                    builder: (context, appNotificationCollectionSnapshot, _) {
+                      if (appNotificationCollectionSnapshot.hasData) {
+                        return appNotificationCollectionSnapshot.docs.isEmpty
+                            ? const Center(
+                                child: Text(Prompts.noNotifications),
+                              )
+                            : ListView.builder(
+                                itemCount: appNotificationCollectionSnapshot
+                                    .docs.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  if (appNotificationCollectionSnapshot
+                                          .hasMore &&
+                                      index + 1 ==
+                                          appNotificationCollectionSnapshot
+                                              .docs.length) {
+                                    appNotificationCollectionSnapshot
+                                        .fetchMore();
+                                  }
 
-                    final AppNotification appNotification =
-                        appNotificationCollectionSnapshot.docs[index].data();
+                                  final AppNotification appNotification =
+                                      appNotificationCollectionSnapshot
+                                          .docs[index]
+                                          .data();
 
-                    return ListTile(
-                      tileColor: appNotification.isRead
-                          ? Colors.white
-                          : Colors.blue[50],
-                      onTap: () {
-                        firebaseServicesNotifier.getFirebaseFirestoreService
-                            .updateDocument(
-                                {ModelFields.isRead: true},
-                                FirebaseConstants.notificationsCollection,
-                                appNotification.id);
-                      },
-                      title: Center(
-                        child: Text(appNotification.body,
-                            style: TextStyle(fontSize: 12.sp)),
-                      ),
-                      trailing: Text(
-                        DateFormat('hh:mm a').format(appNotification.sentAt),
-                        style: TextStyle(fontSize: 10.sp),
-                      ),
-                      subtitle: Center(
-                        child: Text(
-                            DateFormat('MMMM d, y')
-                                .format(appNotification.sentAt),
-                            style: TextStyle(fontSize: 10.sp)),
-                      ),
-                    );
-                  },
-                );
-        }
-        return loading(color: Colors.blue);
-      },
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5.h, horizontal: 10.w),
+                                    child: Material(
+                                      type: MaterialType.transparency,
+                                      child: ListTile(
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Colors.grey[300]!),
+                                          borderRadius:
+                                              BorderRadius.circular(10.r),
+                                        ),
+                                        tileColor: appNotification.isRead
+                                            ? Colors.grey[200]
+                                            : Colors.blue[50],
+                                        onTap: () {
+                                          firebaseServicesNotifier
+                                              .getFirebaseFirestoreService
+                                              .updateDocument(
+                                                  {ModelFields.isRead: true},
+                                                  FirebaseConstants
+                                                      .notificationsCollection,
+                                                  appNotification.id);
+                                        },
+                                        title: Center(
+                                          child: Text(
+                                            appNotification.body,
+                                            style: TextStyle(fontSize: 12.sp),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        trailing: Text(
+                                          DateFormat('hh:mm a')
+                                              .format(appNotification.sentAt),
+                                          style: TextStyle(fontSize: 10.sp),
+                                        ),
+                                        subtitle: Center(
+                                          child: Text(
+                                              DateFormat('MMMM d, y').format(
+                                                  appNotification.sentAt),
+                                              style:
+                                                  TextStyle(fontSize: 10.sp)),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                      }
+                      return loading(color: Colors.blue);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

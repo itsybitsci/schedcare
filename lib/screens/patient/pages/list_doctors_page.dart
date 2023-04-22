@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,6 +23,8 @@ class ListDoctorsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final scrollController = useScrollController();
+
     return Center(
       child: Container(
         height: 520.h,
@@ -57,70 +60,76 @@ class ListDoctorsPage extends HookConsumerWidget {
                   borderRadius: BorderRadius.circular(10.r),
                   color: Colors.white,
                 ),
-                child: FirestoreQueryBuilder<Doctor>(
-                  query: doctorsQuery,
-                  builder: (context, snapshot, _) {
-                    if (snapshot.hasError) {
-                      return const Text(Prompts.errorDueToWeakInternet);
-                    }
+                child: Scrollbar(
+                  controller: scrollController,
+                  child: FirestoreQueryBuilder<Doctor>(
+                    query: doctorsQuery,
+                    builder: (context, snapshot, _) {
+                      if (snapshot.hasError) {
+                        return const Text(Prompts.errorDueToWeakInternet);
+                      }
 
-                    if (snapshot.hasData) {
-                      return snapshot.docs.isEmpty
-                          ? const Center(
-                              child: Text(
-                                Prompts.noAvailableDoctors,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          : ListView.builder(
-                              itemCount: snapshot.docs.length,
-                              itemBuilder: (context, index) {
-                                if (snapshot.hasMore &&
-                                    index + 1 == snapshot.docs.length) {
-                                  snapshot.fetchMore();
-                                }
+                      if (snapshot.hasData) {
+                        return snapshot.docs.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  Prompts.noAvailableDoctors,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: snapshot.docs.length,
+                                itemBuilder: (context, index) {
+                                  if (snapshot.hasMore &&
+                                      index + 1 == snapshot.docs.length) {
+                                    snapshot.fetchMore();
+                                  }
 
-                                final Doctor doctor =
-                                    snapshot.docs[index].data();
+                                  final Doctor doctor =
+                                      snapshot.docs[index].data();
 
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 5.h, horizontal: 10.w),
-                                  child: Material(
-                                    type: MaterialType.transparency,
-                                    child: ListTile(
-                                      tileColor: Colors.grey[200],
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: Colors.grey[300]!),
-                                        borderRadius:
-                                            BorderRadius.circular(10.r),
-                                      ),
-                                      onTap: () {
-                                        context.push(
-                                            RoutePaths.sendConsultationRequest,
-                                            extra: doctor);
-                                      },
-                                      title: Center(
-                                        child: Text(
-                                            '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
-                                                .trim(),
-                                            style: TextStyle(fontSize: 12.sp)),
-                                      ),
-                                      subtitle: Center(
-                                        child: Text(
-                                            'Specialization: ${doctor.specialization}',
-                                            style: TextStyle(fontSize: 10.sp)),
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5.h, horizontal: 10.w),
+                                    child: Material(
+                                      type: MaterialType.transparency,
+                                      child: ListTile(
+                                        tileColor: Colors.grey[200],
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Colors.grey[300]!),
+                                          borderRadius:
+                                              BorderRadius.circular(10.r),
+                                        ),
+                                        onTap: () {
+                                          context.push(
+                                              RoutePaths
+                                                  .sendConsultationRequest,
+                                              extra: doctor);
+                                        },
+                                        title: Center(
+                                          child: Text(
+                                              '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
+                                                  .trim(),
+                                              style:
+                                                  TextStyle(fontSize: 12.sp)),
+                                        ),
+                                        subtitle: Center(
+                                          child: Text(
+                                              'Specialization: ${doctor.specialization}',
+                                              style:
+                                                  TextStyle(fontSize: 10.sp)),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
-                            );
-                    }
+                                  );
+                                },
+                              );
+                      }
 
-                    return loading(color: Colors.blue);
-                  },
+                      return loading(color: Colors.blue);
+                    },
+                  ),
                 ),
               ),
             ),
