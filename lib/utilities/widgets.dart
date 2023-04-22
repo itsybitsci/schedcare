@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
+import 'package:schedcare/utilities/animations.dart';
 import 'package:schedcare/utilities/helpers.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:shimmer/shimmer.dart';
@@ -123,6 +124,9 @@ IconButton logoutButton(
                 Prompts.confirmSigningOut,
                 textAlign: TextAlign.center,
               ),
+              content: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: 100.h),
+                  child: lottieCrying()),
               actions: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -134,7 +138,7 @@ IconButton logoutButton(
                         style: TextStyle(fontSize: 12.sp),
                       ),
                     ),
-                    SizedBox(width: 10.w),
+                    SizedBox(width: 30.w),
                     ElevatedButton(
                       onPressed: () async => onPressedYes(),
                       child: Text(

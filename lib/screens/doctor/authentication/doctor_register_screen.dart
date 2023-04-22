@@ -7,9 +7,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:remove_emoji/remove_emoji.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/providers/generic_fields_provider.dart';
+import 'package:schedcare/utilities/animations.dart';
 import 'package:schedcare/utilities/components.dart';
 import 'package:schedcare/utilities/constants.dart';
-import 'package:schedcare/utilities/widgets.dart';
 
 class DoctorRegisterScreen extends HookConsumerWidget {
   DoctorRegisterScreen({super.key});
@@ -32,12 +32,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ConstrainedBox(
-                    constraints:
-                        BoxConstraints(maxWidth: 100.w, maxHeight: 100.h),
-                    child: Image.asset("assets/images/splash.png"),
-                  ),
-                  SizedBox(height: 10.h),
+                  lottieRegister(),
                   ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: 300.w),
                     child: genericFieldsNotifier.buildPrefix(),
@@ -89,7 +84,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
                   ),
                   SizedBox(height: 10.h),
                   firebaseServicesNotifier.getLoading
-                      ? loading(color: Colors.blue)
+                      ? lottieLoading(width: 100)
                       : ElevatedButton(
                           onPressed: () async {
                             if (formKeyRegisterDoctor.currentState!

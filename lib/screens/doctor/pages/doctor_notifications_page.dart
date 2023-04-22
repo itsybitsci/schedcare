@@ -5,11 +5,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:schedcare/models/app_notification_model.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
+import 'package:schedcare/utilities/animations.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
-import 'package:schedcare/utilities/widgets.dart';
 
 class DoctorNotificationsPage extends HookConsumerWidget {
   DoctorNotificationsPage({Key? key}) : super(key: key);
@@ -76,21 +77,40 @@ class DoctorNotificationsPage extends HookConsumerWidget {
                   child: FirestoreQueryBuilder(
                     query: appNotificationsQuery,
                     builder: (context, appNotificationCollectionSnapshot, _) {
+                      if (appNotificationCollectionSnapshot.hasError) {
+                        return lottieError();
+                      }
+
                       if (appNotificationCollectionSnapshot.hasData) {
                         return appNotificationCollectionSnapshot.docs.isEmpty
                             ? Center(
-                                child: Text(
-                                  Prompts.noNotifications,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15.sp),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset(
+                                        'assets/animations/no-notifications_lottie.json',
+                                        width: 300.w),
+                                    Text(
+                                      Prompts.noNotifications,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14.sp),
+                                    ),
+                                  ],
                                 ),
                               )
                             : ListView.builder(
                                 itemCount: appNotificationCollectionSnapshot
-                                    .docs.length,
+                                        .docs.length +
+                                    1,
                                 itemBuilder: (BuildContext context, int index) {
+                                  if (index ==
+                                      appNotificationCollectionSnapshot
+                                          .docs.length) {
+                                    return lottieDiamondLoading();
+                                  }
+
                                   if (appNotificationCollectionSnapshot
                                           .hasMore &&
                                       index + 1 ==
@@ -154,7 +174,7 @@ class DoctorNotificationsPage extends HookConsumerWidget {
                                 },
                               );
                       }
-                      return loading(color: Colors.blue);
+                      return lottieLoading();
                     },
                   ),
                 ),

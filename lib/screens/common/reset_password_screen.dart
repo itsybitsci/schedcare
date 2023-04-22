@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/providers/generic_fields_provider.dart';
+import 'package:schedcare/utilities/animations.dart';
 import 'package:schedcare/utilities/components.dart';
 
 class ResetPasswordScreen extends HookConsumerWidget {
@@ -45,8 +46,9 @@ class ResetPasswordScreen extends HookConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 200.h,
+                  height: 100.h,
                 ),
+                lottieForgotPassword(),
                 ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: 300.w),
                   child: genericFieldsNotifier.buildEmail(),
@@ -73,7 +75,7 @@ class ResetPasswordScreen extends HookConsumerWidget {
                   },
                 ),
                 SizedBox(
-                  height: 250.h,
+                  height: 200.h,
                 ),
                 const Text('Already know your password?'),
                 RichText(

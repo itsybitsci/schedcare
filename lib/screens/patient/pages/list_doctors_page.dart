@@ -5,10 +5,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'package:schedcare/models/user_models.dart';
+import 'package:schedcare/utilities/animations.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
-import 'package:schedcare/utilities/widgets.dart';
 
 class ListDoctorsPage extends HookConsumerWidget {
   ListDoctorsPage({super.key});
@@ -48,7 +49,7 @@ class ListDoctorsPage extends HookConsumerWidget {
                   'List of Doctors',
                   textAlign: TextAlign.center,
                   style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
                 ),
               ),
             ),
@@ -67,20 +68,35 @@ class ListDoctorsPage extends HookConsumerWidget {
                     query: doctorsQuery,
                     builder: (context, snapshot, _) {
                       if (snapshot.hasError) {
-                        return const Text(Prompts.errorDueToWeakInternet);
+                        return lottieError();
                       }
 
                       if (snapshot.hasData) {
                         return snapshot.docs.isEmpty
-                            ? const Center(
-                                child: Text(
-                                  Prompts.noAvailableDoctors,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Lottie.asset(
+                                        'assets/animations/no-data_lottie.json',
+                                        width: 200.w),
+                                    Text(
+                                      Prompts.noAvailableDoctors,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14.sp),
+                                    ),
+                                  ],
                                 ),
                               )
                             : ListView.builder(
-                                itemCount: snapshot.docs.length,
+                                itemCount: snapshot.docs.length + 1,
                                 itemBuilder: (context, index) {
+                                  if (index == snapshot.docs.length) {
+                                    return lottieDiamondLoading();
+                                  }
+
                                   if (snapshot.hasMore &&
                                       index + 1 == snapshot.docs.length) {
                                     snapshot.fetchMore();
@@ -128,7 +144,7 @@ class ListDoctorsPage extends HookConsumerWidget {
                               );
                       }
 
-                      return loading(color: Colors.blue);
+                      return lottieLoading();
                     },
                   ),
                 ),

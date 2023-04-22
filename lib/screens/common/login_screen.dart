@@ -6,9 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
+import 'package:schedcare/utilities/animations.dart';
 import 'package:schedcare/utilities/components.dart';
 import 'package:schedcare/utilities/constants.dart';
-import 'package:schedcare/utilities/widgets.dart';
 
 class LoginScreen extends HookConsumerWidget {
   LoginScreen({super.key});
@@ -109,7 +109,7 @@ class LoginScreen extends HookConsumerWidget {
                   height: 10.h,
                 ),
                 firebaseServicesNotifier.getLoggingIn
-                    ? loading(color: Colors.blue)
+                    ? lottieLoading(width: 100)
                     : ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 300.w),
                         child: ElevatedButton(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
+import 'package:schedcare/utilities/animations.dart';
 
 class Background extends StatelessWidget {
   final Widget child;
@@ -58,8 +57,7 @@ class LoadingScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Lottie.asset('assets/animations/paper-plane_lottie.json',
-                    width: 500.w),
+                lottieLoadingScreen(),
               ],
             ),
           ),
