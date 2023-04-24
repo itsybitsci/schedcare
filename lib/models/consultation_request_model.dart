@@ -96,7 +96,7 @@ class ConsultationRequest {
       from: consultationDateTime,
       to: consultationDateTime
           .add(const Duration(hours: AppConstants.defaultMeetingDuration)),
-      background: Colors.blue,
+      background: Colors.green,
     );
   }
 }

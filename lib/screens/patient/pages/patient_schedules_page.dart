@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
+import 'package:schedcare/utilities/animations.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/prompts.dart';
-import 'package:schedcare/utilities/widgets.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class PatientSchedulesPage extends HookConsumerWidget {
@@ -24,39 +25,85 @@ class PatientSchedulesPage extends HookConsumerWidget {
             .where(ModelFields.status, isEqualTo: AppConstants.approved)
             .snapshots();
 
-    return StreamBuilder(
-      stream: consultationRequestsStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.hasData) {
-          List<Meeting> meetings = snapshot.data!.docs
-              .map(
-                (data) => ConsultationRequest.fromSnapshot(data).toMeeting(),
-              )
-              .toList();
+    return Center(
+      child: Container(
+        height: 540.h,
+        width: 340.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.r),
+          color: ColorConstants.primaryLight,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 320.w,
+              height: 40.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.r),
+                color: Colors.white,
+              ),
+              child: Center(
+                child: Text(
+                  'Schedule',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
+                ),
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Container(
+              width: 320.w,
+              height: 470.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.r),
+                color: Colors.white,
+              ),
+              child: StreamBuilder(
+                stream: consultationRequestsStream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
+                  if (snapshot.hasError) {
+                    return lottieError();
+                  }
 
-          return SfCalendar(
-            view: CalendarView.month,
-            allowedViews: const [
-              CalendarView.day,
-              CalendarView.workWeek,
-              CalendarView.month,
-            ],
-            initialDisplayDate: DateTime.now(),
-            initialSelectedDate: DateTime.now(),
-            monthViewSettings: const MonthViewSettings(showAgenda: true),
-            dataSource: MeetingDataSource(meetings),
-          );
-        }
+                  if (snapshot.hasData) {
+                    List<Meeting> meetings = snapshot.data!.docs
+                        .map(
+                          (data) => ConsultationRequest.fromSnapshot(data)
+                              .toMeeting(),
+                        )
+                        .toList();
 
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text(Prompts.errorDueToWeakInternet),
-          );
-        }
+                    return SfCalendar(
+                      view: CalendarView.month,
+                      allowedViews: const [
+                        CalendarView.day,
+                        CalendarView.workWeek,
+                        CalendarView.month,
+                      ],
+                      initialDisplayDate: DateTime.now(),
+                      initialSelectedDate: DateTime.now(),
+                      monthViewSettings:
+                          const MonthViewSettings(showAgenda: true),
+                      dataSource: MeetingDataSource(meetings),
+                    );
+                  }
 
-        return loading(color: Colors.blue);
-      },
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text(Prompts.errorDueToWeakInternet),
+                    );
+                  }
+
+                  return lottieLoading();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
