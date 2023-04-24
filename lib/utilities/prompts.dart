@@ -24,8 +24,6 @@ class Prompts {
       'Meeting cannot be started for lapsed consultation requests.';
   static const String waitForDoctorToStartMeeting =
       'Please wait for the doctor to start the meeting.';
-  static const String meetingUnavailable =
-      'Meetings are not available for not approved consultation requests.';
   static const String maximumFileSize =
       "Maximum file size is ${AppConstants.maximumFileUploadSize}MB.";
   static const String couldNotDownloadFile =

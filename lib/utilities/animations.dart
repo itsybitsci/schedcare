@@ -14,7 +14,7 @@ Center lottieLoading({double width = 200}) => Center(
 
 Center lottieDiamondLoading() => Center(
       child: Lottie.asset('assets/animations/diamond-loading_lottie.json',
-          width: 50.w),
+          width: 30.w),
     );
 
 Center lottieError() => Center(
@@ -22,8 +22,9 @@ Center lottieError() => Center(
           width: 200.w),
     );
 
-Center lottieCrying() => Center(
-      child: Lottie.asset('assets/animations/crying_lottie.json', width: 200.w),
+Center lottieSleeping() => Center(
+      child: Lottie.asset('assets/animations/sleeping-koala_lottie.json',
+          width: 200.w),
     );
 
 Center lottieForgotPassword() => Center(
@@ -34,4 +35,9 @@ Center lottieForgotPassword() => Center(
 Center lottieRegister() => Center(
       child:
           Lottie.asset('assets/animations/register_lottie.json', width: 150.w),
+    );
+
+Center lottieCalling() => Center(
+      child:
+          Lottie.asset('assets/animations/video-call_lottie.json', width: 30.w),
     );

@@ -227,124 +227,108 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                       if (consultationRequest.status == AppConstants.pending &&
                           DateTime.now().isBefore(
                               consultationRequest.consultationDateTime))
-                        firebaseServicesNotifier.getLoading
-                            ? loading(color: Colors.blue)
-                            : isEditing.value
-                                ? ElevatedButton(
-                                    onPressed: () async {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: const Text(
-                                                'Confirm Submission of Edited Request'),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => context.pop(),
-                                                child: const Text('Cancel'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () async {
-                                                  if (formKeyEditConsultationRequest
-                                                      .currentState!
-                                                      .validate()) {
-                                                    formKeyEditConsultationRequest
-                                                        .currentState
-                                                        ?.save();
+                        if (isEditing.value)
+                          ElevatedButton(
+                            onPressed: () async {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                        'Confirm Submission of Edited Request'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => context.pop(),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          if (formKeyEditConsultationRequest
+                                              .currentState!
+                                              .validate()) {
+                                            formKeyEditConsultationRequest
+                                                .currentState
+                                                ?.save();
 
-                                                    List<DateTime> consultationRequestStartTimes = snapshot
-                                                        .data!.docs
-                                                        .where((snapshot) =>
-                                                            snapshot.get(ModelFields
-                                                                .status) !=
-                                                            AppConstants
-                                                                .rejected)
-                                                        .where((snapshot) =>
-                                                            snapshot.get(ModelFields.id) !=
-                                                            consultationRequest
-                                                                .id)
-                                                        .map((snapshot) => snapshot
-                                                            .get(ModelFields
-                                                                .consultationDateTime)
-                                                            .toDate() as DateTime)
-                                                        .toList();
+                                            List<DateTime>
+                                                consultationRequestStartTimes =
+                                                snapshot.data!.docs
+                                                    .where((snapshot) =>
+                                                        snapshot.get(ModelFields
+                                                            .status) !=
+                                                        AppConstants.rejected)
+                                                    .where((snapshot) =>
+                                                        snapshot.get(
+                                                            ModelFields.id) !=
+                                                        consultationRequest.id)
+                                                    .map((snapshot) => snapshot
+                                                        .get(ModelFields
+                                                            .consultationDateTime)
+                                                        .toDate() as DateTime)
+                                                    .toList();
 
-                                                    if (isOverlapping(
-                                                        consultationRequestStartTimes,
-                                                        consultationRequestNotifier
-                                                            .dateTime)) {
-                                                      showToast(Prompts
-                                                          .overlappingSchedule);
-                                                      context.pop();
-                                                      return;
-                                                    }
+                                            if (isOverlapping(
+                                                consultationRequestStartTimes,
+                                                consultationRequestNotifier
+                                                    .dateTime)) {
+                                              showToast(
+                                                  Prompts.overlappingSchedule);
+                                              context.pop();
+                                              return;
+                                            }
 
-                                                    Map<String, dynamic> data =
-                                                        {
-                                                      ModelFields
-                                                              .consultationRequestBody:
-                                                          consultationRequestNotifier
-                                                              .consultationRequestBody,
-                                                      ModelFields
-                                                              .consultationDateTime:
-                                                          consultationRequestNotifier
-                                                              .dateTime,
-                                                      ModelFields
-                                                              .consultationType:
-                                                          consultationRequestNotifier
-                                                              .consultationType,
-                                                      ModelFields.modifiedAt:
-                                                          DateTime.now(),
-                                                    };
-                                                    await firebaseServicesNotifier
-                                                        .updateConsultationRequest(
-                                                      data,
-                                                      FirebaseConstants
-                                                          .consultationRequestsCollection,
-                                                      consultationRequest.id,
-                                                    )
-                                                        .then((success) async {
-                                                      if (success) {
-                                                        if (consultationRequestNotifier
-                                                                .pickedFile !=
-                                                            null) {
-                                                          // await firebaseServicesNotifier
-                                                          //     .getFirebaseStorageService
-                                                          //     .deleteFile(
-                                                          //         consultationRequest
-                                                          //             .patientAttachmentUrl!);
-                                                          await uploadAttachment(
-                                                              firebaseServicesNotifier,
-                                                              consultationRequestNotifier,
-                                                              consultationRequest
-                                                                  .id);
-                                                        }
-                                                        if (context.mounted) {
-                                                          context.go(RoutePaths
-                                                              .authWrapper);
-                                                        }
-                                                      }
-                                                    });
-                                                  } else {
-                                                    context.pop();
+                                            Map<String, dynamic> data = {
+                                              ModelFields
+                                                      .consultationRequestBody:
+                                                  consultationRequestNotifier
+                                                      .consultationRequestBody,
+                                              ModelFields.consultationDateTime:
+                                                  consultationRequestNotifier
+                                                      .dateTime,
+                                              ModelFields.consultationType:
+                                                  consultationRequestNotifier
+                                                      .consultationType,
+                                              ModelFields.modifiedAt:
+                                                  DateTime.now(),
+                                            };
+                                            await firebaseServicesNotifier
+                                                .updateConsultationRequest(
+                                              data,
+                                              FirebaseConstants
+                                                  .consultationRequestsCollection,
+                                              consultationRequest.id,
+                                            )
+                                                .then(
+                                              (success) async {
+                                                if (success) {
+                                                  if (consultationRequestNotifier
+                                                          .pickedFile !=
+                                                      null) {
+                                                    await uploadAttachment(
+                                                        firebaseServicesNotifier,
+                                                        consultationRequestNotifier,
+                                                        consultationRequest.id);
                                                   }
-                                                },
-                                                child: const Text('Proceed'),
-                                              ),
-                                            ],
-                                          );
+                                                  if (context.mounted) {
+                                                    context.go(
+                                                        RoutePaths.authWrapper);
+                                                  }
+                                                }
+                                              },
+                                            );
+                                          } else {
+                                            context.pop();
+                                          }
                                         },
-                                      );
-                                    },
-                                    child: const Text('Edit Request'),
-                                  )
-                                : buildCancelRequestButton(
-                                    context, firebaseServicesNotifier),
-                      if (consultationRequest.status == AppConstants.approved &&
-                          DateTime.now().isBefore(
-                              consultationRequest.consultationDateTime))
-                        buildCancelRequestButton(
-                            context, firebaseServicesNotifier),
+                                        child: const Text('Proceed'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: const Text('Edit Request'),
+                          ),
                       if (firebaseServicesNotifier
                               .getFirebaseStorageService.uploadTask !=
                           null)
@@ -362,42 +346,6 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
       ),
     );
   }
-
-  Widget buildCancelRequestButton(BuildContext context,
-          FirebaseServicesProvider firebaseServicesNotifier) =>
-      ElevatedButton(
-        onPressed: () async {
-          return showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title:
-                    const Text('Confirm Cancellation of Consultation Request'),
-                actions: [
-                  TextButton(
-                    onPressed: () => context.pop(),
-                    child: const Text('Keep Request'),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(RouteNames.authWrapper));
-                      await firebaseServicesNotifier.deleteDocument(
-                          FirebaseConstants.consultationRequestsCollection,
-                          consultationRequest.id);
-                    },
-                    child: const Text('Delete Request'),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.red),
-        ),
-        child: const Text('Cancel Request'),
-      );
 
   Future uploadAttachment(
       FirebaseServicesProvider firebaseServicesNotifier,

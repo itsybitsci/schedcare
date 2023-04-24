@@ -8,17 +8,6 @@ import 'package:schedcare/utilities/helpers.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:shimmer/shimmer.dart';
 
-Material materialLoading({String toastMessage = ''}) {
-  if (toastMessage.isNotEmpty) {
-    showToast(toastMessage);
-  }
-  return const Material(
-    child: Center(
-      child: CircularProgressIndicator(),
-    ),
-  );
-}
-
 Center loading({Color color = Colors.white}) => Center(
       child: CircularProgressIndicator(color: color),
     );
@@ -126,24 +115,23 @@ IconButton logoutButton(
               ),
               content: ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: 100.h),
-                  child: lottieCrying()),
+                  child: lottieSleeping()),
               actions: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
+                    TextButton(
                       onPressed: () async => onPressedNo(),
                       child: Text(
                         'NO',
-                        style: TextStyle(fontSize: 12.sp),
+                        style: TextStyle(fontSize: 15.sp),
                       ),
                     ),
-                    SizedBox(width: 30.w),
-                    ElevatedButton(
+                    TextButton(
                       onPressed: () async => onPressedYes(),
                       child: Text(
                         'YES',
-                        style: TextStyle(fontSize: 12.sp),
+                        style: TextStyle(fontSize: 15.sp),
                       ),
                     ),
                   ],
