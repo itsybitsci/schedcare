@@ -355,7 +355,9 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                   child: buildCancelRequestButton(context,
                       firebaseServicesNotifier, consultationRequest.id),
                 ),
-              if (consultationRequest.status == AppConstants.approved)
+              if (consultationRequest.status == AppConstants.approved &&
+                  consultationRequest.consultationType ==
+                      AppConstants.teleconsultation)
                 Container(
                   width: 80.w,
                   height: 25.h,
