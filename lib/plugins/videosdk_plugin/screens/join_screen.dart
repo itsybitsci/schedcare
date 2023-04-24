@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:schedcare/models/consultation_request_model.dart';
 import 'package:schedcare/plugins/videosdk_plugin/screens/one_to_one_meeting.dart';
@@ -192,16 +191,6 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
             backgroundColor: VideoSdkColorConstants.secondaryColor),
       ),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Teleconsultation'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              context.pop();
-            },
-          ),
-          automaticallyImplyLeading: false,
-        ),
         body: SafeArea(
           child: LayoutBuilder(
             builder:

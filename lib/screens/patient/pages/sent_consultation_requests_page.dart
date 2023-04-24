@@ -32,7 +32,7 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
         consultationRequestsCollectionReference
             .where(ModelFields.patientId,
                 isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
-            .orderBy(ModelFields.consultationDateTime)
+            .orderBy(ModelFields.createdAt, descending: true)
             .withConverter(
               fromFirestore: (snapshot, _) =>
                   ConsultationRequest.fromSnapshot(snapshot),

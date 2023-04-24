@@ -19,7 +19,7 @@ Center lottieDiamondLoading() => Center(
 
 Center lottieError() => Center(
       child: Lottie.asset('assets/animations/no-connection_lottie.json',
-          width: 200.w),
+          width: 400.w),
     );
 
 Center lottieSleeping() => Center(
