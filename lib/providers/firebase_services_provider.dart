@@ -380,13 +380,3 @@ final firebaseServicesProvider =
     ChangeNotifierProvider<FirebaseServicesProvider>(
   (ref) => FirebaseServicesProvider(),
 );
-
-final userSnapshotProvider = FutureProvider.family
-    .autoDispose<DocumentSnapshot<Map<String, dynamic>>, String>(
-  (ref, uid) async {
-    return await FirebaseFirestore.instance
-        .collection(FirebaseConstants.usersCollection)
-        .doc(uid)
-        .get();
-  },
-);

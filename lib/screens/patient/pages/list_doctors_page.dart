@@ -128,8 +128,9 @@ class ListDoctorsPage extends HookConsumerWidget {
                                           child: Text(
                                               '${doctor.prefix} ${doctor.firstName} ${doctor.lastName} ${doctor.suffix}'
                                                   .trim(),
-                                              style:
-                                                  TextStyle(fontSize: 12.sp)),
+                                              style: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.bold)),
                                         ),
                                         subtitle: Center(
                                           child: Text(

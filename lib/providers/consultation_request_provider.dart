@@ -77,7 +77,9 @@ class ConsultationRequestProvider extends ChangeNotifier {
           onPressed:
               !firebaseServicesNotifier.getLoading ? () => pickFile() : null,
           child: Text(
-              _pickedFile == null ? 'Select Attachment' : _pickedFile!.name),
+            _pickedFile == null ? 'Add File Attachment' : _pickedFile!.name,
+            style: TextStyle(fontSize: 12.sp),
+          ),
         ),
         if (_pickedFile != null && showX)
           IconButton(
@@ -100,8 +102,12 @@ class ConsultationRequestProvider extends ChangeNotifier {
           final TaskSnapshot taskSnapshot = snapshot.data!;
           final double progress =
               taskSnapshot.bytesTransferred / taskSnapshot.totalBytes;
-          return SizedBox(
+          return Container(
             height: 30.h,
+            width: 200.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.r),
+            ),
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -136,9 +142,14 @@ class ConsultationRequestProvider extends ChangeNotifier {
             scrollController: _scrollController,
             controller: _consultationRequestBodyController,
             decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.grey[200],
+              hintText:
+                  'Describe the purpose of your consultation, any symptoms you might be experiencing, current medications, etc.',
+              hintMaxLines: 10,
               border: OutlineInputBorder(
                 borderSide: const BorderSide(color: Colors.blue, width: 3),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
               ),
             ),
             textAlignVertical: TextAlignVertical.top,
@@ -161,6 +172,8 @@ class ConsultationRequestProvider extends ChangeNotifier {
           enableInteractiveSelection: false,
           controller: _dateController,
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.grey[200],
             labelText: 'Date',
             hintText: 'Date',
             suffixIcon: const Icon(Icons.calendar_month),
@@ -185,7 +198,13 @@ class ConsultationRequestProvider extends ChangeNotifier {
             }
           },
           validator: (value) {
-            return value!.isEmpty ? 'Required' : null;
+            if (value!.isEmpty) {
+              return 'Required';
+            }
+
+            return isWeekend(_chosenDate!)
+                ? 'Weekends are not available'
+                : null;
           },
         ),
       );
@@ -199,6 +218,8 @@ class ConsultationRequestProvider extends ChangeNotifier {
           enableInteractiveSelection: false,
           controller: _timeController,
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.grey[200],
             labelText: 'Time',
             hintText: 'Time',
             suffixIcon: const Icon(Icons.timer),
@@ -242,9 +263,13 @@ class ConsultationRequestProvider extends ChangeNotifier {
   Widget buildConsultationType({enabled = true}) => ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 300.w),
         child: DropdownButtonFormField<String>(
+          borderRadius: BorderRadius.circular(20),
+          dropdownColor: Colors.grey[200],
           value: _consultationTypeDropdownValue,
           alignment: AlignmentDirectional.center,
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.grey[200],
             suffixIcon: const Icon(Icons.person),
             border: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.blue, width: 3),

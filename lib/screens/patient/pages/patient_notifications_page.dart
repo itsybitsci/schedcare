@@ -17,8 +17,6 @@ class PatientNotificationsPage extends HookConsumerWidget {
   final CollectionReference<Map<String, dynamic>>
       appNotificationsCollectionReference = FirebaseFirestore.instance
           .collection(FirebaseConstants.notificationsCollection);
-  final CollectionReference<Map<String, dynamic>> usersCollectionReference =
-      FirebaseFirestore.instance.collection(FirebaseConstants.usersCollection);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

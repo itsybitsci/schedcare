@@ -41,3 +41,8 @@ String getFileNameFromUrl(String url) {
   var match = matches.elementAt(0);
   return Uri.decodeFull(match.group(2)!);
 }
+
+bool isWeekend(DateTime dateTime) {
+  return (dateTime.weekday == 6 ||
+      dateTime.weekday == 7); // 6 is Saturday and 7 is Sunday
+}

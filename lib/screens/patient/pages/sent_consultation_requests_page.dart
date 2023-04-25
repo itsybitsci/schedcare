@@ -447,7 +447,7 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                           FirebaseConstants.consultationRequestsCollection,
                           consultationRequestId);
                     },
-                    child: const Text('Delete Request'),
+                    child: const Text('Cancel Request'),
                   ),
                 ],
               );

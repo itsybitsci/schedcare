@@ -52,9 +52,8 @@ class LoginScreen extends HookConsumerWidget {
                       labelText: 'Email Address',
                       hintText: 'Enter email address',
                       border: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.blue, width: 3),
-                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color: Colors.blue, width: 3.w),
+                        borderRadius: BorderRadius.circular(20.r),
                       ),
                     ),
                     validator: (value) {
@@ -90,8 +89,8 @@ class LoginScreen extends HookConsumerWidget {
                           ),
                           border: OutlineInputBorder(
                             borderSide:
-                                const BorderSide(color: Colors.blue, width: 3),
-                            borderRadius: BorderRadius.circular(20),
+                                BorderSide(color: Colors.blue, width: 3.w),
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
                         ),
                         obscureText: !passwordVisible.value,

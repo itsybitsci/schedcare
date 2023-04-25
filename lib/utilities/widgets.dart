@@ -16,25 +16,29 @@ Shimmer shimmerListTile() => Shimmer.fromColors(
       baseColor: Colors.grey,
       highlightColor: Colors.white,
       child: ListTile(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(10.r),
+        ),
         title: Center(
           child: Container(
-              height: 20.h,
-              width: 280.w,
+              height: 90.h,
+              width: 310.w,
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Colors.grey[300]!,
                 borderRadius: BorderRadius.circular(10.r),
               )),
         ),
-        subtitle: Center(
-          child: Container(
-            height: 10.h,
-            width: 100.w,
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-          ),
-        ),
+        // subtitle: Center(
+        //   child: Container(
+        //     height: 10.h,
+        //     width: 100.w,
+        //     decoration: BoxDecoration(
+        //       color: Colors.grey,
+        //       borderRadius: BorderRadius.circular(10.r),
+        //     ),
+        //   ),
+        // ),
       ),
     );
 
