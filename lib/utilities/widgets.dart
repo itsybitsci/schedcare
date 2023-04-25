@@ -29,16 +29,6 @@ Shimmer shimmerListTile() => Shimmer.fromColors(
                 borderRadius: BorderRadius.circular(10.r),
               )),
         ),
-        // subtitle: Center(
-        //   child: Container(
-        //     height: 10.h,
-        //     width: 100.w,
-        //     decoration: BoxDecoration(
-        //       color: Colors.grey,
-        //       borderRadius: BorderRadius.circular(10.r),
-        //     ),
-        //   ),
-        // ),
       ),
     );
 
