@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
-import 'package:schedcare/utilities/animations.dart';
+import 'package:schedcare/providers/firebase_services_provider.dart';
+import 'package:schedcare/providers/generic_fields_provider.dart';
+import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 import 'package:schedcare/utilities/prompts.dart';
 import 'package:shimmer/shimmer.dart';
@@ -108,9 +111,6 @@ IconButton logoutButton(
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20.sp),
               ),
-              content: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 100.h),
-                  child: lottieSleeping()),
               actions: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -118,14 +118,14 @@ IconButton logoutButton(
                     TextButton(
                       onPressed: () async => onPressedNo(),
                       child: Text(
-                        'NO',
+                        'No',
                         style: TextStyle(fontSize: 15.sp),
                       ),
                     ),
                     TextButton(
                       onPressed: () async => onPressedYes(),
                       child: Text(
-                        'YES',
+                        'Yes',
                         style: TextStyle(fontSize: 15.sp),
                       ),
                     ),
@@ -136,4 +136,164 @@ IconButton logoutButton(
           },
         );
       },
+    );
+
+Widget buildChangePasswordButton(
+        BuildContext context,
+        FirebaseServicesProvider firebaseServicesNotifier,
+        GenericFieldsProvider genericFieldsNotifier,
+        GlobalKey<FormState> formKeyUpdatePatientPassword) =>
+    ElevatedButton(
+      onPressed: firebaseServicesNotifier.getLoading
+          ? null
+          : () async => await showDialog(
+                context: context,
+                builder: (context) {
+                  genericFieldsNotifier.clearPasswordFields();
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    title: Text(
+                      'Enter New Password',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20.sp),
+                    ),
+                    content: StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return ConstrainedBox(
+                          constraints: BoxConstraints(maxHeight: 200.h),
+                          child: Form(
+                            key: formKeyUpdatePatientPassword,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                genericFieldsNotifier.buildPassword(setState),
+                                SizedBox(height: 10.h),
+                                genericFieldsNotifier
+                                    .buildRepeatPassword(setState),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    actionsAlignment: MainAxisAlignment.spaceEvenly,
+                    actions: [
+                      TextButton(
+                        onPressed: () => context.pop(),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          if (formKeyUpdatePatientPassword.currentState!
+                              .validate()) {
+                            formKeyUpdatePatientPassword.currentState?.save();
+                            context.pop();
+                            await firebaseServicesNotifier
+                                .updatePassword(genericFieldsNotifier.password);
+                          }
+                        },
+                        child: Text(
+                          'Update Password',
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+      child: Text(
+        'Change Password',
+        style: TextStyle(fontSize: 12.sp),
+      ),
+    );
+
+Widget buildChangeEmailButton(
+        BuildContext context,
+        FirebaseServicesProvider firebaseServicesNotifier,
+        GenericFieldsProvider genericFieldsNotifier,
+        GlobalKey<FormState> formKeyUpdatePatientEmail) =>
+    ElevatedButton(
+      onPressed: firebaseServicesNotifier.getLoading
+          ? null
+          : () async => await showDialog(
+                context: context,
+                builder: (context) {
+                  genericFieldsNotifier.clearEmailField();
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    title: Text(
+                      'Enter New Email Address',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20.sp),
+                    ),
+                    content: ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: 160.h),
+                      child: Form(
+                        key: formKeyUpdatePatientEmail,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            genericFieldsNotifier.buildEmail(),
+                          ],
+                        ),
+                      ),
+                    ),
+                    actionsAlignment: MainAxisAlignment.spaceEvenly,
+                    actions: [
+                      TextButton(
+                        onPressed: () => context.pop(),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          if (formKeyUpdatePatientEmail.currentState!
+                              .validate()) {
+                            formKeyUpdatePatientEmail.currentState?.save();
+                            context.pop();
+                            await firebaseServicesNotifier
+                                .updateEmail(
+                                    firebaseServicesNotifier.getCurrentUser!,
+                                    genericFieldsNotifier.email)
+                                .then(
+                              (success) async {
+                                if (success) {
+                                  await firebaseServicesNotifier
+                                      .getFirebaseFirestoreService
+                                      .updateDocument(
+                                          {
+                                        ModelFields.email:
+                                            genericFieldsNotifier.email,
+                                        ModelFields.modifiedAt: DateTime.now()
+                                      },
+                                          FirebaseConstants.usersCollection,
+                                          firebaseServicesNotifier
+                                              .getCurrentUser!.uid);
+                                }
+                              },
+                            );
+                          }
+                        },
+                        child: Text(
+                          'Confirm',
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+      child: Text(
+        'Change Email Address',
+        style: TextStyle(fontSize: 12.sp),
+      ),
     );
