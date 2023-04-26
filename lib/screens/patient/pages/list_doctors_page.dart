@@ -5,7 +5,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:lottie/lottie.dart';
 import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/utilities/animations.dart';
 import 'package:schedcare/utilities/constants.dart';
@@ -77,9 +76,7 @@ class ListDoctorsPage extends HookConsumerWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Lottie.asset(
-                                        'assets/animations/no-data_lottie.json',
-                                        width: 200.w),
+                                    lottieNoData(),
                                     Text(
                                       Prompts.noAvailableDoctors,
                                       textAlign: TextAlign.center,
@@ -145,7 +142,7 @@ class ListDoctorsPage extends HookConsumerWidget {
                               );
                       }
 
-                      return lottieLoading();
+                      return lottieLoading(width: 50);
                     },
                   ),
                 ),

@@ -42,9 +42,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
       ),
       resizeToAvoidBottomInset: false,
       body: WillPopScope(
-        onWillPop: () async {
-          return !firebaseServicesNotifier.getLoading;
-        },
+        onWillPop: () async => !firebaseServicesNotifier.getLoading,
         child: Center(
           child: Container(
             height: 580.h,

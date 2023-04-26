@@ -11,10 +11,10 @@ import 'package:schedcare/models/user_models.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/providers/consultation_request_provider.dart';
 import 'package:schedcare/screens/common/conversation_history_screen.dart';
+import 'package:schedcare/utilities/animations.dart';
 import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 import 'package:schedcare/utilities/prompts.dart';
-import 'package:schedcare/utilities/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PatientViewConsultationRequestScreen extends HookConsumerWidget {
@@ -155,6 +155,10 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                           builder: (BuildContext context,
                               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                                   snapshot) {
+                            if (snapshot.hasError) {
+                              return lottieError();
+                            }
+
                             if (snapshot.hasData) {
                               return Form(
                                 key: formKeyEditConsultationRequest,
@@ -458,7 +462,7 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                 ),
                               );
                             }
-                            return loading(color: Colors.blue);
+                            return lottieLoading(width: 50);
                           },
                         ),
                       ),

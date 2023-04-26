@@ -97,7 +97,7 @@ class DoctorSchedulesPage extends HookConsumerWidget {
                     );
                   }
 
-                  return lottieLoading();
+                  return lottieLoading(width: 50);
                 },
               ),
             ),

@@ -41,3 +41,21 @@ Center lottieCalling() => Center(
       child:
           Lottie.asset('assets/animations/video-call_lottie.json', width: 30.w),
     );
+
+Center lottieMale() => Center(
+      child: Lottie.asset('assets/animations/male_lottie.json', width: 300.w),
+    );
+
+Center lottieFemale() => Center(
+      child: Lottie.asset('assets/animations/female_lottie.json', width: 300.w),
+    );
+
+Center lottieNoData() => Center(
+      child:
+          Lottie.asset('assets/animations/no-data_lottie.json', width: 200.w),
+    );
+
+Center lottieNoNotifications() => Center(
+      child: Lottie.asset('assets/animations/no-notifications_lottie.json',
+          width: 300.w),
+    );

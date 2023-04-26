@@ -103,9 +103,10 @@ IconButton logoutButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              title: const Text(
+              title: Text(
                 Prompts.confirmSigningOut,
                 textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20.sp),
               ),
               content: ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: 100.h),

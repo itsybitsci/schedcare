@@ -5,7 +5,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:schedcare/models/app_notification_model.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/utilities/animations.dart';
@@ -85,9 +84,7 @@ class DoctorNotificationsPage extends HookConsumerWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Lottie.asset(
-                                        'assets/animations/no-notifications_lottie.json',
-                                        width: 300.w),
+                                    lottieNoNotifications(),
                                     Text(
                                       Prompts.noNotifications,
                                       textAlign: TextAlign.center,
@@ -172,7 +169,7 @@ class DoctorNotificationsPage extends HookConsumerWidget {
                                 },
                               );
                       }
-                      return lottieLoading();
+                      return lottieLoading(width: 50);
                     },
                   ),
                 ),

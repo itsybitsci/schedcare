@@ -90,8 +90,20 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                       if (consultationRequestCollectionSnapshot.hasData) {
                         return consultationRequestCollectionSnapshot
                                 .docs.isEmpty
-                            ? const Center(
-                                child: Text(Prompts.noSentConsultationRequests),
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    lottieNoData(),
+                                    Text(
+                                      Prompts.noSentConsultationRequests,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14.sp),
+                                    ),
+                                  ],
+                                ),
                               )
                             : ListView.builder(
                                 itemCount: consultationRequestCollectionSnapshot
@@ -210,7 +222,7 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                               );
                       }
 
-                      return lottieLoading();
+                      return lottieLoading(width: 50);
                     },
                   ),
                 ),
