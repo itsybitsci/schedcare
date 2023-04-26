@@ -142,7 +142,7 @@ Widget buildChangePasswordButton(
         BuildContext context,
         FirebaseServicesProvider firebaseServicesNotifier,
         GenericFieldsProvider genericFieldsNotifier,
-        GlobalKey<FormState> formKeyUpdatePatientPassword) =>
+        GlobalKey<FormState> formKeyUpdatePassword) =>
     ElevatedButton(
       onPressed: firebaseServicesNotifier.getLoading
           ? null
@@ -164,7 +164,7 @@ Widget buildChangePasswordButton(
                         return ConstrainedBox(
                           constraints: BoxConstraints(maxHeight: 200.h),
                           child: Form(
-                            key: formKeyUpdatePatientPassword,
+                            key: formKeyUpdatePassword,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -189,9 +189,8 @@ Widget buildChangePasswordButton(
                       ),
                       TextButton(
                         onPressed: () async {
-                          if (formKeyUpdatePatientPassword.currentState!
-                              .validate()) {
-                            formKeyUpdatePatientPassword.currentState?.save();
+                          if (formKeyUpdatePassword.currentState!.validate()) {
+                            formKeyUpdatePassword.currentState?.save();
                             context.pop();
                             await firebaseServicesNotifier
                                 .updatePassword(genericFieldsNotifier.password);
@@ -216,7 +215,7 @@ Widget buildChangeEmailButton(
         BuildContext context,
         FirebaseServicesProvider firebaseServicesNotifier,
         GenericFieldsProvider genericFieldsNotifier,
-        GlobalKey<FormState> formKeyUpdatePatientEmail) =>
+        GlobalKey<FormState> formKeyUpdateEmail) =>
     ElevatedButton(
       onPressed: firebaseServicesNotifier.getLoading
           ? null
@@ -236,7 +235,7 @@ Widget buildChangeEmailButton(
                     content: ConstrainedBox(
                       constraints: BoxConstraints(maxHeight: 160.h),
                       child: Form(
-                        key: formKeyUpdatePatientEmail,
+                        key: formKeyUpdateEmail,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -256,9 +255,8 @@ Widget buildChangeEmailButton(
                       ),
                       TextButton(
                         onPressed: () async {
-                          if (formKeyUpdatePatientEmail.currentState!
-                              .validate()) {
-                            formKeyUpdatePatientEmail.currentState?.save();
+                          if (formKeyUpdateEmail.currentState!.validate()) {
+                            formKeyUpdateEmail.currentState?.save();
                             context.pop();
                             await firebaseServicesNotifier
                                 .updateEmail(

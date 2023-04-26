@@ -8,7 +8,6 @@ import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/providers/generic_fields_provider.dart';
 import 'package:schedcare/utilities/animations.dart';
 import 'package:schedcare/utilities/constants.dart';
-import 'package:schedcare/utilities/prompts.dart';
 import 'package:schedcare/utilities/widgets.dart';
 
 class DoctorProfileScreen extends HookConsumerWidget {
@@ -134,13 +133,7 @@ class DoctorProfileScreen extends HookConsumerWidget {
                           );
                         }
 
-                        if (snapshot.hasError) {
-                          return const Center(
-                            child: Text(Prompts.errorDueToWeakInternet),
-                          );
-                        }
-
-                        return loading(color: Colors.blue);
+                        return lottieLoading(width: 50);
                       },
                     ),
                   ),
