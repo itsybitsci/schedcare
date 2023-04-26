@@ -21,13 +21,13 @@ class FirebaseServicesProvider extends ChangeNotifier {
   final FirebaseStorageService _firebaseStorageService =
       FirebaseStorageService();
   bool _isLoading = false;
-  bool _isLoggingin = false;
+  bool _isLoggingIn = false;
   String? _role;
   String? _deviceToken;
 
   bool get getLoading => _isLoading;
 
-  bool get getLoggingIn => _isLoggingin;
+  bool get getLoggingIn => _isLoggingIn;
 
   User? get getLogin => _firebaseAuthenticationService.currentUser;
 
@@ -53,7 +53,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
   }
 
   setLoggingIn(bool loader) {
-    _isLoggingin = loader;
+    _isLoggingIn = loader;
     notifyListeners();
   }
 
