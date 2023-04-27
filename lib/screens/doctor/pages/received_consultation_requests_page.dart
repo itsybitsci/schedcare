@@ -116,7 +116,7 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                                   if (index ==
                                       consultationRequestCollectionSnapshot
                                           .docs.length) {
-                                    return lottieDiamondLoading();
+                                    return lottieSearchUsers();
                                   }
 
                                   if (consultationRequestCollectionSnapshot

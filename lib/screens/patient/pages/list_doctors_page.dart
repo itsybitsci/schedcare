@@ -92,7 +92,7 @@ class ListDoctorsPage extends HookConsumerWidget {
                                 itemCount: snapshot.docs.length + 1,
                                 itemBuilder: (context, index) {
                                   if (index == snapshot.docs.length) {
-                                    return lottieDiamondLoading();
+                                    return lottieSearchDoctors();
                                   }
 
                                   if (snapshot.hasMore &&

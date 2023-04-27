@@ -54,3 +54,13 @@ Center lottieNoNotifications() => Center(
       child: Lottie.asset('assets/animations/no-notifications_lottie.json',
           width: 300.w),
     );
+
+Center lottieSearchDoctors() => Center(
+      child: Lottie.asset('assets/animations/search-doctors_lottie.json',
+          width: 50.w),
+    );
+
+Center lottieSearchUsers() => Center(
+      child: Lottie.asset('assets/animations/search-users_lottie.json',
+          width: 50.w),
+    );
