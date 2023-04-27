@@ -28,4 +28,5 @@ class Prompts {
       "Maximum file size is ${AppConstants.maximumFileUploadSize}MB.";
   static const String couldNotDownloadFile =
       'Could not download file. Kindly check your internet connection.';
+  static const String noMessages = 'Conversation history is empty.';
 }

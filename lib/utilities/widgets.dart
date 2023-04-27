@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:schedcare/plugins/videosdk_plugin/utils/videosdk_colors.dart';
 import 'package:schedcare/providers/firebase_services_provider.dart';
 import 'package:schedcare/providers/generic_fields_provider.dart';
 import 'package:schedcare/utilities/constants.dart';
@@ -51,7 +50,7 @@ Align conversationHistoryChatWidget(String currentUserRole, String senderRole,
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.blue,
+            color: Colors.lightBlue[200],
           ),
           child: IntrinsicWidth(
             child: Column(
@@ -60,28 +59,24 @@ Align conversationHistoryChatWidget(String currentUserRole, String senderRole,
                 Text(
                   currentUserRole == senderRole ? "You" : senderName,
                   textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    color: VideoSdkColorConstants.black200,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.sp,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   message,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 12.sp),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Container(
                   alignment: Alignment.centerRight,
                   child: Text(
                     DateFormat('hh:mm a').format(timestamp.toLocal()),
                     textAlign: TextAlign.end,
-                    style: const TextStyle(
-                        fontSize: 10, fontWeight: FontWeight.w500),
+                    style:
+                        TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w500),
                   ),
                 ),
               ],
