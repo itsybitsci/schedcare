@@ -22,11 +22,6 @@ Center lottieError() => Center(
           width: 400.w),
     );
 
-Center lottieSleeping() => Center(
-      child: Lottie.asset('assets/animations/sleeping-koala_lottie.json',
-          width: 200.w),
-    );
-
 Center lottieForgotPassword() => Center(
       child: Lottie.asset('assets/animations/forgot-password_lottie.json',
           width: 500.w),

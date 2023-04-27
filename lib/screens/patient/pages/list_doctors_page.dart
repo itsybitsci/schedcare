@@ -62,6 +62,7 @@ class ListDoctorsPage extends HookConsumerWidget {
                   color: Colors.white,
                 ),
                 child: Scrollbar(
+                  radius: Radius.circular(20.r),
                   controller: scrollController,
                   child: FirestoreQueryBuilder<Doctor>(
                     query: doctorsQuery,

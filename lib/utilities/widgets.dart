@@ -28,7 +28,7 @@ Shimmer shimmerListTile() => Shimmer.fromColors(
               height: 90.h,
               width: 310.w,
               decoration: BoxDecoration(
-                color: Colors.grey[300]!,
+                color: Colors.grey[100]!,
                 borderRadius: BorderRadius.circular(10.r),
               )),
         ),

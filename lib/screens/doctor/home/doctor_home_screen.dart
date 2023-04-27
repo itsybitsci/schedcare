@@ -87,7 +87,7 @@ class DoctorHomeScreen extends HookConsumerWidget {
                 ),
               ],
             ),
-            body: AppConstants.doctorPages[index.value],
+            body: Background(child: AppConstants.doctorPages[index.value]),
             bottomNavigationBar: NavigationBarTheme(
               data: NavigationBarThemeData(
                 indicatorColor: Colors.blue.shade100,

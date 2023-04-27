@@ -87,7 +87,7 @@ class PatientHomeScreen extends HookConsumerWidget {
                 ),
               ],
             ),
-            body: AppConstants.patientPages[index.value],
+            body: Background(child: AppConstants.patientPages[index.value]),
             bottomNavigationBar: NavigationBarTheme(
               data: NavigationBarThemeData(
                 indicatorColor: Colors.blue.shade100,
