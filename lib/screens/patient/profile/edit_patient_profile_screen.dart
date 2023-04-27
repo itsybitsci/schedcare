@@ -57,6 +57,7 @@ class EditPatientProfileScreen extends HookConsumerWidget {
     }, []);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text(AppConstants.appTitle),
       ),
