@@ -34,7 +34,7 @@ class LoginScreen extends HookConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 250.w),
+                  constraints: BoxConstraints(maxHeight: 250.h),
                   child: Image.asset("assets/images/splash.png"),
                 ),
                 SizedBox(
