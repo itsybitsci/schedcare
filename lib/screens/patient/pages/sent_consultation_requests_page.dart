@@ -378,18 +378,23 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                   ),
                   child: Center(
                       child: ElevatedButton(
-                    onPressed: () async {
-                      if (meetingId == null) {
-                        showToast(Prompts.waitForDoctorToStartMeeting);
-                        return;
-                      }
+                    onPressed: DateTime.now().isBefore(consultationRequest
+                            .consultationDateTime
+                            .add(const Duration(
+                                hours: AppConstants.defaultMeetingDuration)))
+                        ? () async {
+                            if (meetingId == null) {
+                              showToast(Prompts.waitForDoctorToStartMeeting);
+                              return;
+                            }
 
-                      context.push(RoutePaths.joinScreen,
-                          extra: MeetingPayload(
-                              meetingId: meetingId,
-                              consultationRequest: consultationRequest,
-                              role: AppConstants.patient));
-                    },
+                            context.push(RoutePaths.joinScreen,
+                                extra: MeetingPayload(
+                                    meetingId: meetingId,
+                                    consultationRequest: consultationRequest,
+                                    role: AppConstants.patient));
+                          }
+                        : null,
                     child: Text(
                       'Join Call',
                       style: TextStyle(
@@ -452,13 +457,16 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                     child: const Text('Keep Request'),
                   ),
                   TextButton(
-                    onPressed: () async {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(RouteNames.authWrapper));
-                      await firebaseServicesNotifier.deleteDocument(
-                          FirebaseConstants.consultationRequestsCollection,
-                          consultationRequestId);
-                    },
+                    onPressed: firebaseServicesNotifier.getLoading
+                        ? null
+                        : () async {
+                            Navigator.popUntil(context,
+                                ModalRoute.withName(RouteNames.authWrapper));
+                            await firebaseServicesNotifier.deleteDocument(
+                                FirebaseConstants
+                                    .consultationRequestsCollection,
+                                consultationRequestId);
+                          },
                     child: const Text('Cancel Request'),
                   ),
                 ],

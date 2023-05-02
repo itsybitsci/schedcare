@@ -76,9 +76,13 @@ class ConsultationRequestProvider extends ChangeNotifier {
         ElevatedButton(
           onPressed:
               !firebaseServicesNotifier.getLoading ? () => pickFile() : null,
-          child: Text(
-            _pickedFile == null ? 'Add File Attachment' : _pickedFile!.name,
-            style: TextStyle(fontSize: 12.sp),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 200.w),
+            child: Text(
+              _pickedFile == null ? 'Add File Attachment' : _pickedFile!.name,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 12.sp),
+            ),
           ),
         ),
         if (_pickedFile != null && showX)

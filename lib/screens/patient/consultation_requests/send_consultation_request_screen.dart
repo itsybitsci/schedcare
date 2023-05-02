@@ -222,11 +222,14 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
                                                       .getLoading
                                                   ? null
                                                   : () async => await sendConsultationRequest(
-                                                      context,
-                                                      firebaseServicesNotifier,
-                                                      consultationRequestNotifier,
-                                                      consultationRequestStartTimes,
-                                                      userSnapshot),
+                                                          context,
+                                                          firebaseServicesNotifier,
+                                                          consultationRequestNotifier,
+                                                          consultationRequestStartTimes,
+                                                          userSnapshot)
+                                                      .then((success) => success
+                                                          ? context.pop()
+                                                          : null),
                                               child: Text('SEND REQUEST',
                                                   style: TextStyle(
                                                       fontSize: 14.sp)),
@@ -255,7 +258,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
     );
   }
 
-  Future sendConsultationRequest(
+  Future<bool> sendConsultationRequest(
       BuildContext context,
       FirebaseServicesProvider firebaseServicesNotifier,
       ConsultationRequestProvider consultationRequestNotifier,
@@ -268,7 +271,7 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
       if (isOverlapping(consultationRequestStartTimes,
           consultationRequestNotifier.dateTime)) {
         showToast(Prompts.overlappingSchedule);
-        return;
+        return false;
       }
 
       DocumentReference consultationRequestRef = FirebaseFirestore.instance
@@ -313,13 +316,11 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
           await sendNotification(firebaseServicesNotifier);
 
           showToast('Successfully sent consultation request');
-
-          if (context.mounted) {
-            context.pop();
-          }
         },
       );
+      return true;
     }
+    return false;
   }
 
   Future uploadAttachment(

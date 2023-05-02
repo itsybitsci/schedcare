@@ -62,7 +62,7 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
               children: [
                 Container(
                   width: 320.w,
-                  height: 170.h,
+                  height: 150.h,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.r),
                     color: Colors.white,
@@ -104,7 +104,7 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                 Flexible(
                   child: Container(
                     width: 320.w,
-                    height: 380.h,
+                    height: 400.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.r),
                       color: Colors.white,
@@ -311,82 +311,95 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                     child: const Text('No'),
                   ),
                   TextButton(
-                    onPressed: () async {
-                      await firebaseServicesNotifier.rejectConsultationRequest({
-                        ModelFields.status: AppConstants.rejected,
-                        ModelFields.modifiedAt: DateTime.now()
-                      }, FirebaseConstants.consultationRequestsCollection,
-                          consultationRequest.id).then(
-                        (success) {
-                          if (success) {
-                            context.go(RoutePaths.authWrapper);
-
-                            firebaseServicesNotifier.getFirebaseFirestoreService
-                                .getDocument(
-                                    FirebaseConstants.usersCollection,
-                                    firebaseServicesNotifier
-                                        .getCurrentUser!.uid)
-                                .then(
-                              (userSnapshot) {
-                                DocumentReference appNotificationRef =
-                                    FirebaseFirestore.instance
-                                        .collection(FirebaseConstants
-                                            .notificationsCollection)
-                                        .doc();
-                                String appNotificationId =
-                                    appNotificationRef.id;
-                                String notificationTitle =
-                                    'Consultation Request Rejected';
-                                String notificationBody =
-                                    'Consultation request rejected by  ${'${userSnapshot.get(ModelFields.prefix)} ${userSnapshot.get(ModelFields.firstName)} ${userSnapshot.get(ModelFields.lastName)} ${userSnapshot.get(ModelFields.suffix)}'.trim()}';
-
-                                Map<String, dynamic> appNotification = {
-                                  ModelFields.id: appNotificationId,
-                                  ModelFields.patientId: patient.id,
-                                  ModelFields.doctorId: firebaseServicesNotifier
-                                      .getCurrentUser!.uid,
-                                  ModelFields.title: notificationTitle,
-                                  ModelFields.body: notificationBody,
-                                  ModelFields.sentAt: DateTime.now(),
-                                  ModelFields.sender: AppConstants.doctor,
-                                  ModelFields.isRead: false,
-                                };
-
-                                firebaseServicesNotifier
-                                    .getFirebaseFirestoreService
-                                    .setDocument(
-                                        appNotification,
-                                        FirebaseConstants
-                                            .notificationsCollection,
-                                        appNotificationId);
-
-                                firebaseServicesNotifier
-                                    .getFirebaseFirestoreService
-                                    .getDocument(
-                                        FirebaseConstants.userTokensCollection,
-                                        patient.id)
-                                    .then(
-                                  (DocumentSnapshot<Map<String, dynamic>>
-                                      userTokenSnapshot) {
-                                    List tokens = userTokenSnapshot
-                                        .get(ModelFields.deviceTokens);
-
-                                    for (String token in tokens) {
-                                      firebaseServicesNotifier
-                                          .getFirebaseCloudMessagingService
-                                          .sendPushNotification(
-                                              notificationTitle,
-                                              notificationBody,
-                                              token);
-                                    }
+                    onPressed: firebaseServicesNotifier.getLoading
+                        ? null
+                        : () async {
+                            if (!firebaseServicesNotifier.getLoading) {
+                              await firebaseServicesNotifier
+                                  .rejectConsultationRequest(
+                                      {
+                                    ModelFields.status: AppConstants.rejected,
+                                    ModelFields.modifiedAt: DateTime.now()
                                   },
-                                );
-                              },
-                            );
-                          }
-                        },
-                      );
-                    },
+                                      FirebaseConstants
+                                          .consultationRequestsCollection,
+                                      consultationRequest.id).then(
+                                (success) {
+                                  if (success) {
+                                    context.go(RoutePaths.authWrapper);
+
+                                    firebaseServicesNotifier
+                                        .getFirebaseFirestoreService
+                                        .getDocument(
+                                            FirebaseConstants.usersCollection,
+                                            firebaseServicesNotifier
+                                                .getCurrentUser!.uid)
+                                        .then(
+                                      (userSnapshot) {
+                                        DocumentReference appNotificationRef =
+                                            FirebaseFirestore.instance
+                                                .collection(FirebaseConstants
+                                                    .notificationsCollection)
+                                                .doc();
+                                        String appNotificationId =
+                                            appNotificationRef.id;
+                                        String notificationTitle =
+                                            'Consultation Request Rejected';
+                                        String notificationBody =
+                                            'Consultation request rejected by  ${'${userSnapshot.get(ModelFields.prefix)} ${userSnapshot.get(ModelFields.firstName)} ${userSnapshot.get(ModelFields.lastName)} ${userSnapshot.get(ModelFields.suffix)}'.trim()}';
+
+                                        Map<String, dynamic> appNotification = {
+                                          ModelFields.id: appNotificationId,
+                                          ModelFields.patientId: patient.id,
+                                          ModelFields.doctorId:
+                                              firebaseServicesNotifier
+                                                  .getCurrentUser!.uid,
+                                          ModelFields.title: notificationTitle,
+                                          ModelFields.body: notificationBody,
+                                          ModelFields.sentAt: DateTime.now(),
+                                          ModelFields.sender:
+                                              AppConstants.doctor,
+                                          ModelFields.isRead: false,
+                                        };
+
+                                        firebaseServicesNotifier
+                                            .getFirebaseFirestoreService
+                                            .setDocument(
+                                                appNotification,
+                                                FirebaseConstants
+                                                    .notificationsCollection,
+                                                appNotificationId);
+
+                                        firebaseServicesNotifier
+                                            .getFirebaseFirestoreService
+                                            .getDocument(
+                                                FirebaseConstants
+                                                    .userTokensCollection,
+                                                patient.id)
+                                            .then(
+                                          (DocumentSnapshot<
+                                                  Map<String, dynamic>>
+                                              userTokenSnapshot) {
+                                            List tokens = userTokenSnapshot
+                                                .get(ModelFields.deviceTokens);
+
+                                            for (String token in tokens) {
+                                              firebaseServicesNotifier
+                                                  .getFirebaseCloudMessagingService
+                                                  .sendPushNotification(
+                                                      notificationTitle,
+                                                      notificationBody,
+                                                      token);
+                                            }
+                                          },
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                              );
+                            }
+                          },
                     child: Text('Yes', style: TextStyle(fontSize: 12.sp)),
                   ),
                 ],
@@ -419,84 +432,95 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                     child: Text('No', style: TextStyle(fontSize: 12.sp)),
                   ),
                   TextButton(
-                    onPressed: () async {
-                      await firebaseServicesNotifier.approveConsultationRequest(
-                          {
-                            ModelFields.status: AppConstants.approved,
-                            ModelFields.modifiedAt: DateTime.now()
-                          },
-                          FirebaseConstants.consultationRequestsCollection,
-                          consultationRequest.id).then(
-                        (success) async {
-                          if (success) {
-                            context.go(RoutePaths.authWrapper);
-
-                            firebaseServicesNotifier.getFirebaseFirestoreService
-                                .getDocument(
-                                    FirebaseConstants.usersCollection,
-                                    firebaseServicesNotifier
-                                        .getCurrentUser!.uid)
-                                .then(
-                              (doctorSnapshot) {
-                                DocumentReference appNotificationRef =
-                                    FirebaseFirestore.instance
-                                        .collection(FirebaseConstants
-                                            .notificationsCollection)
-                                        .doc();
-                                String appNotificationId =
-                                    appNotificationRef.id;
-                                String notificationTitle =
-                                    'Consultation Request Approved';
-                                String notificationBody =
-                                    'Consultation request approved by  ${'${doctorSnapshot.get(ModelFields.prefix)} ${doctorSnapshot.get(ModelFields.firstName)} ${doctorSnapshot.get(ModelFields.lastName)} ${doctorSnapshot.get(ModelFields.suffix)}'.trim()}';
-
-                                Map<String, dynamic> appNotification = {
-                                  ModelFields.id: appNotificationId,
-                                  ModelFields.patientId: patient.id,
-                                  ModelFields.doctorId: firebaseServicesNotifier
-                                      .getCurrentUser!.uid,
-                                  ModelFields.title: notificationTitle,
-                                  ModelFields.body: notificationBody,
-                                  ModelFields.sentAt: DateTime.now(),
-                                  ModelFields.sender: AppConstants.doctor,
-                                  ModelFields.isRead: false,
-                                };
-
-                                firebaseServicesNotifier
-                                    .getFirebaseFirestoreService
-                                    .setDocument(
-                                        appNotification,
-                                        FirebaseConstants
-                                            .notificationsCollection,
-                                        appNotificationId);
-
-                                firebaseServicesNotifier
-                                    .getFirebaseFirestoreService
-                                    .getDocument(
-                                        FirebaseConstants.userTokensCollection,
-                                        patient.id)
-                                    .then(
-                                  (DocumentSnapshot<Map<String, dynamic>>
-                                      userTokenSnapshot) {
-                                    List tokens = userTokenSnapshot
-                                        .get(ModelFields.deviceTokens);
-
-                                    for (String token in tokens) {
-                                      firebaseServicesNotifier
-                                          .getFirebaseCloudMessagingService
-                                          .sendPushNotification(
-                                              notificationTitle,
-                                              notificationBody,
-                                              token);
-                                    }
+                    onPressed: firebaseServicesNotifier.getLoading
+                        ? null
+                        : () async {
+                            if (!firebaseServicesNotifier.getLoading) {
+                              await firebaseServicesNotifier
+                                  .approveConsultationRequest(
+                                      {
+                                    ModelFields.status: AppConstants.approved,
+                                    ModelFields.modifiedAt: DateTime.now()
                                   },
-                                );
-                              },
-                            );
-                          }
-                        },
-                      );
-                    },
+                                      FirebaseConstants
+                                          .consultationRequestsCollection,
+                                      consultationRequest.id).then(
+                                (success) async {
+                                  if (success) {
+                                    context.go(RoutePaths.authWrapper);
+
+                                    firebaseServicesNotifier
+                                        .getFirebaseFirestoreService
+                                        .getDocument(
+                                            FirebaseConstants.usersCollection,
+                                            firebaseServicesNotifier
+                                                .getCurrentUser!.uid)
+                                        .then(
+                                      (doctorSnapshot) {
+                                        DocumentReference appNotificationRef =
+                                            FirebaseFirestore.instance
+                                                .collection(FirebaseConstants
+                                                    .notificationsCollection)
+                                                .doc();
+                                        String appNotificationId =
+                                            appNotificationRef.id;
+                                        String notificationTitle =
+                                            'Consultation Request Approved';
+                                        String notificationBody =
+                                            'Consultation request approved by  ${'${doctorSnapshot.get(ModelFields.prefix)} ${doctorSnapshot.get(ModelFields.firstName)} ${doctorSnapshot.get(ModelFields.lastName)} ${doctorSnapshot.get(ModelFields.suffix)}'.trim()}';
+
+                                        Map<String, dynamic> appNotification = {
+                                          ModelFields.id: appNotificationId,
+                                          ModelFields.patientId: patient.id,
+                                          ModelFields.doctorId:
+                                              firebaseServicesNotifier
+                                                  .getCurrentUser!.uid,
+                                          ModelFields.title: notificationTitle,
+                                          ModelFields.body: notificationBody,
+                                          ModelFields.sentAt: DateTime.now(),
+                                          ModelFields.sender:
+                                              AppConstants.doctor,
+                                          ModelFields.isRead: false,
+                                        };
+
+                                        firebaseServicesNotifier
+                                            .getFirebaseFirestoreService
+                                            .setDocument(
+                                                appNotification,
+                                                FirebaseConstants
+                                                    .notificationsCollection,
+                                                appNotificationId);
+
+                                        firebaseServicesNotifier
+                                            .getFirebaseFirestoreService
+                                            .getDocument(
+                                                FirebaseConstants
+                                                    .userTokensCollection,
+                                                patient.id)
+                                            .then(
+                                          (DocumentSnapshot<
+                                                  Map<String, dynamic>>
+                                              userTokenSnapshot) {
+                                            List tokens = userTokenSnapshot
+                                                .get(ModelFields.deviceTokens);
+
+                                            for (String token in tokens) {
+                                              firebaseServicesNotifier
+                                                  .getFirebaseCloudMessagingService
+                                                  .sendPushNotification(
+                                                      notificationTitle,
+                                                      notificationBody,
+                                                      token);
+                                            }
+                                          },
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                              );
+                            }
+                          },
                     child: Text('Yes', style: TextStyle(fontSize: 12.sp)),
                   ),
                 ],
