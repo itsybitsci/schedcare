@@ -242,9 +242,17 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                           children: [
                                             const Text('Patient Attachment: '),
                                             TextButton(
-                                              child: Text(getFileNameFromUrl(
-                                                  consultationRequest
-                                                      .patientAttachmentUrl!)),
+                                              child: ConstrainedBox(
+                                                constraints: BoxConstraints(
+                                                    maxWidth: 100.w),
+                                                child: Text(
+                                                  getFileNameFromUrl(
+                                                      consultationRequest
+                                                          .patientAttachmentUrl!),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
                                               onPressed: () async {
                                                 if (await canLaunchUrl(Uri
                                                     .parse(consultationRequest
@@ -295,9 +303,17 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                           children: [
                                             const Text('Doctor Attachment: '),
                                             TextButton(
-                                              child: Text(getFileNameFromUrl(
-                                                  consultationRequest
-                                                      .doctorAttachmentUrl!)),
+                                              child: ConstrainedBox(
+                                                constraints: BoxConstraints(
+                                                    maxWidth: 100.w),
+                                                child: Text(
+                                                  getFileNameFromUrl(
+                                                      consultationRequest
+                                                          .doctorAttachmentUrl!),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
                                               onPressed: () async {
                                                 if (await canLaunchUrl(Uri
                                                     .parse(consultationRequest

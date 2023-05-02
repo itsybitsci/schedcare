@@ -222,8 +222,13 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
         children: [
           Text('Doctor Attachment: ', style: TextStyle(fontSize: 12.sp)),
           TextButton(
-            child: Text(
-                getFileNameFromUrl(consultationRequest.doctorAttachmentUrl!)),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 100.w),
+              child: Text(
+                getFileNameFromUrl(consultationRequest.doctorAttachmentUrl!),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             onPressed: () async {
               if (await canLaunchUrl(
                   Uri.parse(consultationRequest.doctorAttachmentUrl!))) {
@@ -252,8 +257,13 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
         children: [
           Text('Patient Attachment: ', style: TextStyle(fontSize: 12.sp)),
           TextButton(
-            child: Text(
-                getFileNameFromUrl(consultationRequest.patientAttachmentUrl!)),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 100.w),
+              child: Text(
+                getFileNameFromUrl(consultationRequest.patientAttachmentUrl!),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             onPressed: () async {
               if (await canLaunchUrl(
                   Uri.parse(consultationRequest.patientAttachmentUrl!))) {
