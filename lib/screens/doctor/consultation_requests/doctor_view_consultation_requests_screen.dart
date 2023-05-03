@@ -336,7 +336,10 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                                       consultationRequest.id).then(
                                 (success) {
                                   if (success) {
-                                    context.go(RoutePaths.authWrapper);
+                                    Navigator.popUntil(
+                                        context,
+                                        ModalRoute.withName(
+                                            RouteNames.authWrapper));
 
                                     firebaseServicesNotifier
                                         .getFirebaseFirestoreService
@@ -457,7 +460,10 @@ class DoctorViewConsultationRequestScreen extends HookConsumerWidget {
                                       consultationRequest.id).then(
                                 (success) async {
                                   if (success) {
-                                    context.go(RoutePaths.authWrapper);
+                                    Navigator.popUntil(
+                                        context,
+                                        ModalRoute.withName(
+                                            RouteNames.authWrapper));
 
                                     firebaseServicesNotifier
                                         .getFirebaseFirestoreService

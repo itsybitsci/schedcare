@@ -454,7 +454,7 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                                                               await uploadAttachment(firebaseServicesNotifier, consultationRequestNotifier, consultationRequest.id);
                                                                             }
                                                                             if (context.mounted) {
-                                                                              context.go(RoutePaths.authWrapper);
+                                                                              Navigator.popUntil(context, ModalRoute.withName(RouteNames.authWrapper));
                                                                             }
                                                                           }
                                                                         },
