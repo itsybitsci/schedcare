@@ -172,11 +172,15 @@ class PatientRegisterScreen extends HookConsumerWidget {
                                 style: TextStyle(fontSize: 15.sp)),
                           ),
                     SizedBox(height: 10.h),
-                    const Text('Already have an account?'),
+                    Text(
+                      'Already have an account?',
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
                     RichText(
                       text: TextSpan(
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.black,
+                          fontSize: 12.sp,
                         ),
                         children: [
                           const TextSpan(text: 'Click '),

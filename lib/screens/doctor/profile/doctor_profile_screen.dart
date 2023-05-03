@@ -70,74 +70,80 @@ class DoctorProfileScreen extends HookConsumerWidget {
                         borderRadius: BorderRadius.circular(10.r),
                         color: Colors.white,
                       ),
-                      child: StreamBuilder(
-                        stream: userSnapshots,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<
-                                    DocumentSnapshot<Map<String, dynamic>>>
-                                snapshot) {
-                          if (snapshot.hasError) {
-                            return lottieError();
-                          }
+                      child: Scrollbar(
+                        child: SingleChildScrollView(
+                          child: StreamBuilder(
+                            stream: userSnapshots,
+                            builder: (BuildContext context,
+                                AsyncSnapshot<
+                                        DocumentSnapshot<Map<String, dynamic>>>
+                                    snapshot) {
+                              if (snapshot.hasError) {
+                                return lottieError();
+                              }
 
-                          if (snapshot.hasData) {
-                            DocumentSnapshot<Map<String, dynamic>> data =
-                                snapshot.data!;
-                            return Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  data.get(ModelFields.sex) == AppConstants.male
-                                      ? lottieMale()
-                                      : lottieFemale(),
-                                  Text(
-                                      data
-                                              .get(ModelFields.middleName)
-                                              .toString()
-                                              .isNotEmpty
-                                          ? '${data.get(ModelFields.prefix)} ${data.get(ModelFields.firstName)} ${data.get(ModelFields.middleName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
-                                              .trim()
-                                          : '${data.get(ModelFields.prefix)} ${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
-                                              .trim(),
-                                      style: TextStyle(
-                                          fontSize: 20.sp,
-                                          fontWeight: FontWeight.bold)),
-                                  SizedBox(height: 12.h),
-                                  Text('Email: ${data.get(ModelFields.email)}',
-                                      style: TextStyle(fontSize: 13.sp)),
-                                  SizedBox(height: 3.h),
-                                  Text('Sex: ${data.get(ModelFields.sex)}',
-                                      style: TextStyle(fontSize: 13.sp)),
-                                  SizedBox(height: 3.h),
-                                  Text(
-                                      'Specialization: ${data.get(ModelFields.specialization)}',
-                                      style: TextStyle(fontSize: 13.sp)),
-                                  SizedBox(height: 30.h),
-                                  buildChangePasswordButton(
-                                      context,
-                                      firebaseServicesNotifier,
-                                      genericFieldsNotifier,
-                                      formKeyUpdateDoctorPassword),
-                                  buildChangeEmailButton(
-                                      context,
-                                      firebaseServicesNotifier,
-                                      genericFieldsNotifier,
-                                      formKeyUpdateDoctorEmail),
-                                  ElevatedButton(
-                                    onPressed: () => context
-                                        .push(RoutePaths.editDoctorProfile),
-                                    child: Text(
-                                      'Edit Profile',
-                                      style: TextStyle(fontSize: 12.sp),
-                                    ),
+                              if (snapshot.hasData) {
+                                DocumentSnapshot<Map<String, dynamic>> data =
+                                    snapshot.data!;
+                                return Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      data.get(ModelFields.sex) ==
+                                              AppConstants.male
+                                          ? lottieMale()
+                                          : lottieFemale(),
+                                      Text(
+                                          data
+                                                  .get(ModelFields.middleName)
+                                                  .toString()
+                                                  .isNotEmpty
+                                              ? '${data.get(ModelFields.prefix)} ${data.get(ModelFields.firstName)} ${data.get(ModelFields.middleName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
+                                                  .trim()
+                                              : '${data.get(ModelFields.prefix)} ${data.get(ModelFields.firstName)} ${data.get(ModelFields.lastName)} ${data.get(ModelFields.suffix)}'
+                                                  .trim(),
+                                          style: TextStyle(
+                                              fontSize: 20.sp,
+                                              fontWeight: FontWeight.bold)),
+                                      SizedBox(height: 12.h),
+                                      Text(
+                                          'Email: ${data.get(ModelFields.email)}',
+                                          style: TextStyle(fontSize: 13.sp)),
+                                      SizedBox(height: 3.h),
+                                      Text('Sex: ${data.get(ModelFields.sex)}',
+                                          style: TextStyle(fontSize: 13.sp)),
+                                      SizedBox(height: 3.h),
+                                      Text(
+                                          'Specialization: ${data.get(ModelFields.specialization)}',
+                                          style: TextStyle(fontSize: 13.sp)),
+                                      SizedBox(height: 30.h),
+                                      buildChangePasswordButton(
+                                          context,
+                                          firebaseServicesNotifier,
+                                          genericFieldsNotifier,
+                                          formKeyUpdateDoctorPassword),
+                                      buildChangeEmailButton(
+                                          context,
+                                          firebaseServicesNotifier,
+                                          genericFieldsNotifier,
+                                          formKeyUpdateDoctorEmail),
+                                      ElevatedButton(
+                                        onPressed: () => context
+                                            .push(RoutePaths.editDoctorProfile),
+                                        child: Text(
+                                          'Edit Profile',
+                                          style: TextStyle(fontSize: 12.sp),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            );
-                          }
+                                );
+                              }
 
-                          return lottieLoading(width: 50);
-                        },
+                              return lottieLoading(width: 50);
+                            },
+                          ),
+                        ),
                       ),
                     ),
                   ),

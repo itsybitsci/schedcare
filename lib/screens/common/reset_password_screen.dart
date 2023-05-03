@@ -81,13 +81,13 @@ class ResetPasswordScreen extends HookConsumerWidget {
                   ),
                   Text(
                     'Already know your password?',
-                    style: TextStyle(fontSize: 13.sp),
+                    style: TextStyle(fontSize: 12.sp),
                   ),
                   RichText(
                     text: TextSpan(
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 13.sp,
+                        fontSize: 12.sp,
                       ),
                       children: [
                         const TextSpan(text: 'Click '),

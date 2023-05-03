@@ -130,13 +130,15 @@ class LoginScreen extends HookConsumerWidget {
                 SizedBox(
                   height: 80.h,
                 ),
-                const Text(
+                Text(
                   'Don\'t have an account yet?',
+                  style: TextStyle(fontSize: 12.sp),
                 ),
                 RichText(
                   text: TextSpan(
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
+                      fontSize: 12.sp,
                     ),
                     children: [
                       TextSpan(
@@ -167,8 +169,9 @@ class LoginScreen extends HookConsumerWidget {
                 ),
                 RichText(
                   text: TextSpan(
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
+                      fontSize: 12.sp,
                     ),
                     children: [
                       const TextSpan(

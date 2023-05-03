@@ -404,6 +404,10 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                     ),
                   )),
                 ),
+              if (meetingId != null)
+                Flexible(
+                  child: lottieCalling(),
+                ),
             ],
           ),
         ],
@@ -416,6 +420,7 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 "${DateFormat('MMMM d, y').format(consultationRequest.createdAt)} ",
@@ -427,7 +432,6 @@ class SentConsultationRequestsPage extends HookConsumerWidget {
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 8.sp),
               ),
-              if (meetingId != null) lottieCalling(),
             ],
           ),
         ],
