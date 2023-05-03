@@ -112,11 +112,15 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
               ),
               Lottie.asset('assets/animations/verifying-profile_lottie.json',
                   width: 250.w),
-              const Text('Already verified?'),
+              Text(
+                'Already verified?',
+                style: TextStyle(fontSize: 13.sp),
+              ),
               RichText(
                 text: TextSpan(
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.black,
+                    fontSize: 13.sp,
                   ),
                   children: [
                     const TextSpan(text: 'Click '),

@@ -38,66 +38,74 @@ class ResetPasswordScreen extends HookConsumerWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Background(
-        child: Form(
-          key: formKeyResetPassword,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 100.h,
-                ),
-                lottieForgotPassword(),
-                ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 300.w),
-                  child: genericFieldsNotifier.buildEmail(),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                HookBuilder(
-                  builder: (_) {
-                    final canResendEmail = useState(true);
-
-                    return ElevatedButton(
-                      onPressed: canResendEmail.value
-                          ? () => sendPasswordResetEMail(
-                              firebaseServicesNotifier,
-                              genericFieldsNotifier,
-                              canResendEmail)
-                          : null,
-                      child: Text(
-                        'RESET PASSWORD',
-                        style: TextStyle(fontSize: 15.sp),
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: 200.h,
-                ),
-                const Text('Already know your password?'),
-                RichText(
-                  text: TextSpan(
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                    children: [
-                      const TextSpan(text: 'Click '),
-                      TextSpan(
-                        text: 'here',
-                        style: const TextStyle(
-                          color: Colors.blue,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.pop(),
-                      ),
-                      const TextSpan(text: ' to go back to the login screen.'),
-                    ],
+      body: WillPopScope(
+        onWillPop: () async => !firebaseServicesNotifier.getLoading,
+        child: Background(
+          child: Form(
+            key: formKeyResetPassword,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 100.h,
                   ),
-                ),
-              ],
+                  lottieForgotPassword(),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 300.w),
+                    child: genericFieldsNotifier.buildEmail(),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  HookBuilder(
+                    builder: (_) {
+                      final canResendEmail = useState(true);
+
+                      return ElevatedButton(
+                        onPressed: canResendEmail.value
+                            ? () => sendPasswordResetEMail(
+                                firebaseServicesNotifier,
+                                genericFieldsNotifier,
+                                canResendEmail)
+                            : null,
+                        child: Text(
+                          'RESET PASSWORD',
+                          style: TextStyle(fontSize: 15.sp),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 200.h,
+                  ),
+                  Text(
+                    'Already know your password?',
+                    style: TextStyle(fontSize: 13.sp),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 13.sp,
+                      ),
+                      children: [
+                        const TextSpan(text: 'Click '),
+                        TextSpan(
+                          text: 'here',
+                          style: const TextStyle(
+                            color: Colors.blue,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => context.pop(),
+                        ),
+                        const TextSpan(
+                            text: ' to go back to the login screen.'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

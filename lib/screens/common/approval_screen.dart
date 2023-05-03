@@ -31,8 +31,9 @@ class ApprovalScreen extends HookConsumerWidget {
                 width: 300.w),
             RichText(
               text: TextSpan(
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.black,
+                  fontSize: 13.sp,
                 ),
                 children: [
                   const TextSpan(text: 'Click '),
