@@ -359,105 +359,116 @@ class PatientViewConsultationRequestScreen extends HookConsumerWidget {
                                                 context: context,
                                                 builder: (context) {
                                                   return AlertDialog(
-                                                    title: const Text(
-                                                        'Confirm Submission of Edited Request'),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    actionsAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    title: Text(
+                                                      'Confirm Submission of Edited Request',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontSize: 20.sp),
+                                                    ),
                                                     actions: [
                                                       TextButton(
                                                         onPressed: () =>
                                                             context.pop(),
-                                                        child: const Text(
-                                                            'Cancel'),
+                                                        child: Text(
+                                                          'Cancel',
+                                                          style: TextStyle(
+                                                              fontSize: 15.sp),
+                                                        ),
                                                       ),
                                                       TextButton(
-                                                        onPressed: () async {
-                                                          if (formKeyEditConsultationRequest
-                                                              .currentState!
-                                                              .validate()) {
-                                                            formKeyEditConsultationRequest
-                                                                .currentState
-                                                                ?.save();
+                                                        onPressed:
+                                                            firebaseServicesNotifier
+                                                                    .getLoading
+                                                                ? null
+                                                                : () async {
+                                                                    if (formKeyEditConsultationRequest
+                                                                        .currentState!
+                                                                        .validate()) {
+                                                                      formKeyEditConsultationRequest
+                                                                          .currentState
+                                                                          ?.save();
 
-                                                            List<DateTime> consultationRequestStartTimes = snapshot
-                                                                .data!.docs
-                                                                .where((snapshot) =>
-                                                                    snapshot.get(ModelFields.status) !=
-                                                                    AppConstants
-                                                                        .rejected)
-                                                                .where((snapshot) =>
-                                                                    snapshot.get(ModelFields
-                                                                        .id) !=
-                                                                    consultationRequest
-                                                                        .id)
-                                                                .map((snapshot) => snapshot
-                                                                    .get(ModelFields
-                                                                        .consultationDateTime)
-                                                                    .toDate() as DateTime)
-                                                                .toList();
+                                                                      List<DateTime> consultationRequestStartTimes = snapshot
+                                                                          .data!
+                                                                          .docs
+                                                                          .where((snapshot) =>
+                                                                              snapshot.get(ModelFields.status) !=
+                                                                              AppConstants
+                                                                                  .rejected)
+                                                                          .where((snapshot) =>
+                                                                              snapshot.get(ModelFields.id) !=
+                                                                              consultationRequest
+                                                                                  .id)
+                                                                          .map((snapshot) => snapshot
+                                                                              .get(ModelFields.consultationDateTime)
+                                                                              .toDate() as DateTime)
+                                                                          .toList();
 
-                                                            if (isOverlapping(
-                                                                consultationRequestStartTimes,
-                                                                consultationRequestNotifier
-                                                                    .dateTime)) {
-                                                              showToast(Prompts
-                                                                  .overlappingSchedule);
-                                                              context.pop();
-                                                              return;
-                                                            }
+                                                                      if (isOverlapping(
+                                                                          consultationRequestStartTimes,
+                                                                          consultationRequestNotifier
+                                                                              .dateTime)) {
+                                                                        showToast(
+                                                                            Prompts.overlappingSchedule);
+                                                                        context
+                                                                            .pop();
+                                                                        return;
+                                                                      }
 
-                                                            Map<String, dynamic>
-                                                                data = {
-                                                              ModelFields
-                                                                      .consultationRequestBody:
-                                                                  consultationRequestNotifier
-                                                                      .consultationRequestBody,
-                                                              ModelFields
-                                                                      .consultationDateTime:
-                                                                  consultationRequestNotifier
-                                                                      .dateTime,
-                                                              ModelFields
-                                                                      .consultationType:
-                                                                  consultationRequestNotifier
-                                                                      .consultationType,
-                                                              ModelFields
-                                                                      .modifiedAt:
-                                                                  DateTime
-                                                                      .now(),
-                                                            };
-                                                            await firebaseServicesNotifier
-                                                                .updateConsultationRequest(
-                                                              data,
-                                                              FirebaseConstants
-                                                                  .consultationRequestsCollection,
-                                                              consultationRequest
-                                                                  .id,
-                                                            )
-                                                                .then(
-                                                              (success) async {
-                                                                if (success) {
-                                                                  if (consultationRequestNotifier
-                                                                          .pickedFile !=
-                                                                      null) {
-                                                                    await uploadAttachment(
-                                                                        firebaseServicesNotifier,
-                                                                        consultationRequestNotifier,
+                                                                      Map<String,
+                                                                              dynamic>
+                                                                          data =
+                                                                          {
+                                                                        ModelFields.consultationRequestBody:
+                                                                            consultationRequestNotifier.consultationRequestBody,
+                                                                        ModelFields.consultationDateTime:
+                                                                            consultationRequestNotifier.dateTime,
+                                                                        ModelFields.consultationType:
+                                                                            consultationRequestNotifier.consultationType,
+                                                                        ModelFields.modifiedAt:
+                                                                            DateTime.now(),
+                                                                      };
+                                                                      await firebaseServicesNotifier
+                                                                          .updateConsultationRequest(
+                                                                        data,
+                                                                        FirebaseConstants
+                                                                            .consultationRequestsCollection,
                                                                         consultationRequest
-                                                                            .id);
-                                                                  }
-                                                                  if (context
-                                                                      .mounted) {
-                                                                    context.go(
-                                                                        RoutePaths
-                                                                            .authWrapper);
-                                                                  }
-                                                                }
-                                                              },
-                                                            );
-                                                          } else {
-                                                            context.pop();
-                                                          }
-                                                        },
-                                                        child: const Text(
-                                                            'Proceed'),
+                                                                            .id,
+                                                                      )
+                                                                          .then(
+                                                                        (success) async {
+                                                                          if (success) {
+                                                                            if (consultationRequestNotifier.pickedFile !=
+                                                                                null) {
+                                                                              await uploadAttachment(firebaseServicesNotifier, consultationRequestNotifier, consultationRequest.id);
+                                                                            }
+                                                                            if (context.mounted) {
+                                                                              context.go(RoutePaths.authWrapper);
+                                                                            }
+                                                                          }
+                                                                        },
+                                                                      );
+                                                                    } else {
+                                                                      context
+                                                                          .pop();
+                                                                    }
+                                                                  },
+                                                        child: Text(
+                                                          'Proceed',
+                                                          style: TextStyle(
+                                                              fontSize: 15.sp),
+                                                        ),
                                                       ),
                                                     ],
                                                   );
