@@ -127,8 +127,6 @@ class PatientRegisterScreen extends HookConsumerWidget {
                                   .validate()) {
                                 formKeyRegisterPatient.currentState?.save();
                                 Map<String, dynamic> data = {
-                                  ModelFields.id: firebaseServicesNotifier
-                                      .getCurrentUser!.uid,
                                   ModelFields.email:
                                       genericFieldsNotifier.email,
                                   ModelFields.role: AppConstants.patient,

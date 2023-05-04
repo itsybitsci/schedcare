@@ -100,6 +100,7 @@ class FirebaseServicesProvider extends ChangeNotifier {
 
       data.addAll(
         {
+          ModelFields.id: user.uid,
           ModelFields.lastLogin: user.metadata.lastSignInTime,
           ModelFields.modifiedAt: user.metadata.creationTime,
           ModelFields.createdAt: user.metadata.creationTime,
