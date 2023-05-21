@@ -3,6 +3,7 @@ import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedcare/models/app_notification_model.dart';
@@ -144,6 +145,46 @@ class DoctorNotificationsPage extends HookConsumerWidget {
                                                     FirebaseConstants
                                                         .notificationsCollection,
                                                     appNotification.id),
+                                        onLongPress: () async =>
+                                            await showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text(
+                                              'Delete Notification?',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(fontSize: 15.sp),
+                                            ),
+                                            actionsAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => context.pop(),
+                                                child: Text(
+                                                  'Cancel',
+                                                  style: TextStyle(
+                                                      fontSize: 10.sp),
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () async {
+                                                  await firebaseServicesNotifier
+                                                      .getFirebaseFirestoreService
+                                                      .deleteDocument(
+                                                          FirebaseConstants
+                                                              .notificationsCollection,
+                                                          appNotification.id)
+                                                      .then((value) =>
+                                                          context.pop());
+                                                },
+                                                child: Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                      fontSize: 10.sp),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                         title: Center(
                                           child: Text(
                                             appNotification.body,
