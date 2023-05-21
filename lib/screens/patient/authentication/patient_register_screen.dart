@@ -155,6 +155,7 @@ class PatientRegisterScreen extends HookConsumerWidget {
                                   ModelFields.vaccinationStatus:
                                       genericFieldsNotifier.vaccinationStatus,
                                   ModelFields.isApproved: true,
+                                  ModelFields.isEmailVerified: false,
                                 };
 
                                 await firebaseServicesNotifier

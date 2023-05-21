@@ -7,7 +7,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:schedcare/services/firebase_authentication_service.dart';
 import 'package:schedcare/screens/common/auth_wrapper.dart';
+import 'package:schedcare/services/firebase_firestore_service.dart';
 import 'package:schedcare/utilities/components.dart';
+import 'package:schedcare/utilities/constants.dart';
 import 'package:schedcare/utilities/helpers.dart';
 
 class VerifyEmailScreen extends ConsumerStatefulWidget {
@@ -22,6 +24,8 @@ class VerifyEmailScreen extends ConsumerStatefulWidget {
 class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
   FirebaseAuthenticationService firebaseAuthenticationService =
       FirebaseAuthenticationService();
+  FirebaseFirestoreService firebaseFirestoreService =
+      FirebaseFirestoreService();
   late bool isEmailVerified;
   late bool canResendVerificationEmail;
   Timer? timer;
@@ -69,6 +73,13 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
 
   Future checkEmailVerified() async {
     await firebaseAuthenticationService.currentUser!.reload();
+
+    if (firebaseAuthenticationService.currentUser!.emailVerified) {
+      await firebaseFirestoreService.updateDocument(
+          {ModelFields.isEmailVerified: true},
+          FirebaseConstants.usersCollection,
+          firebaseAuthenticationService.currentUser!.uid);
+    }
 
     setState(() {
       isEmailVerified =

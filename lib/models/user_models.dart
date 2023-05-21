@@ -5,6 +5,7 @@ class Patient {
   final String id;
   final String email;
   final String role;
+  final bool isEmailVerified;
   final String firstName;
   final String middleName;
   final String lastName;
@@ -27,6 +28,7 @@ class Patient {
       {required this.id,
       required this.email,
       required this.role,
+      required this.isEmailVerified,
       required this.firstName,
       required this.middleName,
       required this.lastName,
@@ -50,6 +52,7 @@ class Patient {
       id: snapshot.get(ModelFields.id),
       email: snapshot.get(ModelFields.email),
       role: snapshot.get(ModelFields.role),
+      isEmailVerified: snapshot.get(ModelFields.isEmailVerified),
       firstName: snapshot.get(ModelFields.firstName),
       middleName: snapshot.get(ModelFields.middleName) ?? '',
       lastName: snapshot.get(ModelFields.lastName),
@@ -75,6 +78,7 @@ class Patient {
       ModelFields.patientId: id,
       ModelFields.email: email,
       ModelFields.role: role,
+      ModelFields.isEmailVerified: isEmailVerified,
       ModelFields.firstName: firstName,
       ModelFields.middleName: middleName,
       ModelFields.lastName: lastName,
@@ -100,6 +104,7 @@ class Doctor {
   final String id;
   final String email;
   final String role;
+  final bool isEmailVerified;
   final String prefix;
   final String firstName;
   final String middleName;
@@ -116,6 +121,7 @@ class Doctor {
       {required this.id,
       required this.email,
       required this.role,
+      required this.isEmailVerified,
       required this.prefix,
       required this.firstName,
       required this.middleName,
@@ -133,6 +139,7 @@ class Doctor {
       id: snapshot.get(ModelFields.id),
       email: snapshot.get(ModelFields.email),
       role: snapshot.get(ModelFields.role),
+      isEmailVerified: snapshot.get(ModelFields.isEmailVerified),
       prefix: snapshot.get(ModelFields.prefix) ?? '',
       firstName: snapshot.get(ModelFields.firstName),
       middleName: snapshot.get(ModelFields.middleName) ?? '',
@@ -152,6 +159,7 @@ class Doctor {
       ModelFields.doctorId: id,
       ModelFields.email: email,
       ModelFields.role: role,
+      ModelFields.isEmailVerified: isEmailVerified,
       ModelFields.prefix: prefix,
       ModelFields.firstName: firstName,
       ModelFields.middleName: middleName,

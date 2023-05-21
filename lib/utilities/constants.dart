@@ -211,6 +211,7 @@ class ModelFields {
   static const String senderName = 'senderName';
   static const String isPatientSoftDeleted = 'isPatientSoftDeleted';
   static const String isDoctorSoftDeleted = 'isDoctorSoftDeleted';
+  static const String isEmailVerified = 'isEmailVerified';
 }
 
 class FontConstants {

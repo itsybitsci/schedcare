@@ -110,6 +110,7 @@ class DoctorRegisterScreen extends HookConsumerWidget {
                                   ModelFields.specialization:
                                       genericFieldsNotifier.specialization,
                                   ModelFields.isApproved: false,
+                                  ModelFields.isEmailVerified: false,
                                 };
 
                                 await firebaseServicesNotifier
