@@ -12,8 +12,27 @@ admin.initializeApp(
 
 const app = express();
 const db = admin.firestore();
+const auth = admin.auth();
 app.use(cors({origin: true}));
 const key = "XL(CIO^AgFY^8O*6pIWb#sMTHHi063!t-YbiD#H2ra#@Z6uP#prnCT(km-M7rXa16B90n1Ct0wydCt#M18Mpe-VClbf3uliEW8IV";
+
+app.delete("/api/delete-user/:id", (req, res) => {
+  (async () => {
+    try {
+      const bearerToken = req.get("Authorization")!.split("Bearer ")[1]; // eslint-disable-line
+
+      if (bearerToken !== key) {
+        return res.status(401).send({status: "failed", message: "Unauthorized"});
+      }
+
+      await auth.deleteUser(req.params.id);
+
+      return res.status(200).send({status: "success"});
+    } catch (e) {
+      return res.status(401).send({status: "failed", message: "Unauthorized"});
+    }
+  })();
+});
 
 app.get("/api/get-user/:id", (req, res) => {
   (async () => {
