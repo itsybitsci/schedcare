@@ -189,6 +189,8 @@ app.get("/api/get-all-consultationRequests", (req, res) => {
             meetingId: doc.data().meetingId,
             patientAttachmentUrl: doc.data().patientAttachmentUrl,
             doctorAttachmentUrl: doc.data().doctorAttachmentUrl,
+            isPatientSoftDeleted: doc.data().isPatientSoftDeleted,
+            isDoctorSoftDeleted: doc.data().isDoctorSoftDeleted,
           };
           response.push(selectedItem);
         }

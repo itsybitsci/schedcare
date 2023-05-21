@@ -35,6 +35,7 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
         consultationRequestsCollectionReference
             .where(ModelFields.doctorId,
                 isEqualTo: firebaseServicesNotifier.getCurrentUser!.uid)
+            .where(ModelFields.isDoctorSoftDeleted, isEqualTo: false)
             .orderBy(ModelFields.createdAt, descending: true)
             .withConverter(
               fromFirestore: (snapshot, _) =>
@@ -171,6 +172,67 @@ class ReceivedConsultationRequestsPage extends HookConsumerWidget {
                                                         consultationRequest:
                                                             consultationRequest),
                                               ),
+                                              onLongPress: DateTime.now().isBefore(
+                                                      consultationRequest
+                                                          .consultationDateTime
+                                                          .add(const Duration(
+                                                              hours: AppConstants
+                                                                  .defaultMeetingDuration)))
+                                                  ? null
+                                                  : () async =>
+                                                      await showDialog(
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            AlertDialog(
+                                                          title: Text(
+                                                            'Delete Consultation Request?',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    15.sp),
+                                                          ),
+                                                          actionsAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () =>
+                                                                  context.pop(),
+                                                              child: Text(
+                                                                'Cancel',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        10.sp),
+                                                              ),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                await firebaseServicesNotifier.getFirebaseFirestoreService.updateDocument(
+                                                                    {
+                                                                      ModelFields
+                                                                              .isDoctorSoftDeleted:
+                                                                          true
+                                                                    },
+                                                                    FirebaseConstants
+                                                                        .consultationRequestsCollection,
+                                                                    consultationRequest
+                                                                        .id).then(
+                                                                    (value) =>
+                                                                        context
+                                                                            .pop());
+                                                              },
+                                                              child: Text(
+                                                                'Delete',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        10.sp),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
                                               title: Text(
                                                   '${patient.firstName} ${patient.lastName}',
                                                   textAlign: TextAlign.left,

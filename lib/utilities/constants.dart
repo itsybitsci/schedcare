@@ -209,6 +209,8 @@ class ModelFields {
   static const String message = 'message';
   static const String messageTimeStamp = 'messageTimeStamp';
   static const String senderName = 'senderName';
+  static const String isPatientSoftDeleted = 'isPatientSoftDeleted';
+  static const String isDoctorSoftDeleted = 'isDoctorSoftDeleted';
 }
 
 class FontConstants {

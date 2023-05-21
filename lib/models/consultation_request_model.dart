@@ -17,6 +17,8 @@ class ConsultationRequest {
   final DateTime modifiedAt;
   final DateTime createdAt;
   final List messages;
+  final bool isPatientSoftDeleted;
+  final bool isDoctorSoftDeleted;
   String? meetingId;
   String? patientAttachmentUrl;
   String? doctorAttachmentUrl;
@@ -34,6 +36,8 @@ class ConsultationRequest {
     required this.modifiedAt,
     required this.createdAt,
     required this.messages,
+    required this.isPatientSoftDeleted,
+    required this.isDoctorSoftDeleted,
     this.meetingId,
     this.patientAttachmentUrl,
     this.doctorAttachmentUrl,
@@ -60,6 +64,8 @@ class ConsultationRequest {
           .get(ModelFields.messages)
           .map((message) => Message.fromJson(message))
           .toList(),
+      isPatientSoftDeleted: snapshot.get(ModelFields.isPatientSoftDeleted),
+      isDoctorSoftDeleted: snapshot.get(ModelFields.isDoctorSoftDeleted),
       meetingId: snapshot.get(ModelFields.meetingId),
       patientAttachmentUrl: snapshot.get(ModelFields.patientAttachmentUrl),
       doctorAttachmentUrl: snapshot.get(ModelFields.doctorAttachmentUrl),
@@ -84,6 +90,9 @@ class ConsultationRequest {
       ModelFields.meetingId: meetingId,
       ModelFields.patientAttachmentUrl: patientAttachmentUrl,
       ModelFields.doctorAttachmentUrl: doctorAttachmentUrl,
+      ModelFields.isPatientSoftDeleted: isPatientSoftDeleted,
+      ModelFields.isDoctorSoftDeleted: isDoctorSoftDeleted,
+      ModelFields.messages: messages.map((message) => message.toMap()).toList(),
     };
   }
 
@@ -183,5 +192,14 @@ class Message {
       senderName: json[ModelFields.senderName],
       messageTimeStamp: json[ModelFields.messageTimeStamp].toDate(),
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      ModelFields.message: message,
+      ModelFields.sender: senderRole,
+      ModelFields.senderName: senderName,
+      ModelFields.messageTimeStamp: messageTimeStamp,
+    };
   }
 }

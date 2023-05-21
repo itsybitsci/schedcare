@@ -299,6 +299,8 @@ class SendConsultationRequestScreen extends HookConsumerWidget {
         ModelFields.messages: [],
         ModelFields.patientAttachmentUrl: null,
         ModelFields.doctorAttachmentUrl: null,
+        ModelFields.isPatientSoftDeleted: false,
+        ModelFields.isDoctorSoftDeleted: false,
       };
 
       await firebaseServicesNotifier
